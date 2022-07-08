@@ -1,26 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, FormEvent} from 'react';
+import {createGame} from "./service/apiService";
 
-function App() {
+export default function App() {
 
-    const [greeting, setGreeting] = useState('')
+    const [game, setGame] = useState(localStorage.getItem("game") ?? "");
 
-    useEffect(() => {
-        fetch('/api/greeting', {
-            method: 'GET',
-            headers: {
-                'Accept': 'text/plain'
-            }
-        })
-            .then(response => response.text())
-            .then(text => setGreeting(text))
-            .catch(err => setGreeting('Da ist etwas schief gelaufen'));
-    }, []);
+    function saveGame(event: FormEvent){
+        event.preventDefault()
+        createGame({gameName: game, playtime: 0, spentMoney: 0})
+            .then(()=> setGame(""))
+    }
 
-    return (
+    return(
         <div>
-            {greeting}
+            <input type={"text"} placeholder={"Game to add"} value={game} onChange={event => setGame(event.target.value)}/>
+            <button onClick={saveGame}>Add Game</button>
         </div>
-    );
+    )
 }
-
-export default App;
