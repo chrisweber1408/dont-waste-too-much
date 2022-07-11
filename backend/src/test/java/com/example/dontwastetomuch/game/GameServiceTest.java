@@ -25,7 +25,7 @@ class GameServiceTest {
         //given
         Game game1 = new Game("League of Legends", true);
         Game game2 = new Game("FIFA 22", true);
-        Game game3 = new Game("World of Warcraft", true);
+        Game game3 = new Game("Rocket League", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         GameService gameService = new GameService(gameRepo);
         Mockito.when(gameRepo.findAll()).thenReturn(List.of(game1, game2, game3));
