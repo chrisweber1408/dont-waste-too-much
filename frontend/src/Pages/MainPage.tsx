@@ -1,6 +1,6 @@
 import GamesGallery from "../components/GamesGallery";
 import {createGame, fetchAllGames} from "../service/apiService";
-import {FormEvent, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Game} from "../service/model";
 
 export default function MainPage(){
@@ -9,7 +9,7 @@ export default function MainPage(){
     const [userGame, setUserGame] = useState(localStorage.getItem("userGame") ?? "")
     const [adminGame, setAdminGame] = useState(localStorage.getItem("adminGame") ?? "")
     const [games, setGames] = useState<Array<Game>>([])
-    const [errorMessage, setErrorMassage] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
 
     useEffect(()=>{
         localStorage.setItem("userGame", userGame)
@@ -26,8 +26,8 @@ export default function MainPage(){
     const fetchAll = ()=>{
         fetchAllGames()
             .then((gamesFromDb: Array<Game>) => setGames(gamesFromDb))
-            .then(()=> setErrorMassage(""))
-            .catch(()=> setErrorMassage("The games could not be loaded"))
+            .then(()=> setErrorMessage(""))
+            .catch(()=> setErrorMessage("The games could not be loaded"))
         // showtime of errorMessage
     }
 
