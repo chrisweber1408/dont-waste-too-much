@@ -15,8 +15,10 @@ public class Game {
     private String gameName;
     private double spentMoney;
     private double playtime;
+    private boolean approved;
 
-    public Game(String gameName) {
+    public Game(String gameName, boolean approved) {
         this.gameName = gameName;
+        this.approved = approved;
     }
 }
