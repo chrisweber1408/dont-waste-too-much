@@ -28,12 +28,11 @@ class GameServiceTest {
         Game game3 = new Game("World of Warcraft", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         GameService gameService = new GameService(gameRepo);
-        gameService.addAGame(game1);
-        gameService.addAGame(game2);
-        gameService.addAGame(game3);
+        Mockito.when(gameRepo.findAll()).thenReturn(List.of(game1, game2, game3));
         //when
-        List<Game> allGames = gameService.getAllApprovedGamesAndNotApprovedGamesFromUser();
+        List<Game> allGames = gameService.getAllGames();
         //then
+        Assertions.assertThat(allGames).isEqualTo(List.of(game1, game2, game3));
         Assertions.assertThat(allGames).hasSize(3);
     }
 }

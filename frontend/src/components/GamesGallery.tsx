@@ -14,12 +14,16 @@ export default function GamesGallery(props: GamesGalleryProps){
         <div>
             <div>
                 Approved Games
-                {approvedGames.map(game => <li>{game.gameName}</li>)}
+                {approvedGames.map(game => <li>{game.gameName
+                    + " spent money: " + game.spentMoney
+                    + " playtime: " + game.playtime}</li>)}
             </div>
             <div>
                 Unapproved Games
-                {unapprovedGames.map(game => <li>{game.gameName}</li>)}
-            </div>
+                {unapprovedGames.map(game => <li>{game.gameName
+                    + " spent money: " + game.spentMoney
+                    + " playtime: " + game.playtime}</li>)}
+        </div>
         </div>
 
     )

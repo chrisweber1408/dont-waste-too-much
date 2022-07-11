@@ -17,7 +17,7 @@ public class GameService {
         gameRepo.save(game);
     }
 
-    public List<Game> getAllApprovedGamesAndNotApprovedGamesFromUser() {
+    public List<Game> getAllGames() {
         return gameRepo.findAll();
     }
 }

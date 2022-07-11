@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@CrossOrigin
+
+
 @RestController
 @RequestMapping("/api/game")
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class GameController {
     }
 
     @GetMapping
-    public List<Game> getAllApprovedGamesAndNotApprovedGamesFromUser(){
-        return gameService.getAllApprovedGamesAndNotApprovedGamesFromUser();
+    public List<Game> getAllGames(){
+        return gameService.getAllGames();
     }
 }
