@@ -26,17 +26,16 @@ export default function MainPage(){
     const fetchAll = ()=>{
         fetchAllGames()
             .then((gamesFromDb: Array<Game>) => setGames(gamesFromDb))
+            .then(()=> setErrorMassage(""))
             .catch(()=> setErrorMassage("The games could not be loaded"))
         // showtime of errorMessage
     }
 
-    function saveGameFromUser(event: FormEvent){
-        event.preventDefault()
+    function saveGameFromUser(){
         createGame({gameName: userGame, playtime: 0, spentMoney: 0, approved: false})
             .then(()=> setUserGame(""))
     }
-    function saveGameFromAdmin(event: FormEvent){
-        event.preventDefault()
+    function saveGameFromAdmin(){
         createGame({gameName: adminGame, playtime: 0, spentMoney: 0, approved: true})
             .then(()=> setAdminGame(""))
     }
