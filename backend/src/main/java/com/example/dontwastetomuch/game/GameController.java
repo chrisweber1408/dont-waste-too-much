@@ -22,6 +22,7 @@ public class GameController {
         gameService.addAGame(game);
     }
 
+
     @GetMapping
     public List<Game> getAllGames(){
         return gameService.getAllGames();
