@@ -27,4 +27,9 @@ public class GameController {
     public List<Game> getAllGames(){
         return gameService.getAllGames();
     }
+
+    @GetMapping("/{gameId}")
+    public Game getOneGame(@PathVariable String gameId){
+        return gameService.getOneGame(gameId);
+    }
 }

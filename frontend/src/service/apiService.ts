@@ -9,3 +9,7 @@ export function fetchAllGames(){
     return axios.get("/api/game")
         .then((response: AxiosResponse<Array<Game>, any>) => response.data)
 }
+
+export function getGame(gameId: string){
+    return axios.get("/api/game/" + gameId)
+}
