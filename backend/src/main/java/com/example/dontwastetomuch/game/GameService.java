@@ -24,4 +24,8 @@ public class GameService {
     public Game getOneGame(String gameId) {
         return gameRepo.findById(gameId).orElseThrow();
     }
+
+    public void editGame(Game game) {
+        gameRepo.save(game);
+    }
 }

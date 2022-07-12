@@ -13,3 +13,7 @@ export function fetchAllGames(){
 export function getGame(gameId: string){
     return axios.get("/api/game/" + gameId)
 }
+
+export function editGame(game: Game){
+    return axios.put("/api/game", game)
+}

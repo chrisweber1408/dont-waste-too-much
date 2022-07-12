@@ -1,6 +1,6 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {getGame} from "../service/apiService";
+import {editGame, getGame} from "../service/apiService";
 import {Game} from "../service/model";
 
 export default function EditPage(){
@@ -8,9 +8,12 @@ export default function EditPage(){
     const {id} = useParams()
     const [game, setGame] = useState({} as Game)
     const [gameName, setGameName] = useState("")
-    const [spentMoney, setSpentMoney] = useState("")
-    const [playtime, setPlaytime] = useState("")
+    const [spentMoney, setSpentMoney] = useState(0)
+    const [playtime, setPlaytime] = useState(0)
+    const [addPlaytime, setAddPlaytime] = useState(0)
     const [approved, setApproved] = useState(false)
+
+    const nav = useNavigate()
 
     useEffect(()=>{
         if(id){
@@ -26,6 +29,18 @@ export default function EditPage(){
         }
     },[id])
 
+    const saveChange = ()=>{
+        const newPlaytime = playtime + addPlaytime
+        editGame({
+            "id": game.id,
+            "gameName": gameName,
+            "spentMoney": spentMoney,
+            "playtime": newPlaytime,
+            "approved": game.approved
+        })
+            .then(()=> nav("/"))
+    }
+
     return(
         <div>
             <div>
@@ -33,9 +48,10 @@ export default function EditPage(){
             </div>
             <div>
                 {approved && <div>{gameName}</div>}
-                {!approved && <span><input type={"text"} value={gameName}/></span>}
-                <span><input type={"number"} value={spentMoney}/></span>
-                <span><input type={"number"} value={playtime}/></span>
+                {!approved && <span><input type={"text"} value={gameName} onChange={event => setGameName(event.target.value)}/></span>}
+                <span><input type={"number"} value={spentMoney} onChange={event => setSpentMoney(parseFloat(event.target.value))}/></span>
+                <span>Playtime: {playtime}<input type={"number"} onChange={event => setAddPlaytime(parseFloat(event.target.value))}/></span>
+                <button onClick={saveChange}>Add</button>
             </div>
         </div>
     )
