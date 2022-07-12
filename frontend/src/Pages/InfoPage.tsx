@@ -3,12 +3,13 @@ import {useEffect, useState} from "react";
 import {editGame, getGame} from "../service/apiService";
 import {Game} from "../service/model";
 
-export default function EditPage(){
+export default function InfoPage(){
 
     const {id} = useParams()
     const [game, setGame] = useState({} as Game)
     const [gameName, setGameName] = useState("")
     const [spentMoney, setSpentMoney] = useState(0)
+    const [addSpentMoney, setAppSpentMoney] = useState(0)
     const [playtime, setPlaytime] = useState(0)
     const [addPlaytime, setAddPlaytime] = useState(0)
     const [approved, setApproved] = useState(false)
@@ -31,10 +32,11 @@ export default function EditPage(){
 
     const saveChange = ()=>{
         const newPlaytime = playtime + addPlaytime
+        const newSpentMoney = spentMoney + addSpentMoney
         editGame({
             "id": game.id,
             "gameName": gameName,
-            "spentMoney": spentMoney,
+            "spentMoney": newSpentMoney,
             "playtime": newPlaytime,
             "approved": game.approved
         })
@@ -48,9 +50,9 @@ export default function EditPage(){
             </div>
             <div>
                 {approved && <div>{gameName}</div>}
-                {!approved && <span><input type={"text"} value={gameName} onChange={event => setGameName(event.target.value)}/></span>}
-                <span><input type={"number"} value={spentMoney} onChange={event => setSpentMoney(parseFloat(event.target.value))}/></span>
-                <span>Playtime: {playtime}<input type={"number"} onChange={event => setAddPlaytime(parseFloat(event.target.value))}/></span>
+                {!approved && <div><input type={"text"} value={gameName} onChange={event => setGameName(event.target.value)}/></div>}
+                <div>Spent money: {spentMoney}<input type={"number"} onChange={event => setAppSpentMoney(parseFloat(event.target.value))}/></div>
+                <div>Playtime: {playtime}<input type={"number"} onChange={event => setAddPlaytime(parseFloat(event.target.value))}/></div>
                 <button onClick={saveChange}>Add</button>
             </div>
         </div>

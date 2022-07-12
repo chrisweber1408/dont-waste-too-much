@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.game;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -9,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Document(collection = "games")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Game {
 
     @Id
@@ -23,4 +25,5 @@ public class Game {
         this.gameName = gameName;
         this.approved = approved;
     }
+
 }
