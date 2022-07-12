@@ -7,7 +7,7 @@ export function createGame(game: Game){
 
 export function fetchAllGames(){
     return axios.get("/api/game")
-        .then((response: AxiosResponse<Array<Game>, any>) => response.data)
+        .then((response: AxiosResponse<Array<Game>>) => response.data)
 }
 
 export function getGame(gameId: string){
