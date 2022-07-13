@@ -22,7 +22,7 @@ export default function UnapprovedInfoPage(){
 
     useEffect(()=>{
         fetchGame()
-    },[id])
+    },[])
 
     const fetchGame = ()=>{
         if(id){
