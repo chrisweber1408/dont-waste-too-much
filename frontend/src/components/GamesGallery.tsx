@@ -1,29 +1,33 @@
 import {Game} from "../service/model";
+import {useNavigate} from "react-router-dom";
 
 
-interface GamesGalleryProps{
+interface GamesGalleryProps {
     games: Array<Game>
 }
 
-export default function GamesGallery(props: GamesGalleryProps){
+export default function GamesGallery(props: GamesGalleryProps) {
 
     const approvedGames = props.games.filter(game => game.approved)
     const unapprovedGames = props.games.filter(game => !game.approved)
+    const nav = useNavigate()
 
-    return(
+    return (
         <div>
             <div>
                 Approved Games
                 {approvedGames.map(game => <li>{game.gameName
-                    + " spent money: " + game.spentMoney
-                    + " playtime: " + game.playtime}</li>)}
+                    + " money: " + game.spentMoney + "€"}
+                    {" time: " + game.playtime + "h"}
+                    <button onClick={()=> nav("/" + game.id)}>Edit</button></li>)}
             </div>
             <div>
                 Unapproved Games
                 {unapprovedGames.map(game => <li>{game.gameName
-                    + " spent money: " + game.spentMoney
-                    + " playtime: " + game.playtime}</li>)}
-        </div>
+                    + " money: " + game.spentMoney + "€"}
+                    {" time: " + game.playtime + "h"}
+                    <button onClick={()=> nav("/" + game.id)}>Edit</button></li>)}
+            </div>
         </div>
 
     )
