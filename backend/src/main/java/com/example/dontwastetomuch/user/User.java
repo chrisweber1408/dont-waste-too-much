@@ -12,4 +12,5 @@ public class User {
     @Indexed(unique = true)
     private String username;
     private List<GameData> gameData;
+
 }

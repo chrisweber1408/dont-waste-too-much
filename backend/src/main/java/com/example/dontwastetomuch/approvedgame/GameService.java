@@ -32,6 +32,12 @@ public class GameService {
     }
 
     public void editGame(Game game) {
-        gameRepo.save(game);
+        if (game.isApproved()) {
+            game.setApproved(false);
+            gameRepo.save(game);
+        }else {
+            game.setApproved(true);
+            gameRepo.save(game);
+        }
     }
 }
