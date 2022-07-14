@@ -1,52 +1,41 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {editApprovedGame, getApprovedGame} from "../service/apiService";
-import {ApprovedGame} from "../service/model";
+import {game} from "../service/model";
 
 
-export default function ApprovedInfoPage(){
+export default function InfoPage(){
 
     const {id} = useParams()
-    const [game, setGame] = useState({} as ApprovedGame)
+    const [game, setGame] = useState({} as game)
     const [gameName, setGameName] = useState("")
-    const [spentMoney, setSpentMoney] = useState(0)
-    const [addSpentMoney, setAddSpentMoney] = useState(0)
-    const [playtime, setPlaytime] = useState(0)
-    const [addPlaytime, setAddPlaytime] = useState(0)
-    const [approved, setApproved] = useState(false)
     const [errorMessageId, setErrorMessageId] = useState("")
     const [errorMessageUnique, setErrorMessageUnique] = useState("")
-    const newPlaytime = playtime + addPlaytime
-    const newSpentMoney = spentMoney + addSpentMoney
     const nav = useNavigate()
 
-    useEffect(()=>{
-      fetchGame()
-    },[])
 
-    const fetchGame = ()=>{
+
+    const fetchGame = useCallback( ()=>{
         if(id){
             getApprovedGame(id)
                 .then(response => response.data)
                 .then(data => {
                     setGame(data)
                     setGameName(data.gameName)
-                    setSpentMoney(data.spentMoney)
-                    setPlaytime(data.playtime)
-                    setApproved(data.approved)
                 })
                 .then(()=> setErrorMessageId(""))
                 .catch(()=> setErrorMessageId("The game could not be loaded"))
         }
-    }
+    },[id])
+
+    useEffect(()=>{
+        fetchGame()
+    },[fetchGame])
 
     const saveChange = ()=>{
         editApprovedGame({
             "id": game.id,
             "gameName": gameName,
-            "spentMoney": newSpentMoney,
-            "playtime": newPlaytime,
-            "approved": game.approved
         })
             .then(fetchGame)
             .then(()=> nav("/"))
@@ -62,10 +51,8 @@ export default function ApprovedInfoPage(){
             <div>
                 {errorMessageUnique && <div>{errorMessageUnique}</div>}
                 {errorMessageId && <div>{errorMessageId}</div>}
-                {approved && <div>{gameName}</div>}
-                {!approved && <div><input type={"text"} value={gameName} onChange={event => setGameName(event.target.value)}/></div>}
-                <div>Spent money: {spentMoney}<input type={"number"} onChange={event => setAddSpentMoney(parseFloat(event.target.value))}/></div>
-                <div>Playtime: {playtime}<input type={"number"} onChange={event => setAddPlaytime(parseFloat(event.target.value))}/></div>
+                <div>{gameName}</div>
+                <div><input type={"text"} value={gameName} onChange={event => setGameName(event.target.value)}/></div>
                 <button onClick={saveChange}>Add</button>
             </div>
         </div>

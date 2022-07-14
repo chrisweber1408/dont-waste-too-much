@@ -1,15 +1,5 @@
-export interface ApprovedGame {
+export interface game {
     id? : string,
     gameName : string,
-    spentMoney : number,
-    playtime : number,
-    approved : boolean
-}
-
-export interface UnapprovedGame {
-    id? : string,
-    gameName : string,
-    spentMoney : number,
-    playtime : number,
-    approved : boolean
+    approved? : boolean
 }

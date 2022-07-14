@@ -1,23 +1,20 @@
 import GamesGallery from "../components/GamesGallery";
 import {
-    createApprovedGame,
-    createUnapprovedGame,
-    fetchAllGamesApproved,
-    fetchAllGamesUnapproved
+    createAdminGame,
+    createUserGame,
+    fetchAllGames
 } from "../service/apiService";
 import {useEffect, useState} from "react";
-import {ApprovedGame, UnapprovedGame} from "../service/model";
+import {game} from "../service/model";
 
 export default function MainPage(){
 
 
     const [userGame, setUserGame] = useState(localStorage.getItem("userGame") ?? "")
     const [adminGame, setAdminGame] = useState(localStorage.getItem("adminGame") ?? "")
-    const [approvedGames, setApprovedGames] = useState<Array<ApprovedGame>>([])
-    const [unapprovedGames, setUnapprovedGames] = useState<Array<UnapprovedGame>>([])
-    const [errorMessageLoadApprovedGames, setErrorMessageLoadApprovedGames] = useState("")
-    const [errorMessageLoadUnapprovedGames, setErrorMessageLoadUnapprovedGames] = useState("")
-    const [errorMessageCreateApprovedGames, setErrorMessageCreateApprovedGames] = useState("")
+    const [games, setGames] = useState<Array<game>>([])
+    const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
+    const [errorMessageCreateApprovedGame, setErrorMessageCreateApprovedGame] = useState("")
     const [errorMessageCreateUnapprovedGames, setErrorMessageCreateUnapprovedGames] = useState("")
 
 
@@ -31,32 +28,26 @@ export default function MainPage(){
 
     useEffect(()=>{
         fetchAllApprovedGames()
-        fetchAllUnapprovedGames()
     },[userGame, adminGame])
 
     const fetchAllApprovedGames = ()=>{
-        fetchAllGamesApproved()
-            .then((approvedGamesFromDb: Array<ApprovedGame>) => setApprovedGames(approvedGamesFromDb))
-            .then(()=> setErrorMessageLoadApprovedGames(""))
-            .catch(()=> setErrorMessageLoadApprovedGames("The approved games could not be loaded"))
+        fetchAllGames()
+            .then((games: Array<game>) => setGames(games))
+            .then(()=> setErrorMessageLoadGames(""))
+            .catch(()=> setErrorMessageLoadGames("The games could not be loaded"))
     }
-    const fetchAllUnapprovedGames = ()=>{
-        fetchAllGamesUnapproved()
-            .then((unapprovedGamesFromDb: Array<UnapprovedGame>) => setUnapprovedGames(unapprovedGamesFromDb))
-            .then(()=> setErrorMessageLoadUnapprovedGames(""))
-            .catch(()=> setErrorMessageLoadUnapprovedGames("The unapproved games could not be loaded"))
-    }
-    function saveApprovedGame(){
-        createApprovedGame({gameName: adminGame, playtime: 0, spentMoney: 0, approved: true})
+
+    function saveAdminGame(){
+        createAdminGame({gameName: adminGame})
             .then(()=> setAdminGame(""))
-            .then(()=> setErrorMessageCreateApprovedGames(""))
-            .catch(()=> setErrorMessageCreateApprovedGames("The Game could not be created"))
+            .then(()=> setErrorMessageCreateApprovedGame(""))
+            .catch(()=> setErrorMessageCreateApprovedGame("The game already exists"))
     }
-    function saveUnapprovedGame(){
-        createUnapprovedGame({gameName: userGame, playtime: 0, spentMoney: 0, approved: false})
+    function saveUserGame(){
+        createUserGame({gameName: userGame})
             .then(()=> setUserGame(""))
             .then(()=> setErrorMessageCreateUnapprovedGames(""))
-            .catch(()=> setErrorMessageCreateUnapprovedGames("The Game could not be created"))
+            .catch(()=> setErrorMessageCreateUnapprovedGames("The game already exists"))
     }
 
 
@@ -64,22 +55,21 @@ export default function MainPage(){
 
     return(
         <div>
-            <span>{errorMessageLoadApprovedGames}</span>
-            <span>{errorMessageLoadUnapprovedGames}</span>
-            <span>{errorMessageCreateApprovedGames}</span>
+            <span>{errorMessageLoadGames}</span>
+            <span>{errorMessageCreateApprovedGame}</span>
             <span>{errorMessageCreateUnapprovedGames}</span>
             <div>
                 User
                 <input type={"text"} placeholder={"Game to add"} value={userGame} onChange={event => setUserGame(event.target.value)}/>
-                <button onClick={saveUnapprovedGame}>Add Game</button>
+                <button onClick={saveUserGame}>Add Game</button>
             </div>
             <div>
                 Admin
                 <input type={"text"} placeholder={"Game to add"} value={adminGame} onChange={event => setAdminGame(event.target.value)}/>
-                <button onClick={saveApprovedGame}>Add Game</button>
+                <button onClick={saveAdminGame}>Add Game</button>
             </div>
             <div>
-                <GamesGallery approvedGames={approvedGames} unapprovedGames={unapprovedGames}/>
+                <GamesGallery games={games}/>
             </div>
         </div>
 

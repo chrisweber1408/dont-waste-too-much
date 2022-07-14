@@ -1,35 +1,31 @@
-import {ApprovedGame} from "./model";
+import {game} from "./model";
 import axios, {AxiosResponse} from "axios";
 
-export function createApprovedGame(game: ApprovedGame){
-    return axios.post("/api/approved", game)
+export function createAdminGame(game: game){
+    return axios.post("/api/game/admin", game)
 }
 
-export function createUnapprovedGame(game: ApprovedGame){
-    return axios.post("/api/unapproved", game)
+export function createUserGame(game: game){
+    return axios.post("/api/game/user", game)
 }
 
-export function fetchAllGamesApproved(){
-    return axios.get("/api/approved")
-        .then((response: AxiosResponse<Array<ApprovedGame>>) => response.data)
-}
-export function fetchAllGamesUnapproved(){
-    return axios.get("/api/unapproved")
-        .then((response: AxiosResponse<Array<ApprovedGame>>) => response.data)
+export function fetchAllGames(){
+    return axios.get("/api/game")
+        .then((response: AxiosResponse<Array<game>>) => response.data)
 }
 
 export function getApprovedGame(gameId: string){
-    return axios.get("/api/approved/" + gameId)
+    return axios.get("/api/game/" + gameId)
 }
 
 export function getUnapprovedGame(gameId: string){
     return axios.get("/api/unapproved/" + gameId)
 }
 
-export function editApprovedGame(game: ApprovedGame){
+export function editApprovedGame(game: game){
     return axios.put("/api/approved", game)
 }
 
-export function editUnapprovedGame(game: ApprovedGame){
+export function editUnapprovedGame(game: game){
     return axios.put("/api/unapproved", game)
 }
