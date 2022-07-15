@@ -1,7 +1,5 @@
-export interface Game{
+export interface game {
     id? : string,
     gameName : string,
-    spentMoney : number,
-    playtime : number,
-    approved : boolean
+    approved? : boolean
 }

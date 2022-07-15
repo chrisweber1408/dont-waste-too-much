@@ -1,46 +1,43 @@
-import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {editGame, getGame} from "../service/apiService";
-import {Game} from "../service/model";
+import {useParams} from "react-router-dom";
+import {useCallback, useEffect, useState} from "react";
+import {editGame, getApprovedGame} from "../service/apiService";
+import {game} from "../service/model";
+
 
 export default function InfoPage(){
 
     const {id} = useParams()
-    const [game, setGame] = useState({} as Game)
+    const [game, setGame] = useState({} as game)
     const [gameName, setGameName] = useState("")
-    const [spentMoney, setSpentMoney] = useState(0)
-    const [addSpentMoney, setAppSpentMoney] = useState(0)
-    const [playtime, setPlaytime] = useState(0)
-    const [addPlaytime, setAddPlaytime] = useState(0)
-    const [approved, setApproved] = useState(false)
+    const [approved, setApproved] = useState()
+    const [errorMessageId, setErrorMessageId] = useState("")
 
-    const nav = useNavigate()
 
-    useEffect(()=>{
+    const fetchGame = useCallback( ()=>{
         if(id){
-            getGame(id)
+            getApprovedGame(id)
                 .then(response => response.data)
                 .then(data => {
                     setGame(data)
                     setGameName(data.gameName)
-                    setSpentMoney(data.spentMoney)
-                    setPlaytime(data.playtime)
                     setApproved(data.approved)
                 })
+                .then(()=> setErrorMessageId(""))
+                .catch(()=> setErrorMessageId("The game could not be loaded"))
         }
     },[id])
 
-    const saveChange = ()=>{
-        const newPlaytime = playtime + addPlaytime
-        const newSpentMoney = spentMoney + addSpentMoney
-        editGame({
-            "id": game.id,
-            "gameName": gameName,
-            "spentMoney": newSpentMoney,
-            "playtime": newPlaytime,
-            "approved": game.approved
-        })
-            .then(()=> nav("/"))
+    useEffect(()=>{
+        fetchGame()
+    },[fetchGame])
+
+
+    const switchStatus = ()=>{
+            editGame({
+                "id": game.id,
+                "gameName": gameName,
+                "approved": approved
+            }).then(fetchGame)
     }
 
     return(
@@ -49,11 +46,9 @@ export default function InfoPage(){
                 <h3>Game Page</h3>
             </div>
             <div>
-                {approved && <div>{gameName}</div>}
-                {!approved && <div><input type={"text"} value={gameName} onChange={event => setGameName(event.target.value)}/></div>}
-                <div>Spent money: {spentMoney}<input type={"number"} onChange={event => setAppSpentMoney(parseFloat(event.target.value))}/></div>
-                <div>Playtime: {playtime}<input type={"number"} onChange={event => setAddPlaytime(parseFloat(event.target.value))}/></div>
-                <button onClick={saveChange}>Add</button>
+                {errorMessageId && <div>{errorMessageId}</div>}
+                <div>{gameName}</div>
+                <button onClick={switchStatus}>AdminSwitch</button>
             </div>
         </div>
     )

@@ -1,14 +1,8 @@
-package com.example.dontwastetomuch.game;
-
-
+package com.example.dontwastetomuch.approvedgame;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
-
-
 
 @RestController
 @RequestMapping("/api/game")
@@ -17,12 +11,17 @@ public class GameController {
 
     private final GameService gameService;
 
-    @PostMapping
-    public void addAGame(@RequestBody Game game){
-        gameService.addAGame(game);
+    @PostMapping("/user")
+    public void addUserGame(@RequestBody Game game){
+        gameService.addUserGame(game);
+    }
+
+    @PostMapping("/admin")
+    public void addAdminGame(@RequestBody Game game){
+        gameService.addAdminGame(game);
     }
     
-    @GetMapping
+    @GetMapping()
     public List<Game> getAllGames(){
         return gameService.getAllGames();
     }
@@ -32,7 +31,7 @@ public class GameController {
         return gameService.getOneGame(gameId);
     }
 
-    @PutMapping
+    @PutMapping()
     public void editGame(@RequestBody Game game){
         gameService.editGame(game);
     }

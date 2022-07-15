@@ -5,6 +5,7 @@ import RegisterPage from "./Pages/RegisterPage";
 import MainPage from "./Pages/MainPage";
 import InfoPage from "./Pages/InfoPage";
 
+
 export default function App() {
 
     return(
@@ -13,10 +14,8 @@ export default function App() {
                 <Route path={"/login"} element={<WelcomePage/>}/>
                 <Route path={"/register"} element={<RegisterPage/>}/>
                 <Route path={"/"} element={<MainPage/>}/>
-                <Route path={"/:id"} element={<InfoPage/>}/>
+                <Route path={"/infos/:id"} element={<InfoPage/>}/>
             </Routes>
         </BrowserRouter>
     )
-
-
 }

@@ -1,4 +1,4 @@
-package com.example.dontwastetomuch.game;
+package com.example.dontwastetomuch.approvedgame;
 
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,13 @@ public class GameService {
         this.gameRepo = gameRepo;
     }
 
-    public void addAGame(Game game) {
+    public void addAdminGame(Game game) {
+        game.setApproved(true);
+        gameRepo.save(game);
+    }
+
+    public void addUserGame(Game game) {
+        game.setApproved(false);
         gameRepo.save(game);
     }
 
@@ -26,6 +32,12 @@ public class GameService {
     }
 
     public void editGame(Game game) {
-        gameRepo.save(game);
+        if (game.isApproved()) {
+            game.setApproved(false);
+            gameRepo.save(game);
+        }else {
+            game.setApproved(true);
+            gameRepo.save(game);
+        }
     }
 }

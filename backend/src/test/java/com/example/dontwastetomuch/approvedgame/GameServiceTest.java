@@ -1,4 +1,4 @@
-package com.example.dontwastetomuch.game;
+package com.example.dontwastetomuch.approvedgame;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ class GameServiceTest {
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         GameService gameService = new GameService(gameRepo);
         //when
-        gameService.addAGame(game);
+        gameService.addAdminGame(game);
         //then
         Mockito.verify(gameRepo).save(game);
     }
@@ -54,15 +54,15 @@ class GameServiceTest {
     @Test
     void shouldEditOneGame(){
         //given
-        Game gameToEdit = new Game("123","FIFA 22", 20, 100, true);
-        Game savedGame = new Game("123","FIFA 22", 20, 100, true);
+        Game gameToEdit = new Game("123","FIFA 22", true);
+        Game savedGame = new Game("123","FIFA 22", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         GameService gameService = new GameService(gameRepo);
         //when
         Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(savedGame));
         Mockito.when(gameRepo.save(gameToEdit)).thenReturn(gameToEdit);
         //then
-        Assertions.assertThatNoException().isThrownBy(()->gameService.editGame(gameToEdit));
+        Assertions.assertThatNoException().isThrownBy(()-> gameService.editGame(gameToEdit));
     }
 
 }
