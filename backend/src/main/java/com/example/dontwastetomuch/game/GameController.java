@@ -1,6 +1,7 @@
-package com.example.dontwastetomuch.approvedgame;
+package com.example.dontwastetomuch.game;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -12,11 +13,13 @@ public class GameController {
     private final GameService gameService;
 
     @PostMapping("/user")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addUserGame(@RequestBody Game game){
         gameService.addUserGame(game);
     }
 
     @PostMapping("/admin")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addAdminGame(@RequestBody Game game){
         gameService.addAdminGame(game);
     }

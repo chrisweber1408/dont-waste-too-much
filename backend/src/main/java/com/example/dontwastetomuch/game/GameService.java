@@ -1,4 +1,4 @@
-package com.example.dontwastetomuch.approvedgame;
+package com.example.dontwastetomuch.game;
 
 import org.springframework.stereotype.Service;
 
