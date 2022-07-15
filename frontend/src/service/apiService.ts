@@ -18,14 +18,6 @@ export function getApprovedGame(gameId: string){
     return axios.get("/api/game/" + gameId)
 }
 
-export function getUnapprovedGame(gameId: string){
-    return axios.get("/api/unapproved/" + gameId)
-}
-
 export function editGame(game: game){
     return axios.put("/api/game", game)
-}
-
-export function editUnapprovedGame(game: game){
-    return axios.put("/api/unapproved", game)
 }

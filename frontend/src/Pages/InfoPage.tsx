@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
 import {editGame, getApprovedGame} from "../service/apiService";
 import {game} from "../service/model";
