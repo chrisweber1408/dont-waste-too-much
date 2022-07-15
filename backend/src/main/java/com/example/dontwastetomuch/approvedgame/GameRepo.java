@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface GameRepo extends MongoRepository<Game, String> {
-    List<Game> findAllByGameName(String gameName);
+
 }
