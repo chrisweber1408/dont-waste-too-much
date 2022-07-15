@@ -34,8 +34,9 @@ public class GameController {
         return gameService.getOneGame(gameId);
     }
 
-    @PutMapping()
-    public void editGame(@RequestBody Game game){
+    @PutMapping("/{gameId}")
+    public void editGame(@PathVariable String gameId){
+        Game game = getOneGame(gameId);
         gameService.editGame(game);
     }
 }

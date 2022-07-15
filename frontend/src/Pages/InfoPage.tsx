@@ -33,11 +33,9 @@ export default function InfoPage(){
 
 
     const switchStatus = ()=>{
-            editGame({
-                "id": game.id,
-                "gameName": gameName,
-                "approved": approved
-            }).then(fetchGame)
+        if (id)
+            editGame(id)
+                .then(fetchGame)
     }
 
     return(
