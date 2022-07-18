@@ -35,10 +35,10 @@ public class GameControllerIT {
         loginData.setPassword("123");
         ResponseEntity<LoginResponse> loginResponseResponseEntity = testRestTemplate.postForEntity("/api/login", loginData, LoginResponse.class);
         Assertions.assertThat(loginResponseResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(Objects.requireNonNull(loginResponseResponseEntity.getBody()).getToken()).isNotBlank();
+        Assertions.assertThat(Objects.requireNonNull(loginResponseResponseEntity.getBody()).getJwt()).isNotBlank();
 
         //addUserGame
-        String token = loginResponseResponseEntity.getBody().getToken();
+        String token = loginResponseResponseEntity.getBody().getJwt();
         Game game1 = new Game("123", "game1", false);
         ResponseEntity<Void> responseEntity1 = testRestTemplate.exchange("/api/game/user", HttpMethod.POST, new HttpEntity<>(game1, createHeader(token)), Void.class);
         Assertions.assertThat(responseEntity1.getStatusCode()).isEqualTo(HttpStatus.CREATED);
