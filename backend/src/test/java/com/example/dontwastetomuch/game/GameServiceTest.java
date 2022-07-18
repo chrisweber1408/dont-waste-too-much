@@ -1,4 +1,4 @@
-package com.example.dontwastetomuch.approvedgame;
+package com.example.dontwastetomuch.game;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

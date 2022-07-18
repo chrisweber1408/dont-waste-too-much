@@ -18,6 +18,6 @@ export function getApprovedGame(gameId: string){
     return axios.get("/api/game/" + gameId)
 }
 
-export function editGame(game: game){
-    return axios.put("/api/game", game)
+export function editGame(gameId: string){
+    return axios.put("/api/game/" + gameId)
 }

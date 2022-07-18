@@ -1,4 +1,4 @@
-package com.example.dontwastetomuch.approvedgame;
+package com.example.dontwastetomuch.game;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +23,10 @@ public class Game {
     public Game(String gameName, boolean approved) {
         this.gameName = gameName;
         this.approved = approved;
+    }
+
+    public Game(String gameName){
+        this.gameName = gameName;
     }
 
 }
