@@ -14,8 +14,8 @@ export default function RegisterPage(){
 
     function login(formEvent: FormEvent){
         formEvent.preventDefault()
-        sendLogin(username, password)
-            .then(data => localStorage.setItem("token", data.token))
+        sendLogin({username, password})
+            .then(data => localStorage.setItem("jwt", data.jwt))
             .then(()=> nav("/main"))
     }
 

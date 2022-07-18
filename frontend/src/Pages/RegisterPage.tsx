@@ -8,12 +8,13 @@ export default function RegisterPage(){
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [passwordRepeat, setPasswordRepeat] = useState("")
 
     const nav = useNavigate()
 
     function register(formEvent: FormEvent){
         formEvent.preventDefault()
-        registerUser(username, password)
+        registerUser({username, password, passwordRepeat})
             .then(()=> nav("/"))
     }
 
@@ -31,6 +32,10 @@ export default function RegisterPage(){
                     <span className={"input"}>
                         <TextField type={"password"} label="Password" variant="outlined" value={password}
                                    onChange={event => setPassword(event.target.value)}/>
+                    </span>
+                    <span className={"input"}>
+                        <TextField type={"password"} label="Password" variant="outlined" value={passwordRepeat}
+                                   onChange={event => setPasswordRepeat(event.target.value)}/>
                     </span>
                     <span className={"input"}>
                         <Button variant="contained" type="submit">Confirm</Button>

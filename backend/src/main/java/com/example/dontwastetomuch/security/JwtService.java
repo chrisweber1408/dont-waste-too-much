@@ -12,15 +12,15 @@ import java.util.Date;
 import java.util.Map;
 
 @Service
-public class JWTService {
+public class JwtService {
 
     private final String secret;
 
-    public JWTService(@Value("${app.jwt.secret}") String secret) {
+    public JwtService(@Value("${app.jwt.secret}") String secret) {
         this.secret = secret;
     }
 
-    public String createToken(Map<String, Object> claims, String subject) {
+    public String createJwt(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)

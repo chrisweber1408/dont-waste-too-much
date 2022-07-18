@@ -5,5 +5,16 @@ export interface game {
 }
 
 export interface LoginResponse{
-    token: string
+    jwt: string
+}
+
+export interface LoginData {
+    username: string
+    password: string
+}
+
+export interface MyUserCreationData{
+    username: string
+    password: string
+    passwordRepeat: string
 }

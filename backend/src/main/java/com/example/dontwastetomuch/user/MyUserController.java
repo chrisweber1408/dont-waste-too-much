@@ -1,27 +1,28 @@
 package com.example.dontwastetomuch.user;
 
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class MyUserController {
 
-
-    private final MyUserService myUserService;
-    private final PasswordEncoder encoder;
+    private final MyUserService userService;
 
     @PostMapping
-    public void postNewUser(@RequestBody MyUser newMyUser){
-        String password = encoder.encode(newMyUser.getPassword());
-        newMyUser.setPassword(password);
-        myUserService.addNewUser(newMyUser);
+    public ResponseEntity<Void> createUser(@RequestBody MyUserCreationData userCreationData) {
+        try {
+            userService.createNewUser(userCreationData);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
