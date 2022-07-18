@@ -3,3 +3,7 @@ export interface game {
     gameName : string,
     approved? : boolean
 }
+
+export interface LoginResponse{
+    token: string
+}

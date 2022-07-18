@@ -16,6 +16,7 @@ public class MyUser {
     @Indexed(unique = true)
     private String username;
     private String password;
+    private String roll = "user";
     private List<GameData> gameData;
 
 }
