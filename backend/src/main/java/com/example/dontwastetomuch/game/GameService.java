@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +48,9 @@ public class GameService {
         GameData gameData = new GameData(gameId);
         myUser.addGameData(gameData);
         myUserRepo.save(myUser);
+    }
+
+    public List<GameData> getAllMyGames(MyUser myUser) {
+        return myUser.getGameData();
     }
 }

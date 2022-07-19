@@ -4,6 +4,12 @@ export interface Game {
     approved? : boolean
 }
 
+export interface GameData{
+    id : string,
+    playtime: number,
+    money: number
+}
+
 export interface LoginResponse{
     jwt: string
 }

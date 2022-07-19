@@ -15,8 +15,8 @@ export default function App() {
                 <Route path={"/"} element={<WelcomePage/>}/>
                 <Route path={"/register"} element={<RegisterPage/>}/>
                 <Route path={"/main"} element={<MainPage/>}/>
-                <Route path={"/myGames"} element={<MyUserGames/>}/>
                 <Route path={"/infos/:id"} element={<InfoPage/>}/>
+                <Route path={"/myGames"} element={<MyUserGames/>}/>
             </Routes>
         </BrowserRouter>
     )

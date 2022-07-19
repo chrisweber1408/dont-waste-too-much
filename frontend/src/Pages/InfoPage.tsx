@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
-import {editGame, getApprovedGame, postToMyGames} from "../service/apiService";
+import {editGame, getOneGame, postToMyGames} from "../service/apiService";
 
 
 export default function InfoPage(){
@@ -12,7 +12,7 @@ export default function InfoPage(){
 
     const fetchGame = useCallback( ()=>{
         if(id){
-            getApprovedGame(id)
+            getOneGame(id)
                 .then(response => response.data)
                 .then(data => {
                     setGameName(data.gameName)
