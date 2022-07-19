@@ -11,9 +11,9 @@ export default function App() {
     return(
         <BrowserRouter>
             <Routes>
-                <Route path={"/login"} element={<WelcomePage/>}/>
+                <Route path={"/"} element={<WelcomePage/>}/>
                 <Route path={"/register"} element={<RegisterPage/>}/>
-                <Route path={"/"} element={<MainPage/>}/>
+                <Route path={"/main"} element={<MainPage/>}/>
                 <Route path={"/infos/:id"} element={<InfoPage/>}/>
             </Routes>
         </BrowserRouter>
