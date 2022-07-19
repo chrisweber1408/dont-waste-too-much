@@ -28,6 +28,10 @@ export function editGame(gameId: string){
     return axios.put("/api/game/" + gameId, gameId, requestConfig)
 }
 
+export function postToMyGames(gameId: string){
+    return axios.put("/api/game/myGames/" + gameId, gameId, requestConfig)
+}
+
 
 
 //----------- Register and Login -----------//

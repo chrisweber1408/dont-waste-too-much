@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
-import {editGame, getApprovedGame} from "../service/apiService";
+import {editGame, getApprovedGame, postToMyGames} from "../service/apiService";
 
 
 export default function InfoPage(){
@@ -33,6 +33,12 @@ export default function InfoPage(){
                 .then(fetchGame)
     }
 
+    function addToMyGames(){
+        if(id){
+            postToMyGames(id)
+        }
+    }
+
     return(
         <div>
             <div>
@@ -41,6 +47,7 @@ export default function InfoPage(){
             <div>
                 {errorMessageId && <div>{errorMessageId}</div>}
                 <div>{gameName}</div>
+                <button onClick={addToMyGames}>AddToMyGames</button>
                 <button onClick={switchStatus}>AdminSwitch</button>
             </div>
         </div>

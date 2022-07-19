@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "user")
@@ -23,6 +24,12 @@ public class MyUser {
     private List<String> roles;
     private List<GameData> gameData;
 
+    public void addGameData(GameData gameData) {
+        if(this.gameData == null){
+            this.gameData = new ArrayList<>();
+        }
+        this.gameData.add(gameData);
+    }
 }
 
 

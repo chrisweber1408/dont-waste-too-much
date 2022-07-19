@@ -1,9 +1,14 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.user.MyUser;
+import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/game")
@@ -11,6 +16,7 @@ import java.util.List;
 public class GameController {
 
     private final GameService gameService;
+    private final MyUserRepo myUserRepo;
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,4 +45,11 @@ public class GameController {
         Game game = getOneGame(gameId);
         gameService.editGame(game);
     }
+
+    @PutMapping("/myGames/{gameId}")
+    public void addMyGame(@PathVariable String gameId, Principal principal){
+        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+        gameService.addMyGame(myUser, gameId);
+    }
+
 }
