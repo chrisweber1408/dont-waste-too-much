@@ -20,8 +20,10 @@ public class MyUserController {
         try {
             userService.createNewUser(userCreationData);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
