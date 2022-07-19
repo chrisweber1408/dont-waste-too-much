@@ -5,14 +5,14 @@ import {
     fetchAllGames
 } from "../service/apiService";
 import {useEffect, useState} from "react";
-import {game} from "../service/model";
+import {Game} from "../service/model";
 
 export default function MainPage(){
 
 
     const [userGame, setUserGame] = useState(localStorage.getItem("userGame") ?? "")
     const [adminGame, setAdminGame] = useState(localStorage.getItem("adminGame") ?? "")
-    const [games, setGames] = useState<Array<game>>([])
+    const [games, setGames] = useState<Array<Game>>([])
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
     const [errorMessageCreateApprovedGame, setErrorMessageCreateApprovedGame] = useState("")
     const [errorMessageCreateUnapprovedGames, setErrorMessageCreateUnapprovedGames] = useState("")
@@ -32,7 +32,7 @@ export default function MainPage(){
 
     const fetchAllApprovedGames = ()=>{
         fetchAllGames()
-            .then((games: Array<game>) => setGames(games))
+            .then((games: Array<Game>) => setGames(games))
             .then(()=> setErrorMessageLoadGames(""))
             .catch(()=> setErrorMessageLoadGames("The games could not be loaded"))
     }

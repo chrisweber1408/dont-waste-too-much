@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 class MyUserServiceTest {
 
     @Test
@@ -24,6 +26,7 @@ class MyUserServiceTest {
         MyUser expectedUser = new MyUser();
         expectedUser.setUsername("testUser");
         expectedUser.setPassword("hashedPassword");
+        expectedUser.setRoles((List.of("user")));
 
         Mockito.verify(userRepository).save(expectedUser);
     }

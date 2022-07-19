@@ -1,9 +1,9 @@
-import {game} from "../service/model";
+import {Game} from "../service/model";
 import {useNavigate} from "react-router-dom";
 
 
 interface GamesGalleryProps {
-    games: Array<game>
+    games: Array<Game>
 }
 
 export default function GamesGallery(props: GamesGalleryProps) {
