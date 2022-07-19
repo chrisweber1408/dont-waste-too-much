@@ -25,21 +25,21 @@ export default function RegisterPage(){
             </div>
             <div>
                 <form onSubmit={register}>
-                    <span className={"input"}>
+                    <div className={"input"}>
                         <TextField  label="Username" variant="outlined" className={"inputfield"} type="text" value={username}
                                     onChange={event => setUsername(event.target.value)}/>
-                    </span>
-                    <span className={"input"}>
+                    </div>
+                    <div className={"input"}>
                         <TextField type={"password"} label="Password" variant="outlined" value={password}
                                    onChange={event => setPassword(event.target.value)}/>
-                    </span>
-                    <span className={"input"}>
+                    </div>
+                    <div className={"input"}>
                         <TextField type={"password"} label="Password" variant="outlined" value={passwordRepeat}
                                    onChange={event => setPasswordRepeat(event.target.value)}/>
-                    </span>
-                    <span className={"input"}>
+                    </div>
+                    <div className={"input"}>
                         <Button variant="contained" type="submit">Confirm</Button>
-                    </span>
+                    </div>
                     <div className={"input"}>
                         <Button onClick={()=>nav("/")} variant="contained">Back</Button>
                     </div>

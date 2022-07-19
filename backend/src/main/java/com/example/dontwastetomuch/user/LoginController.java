@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/login")
@@ -28,7 +29,9 @@ public class LoginController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginData.getUsername(), loginData.getPassword()));
             MyUser user = userService.findByUsername(loginData.getUsername()).orElseThrow();
-            String jwt = jwtService.createJwt(new HashMap<>(), user.getId());
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("roles", user.getRoles());
+            String jwt = jwtService.createJwt(claims, user.getId());
             return ResponseEntity.ok(new LoginResponse(jwt));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

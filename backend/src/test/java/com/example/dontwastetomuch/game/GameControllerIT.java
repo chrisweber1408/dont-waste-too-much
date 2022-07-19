@@ -4,6 +4,7 @@ package com.example.dontwastetomuch.game;
 import com.example.dontwastetomuch.user.LoginData;
 import com.example.dontwastetomuch.user.LoginResponse;
 import com.example.dontwastetomuch.user.MyUser;
+import com.example.dontwastetomuch.user.MyUserCreationData;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,11 +25,12 @@ public class GameControllerIT {
     void shouldTestTheController(){
 
         //addUser
-        MyUser user1 = new MyUser();
+        MyUserCreationData user1 = new MyUserCreationData();
         user1.setUsername("Hans");
         user1.setPassword("123");
-        ResponseEntity<Void> responseEntity = testRestTemplate.postForEntity("/api/user", user1, Void.class);
-        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        user1.setPasswordRepeat("123");
+        ResponseEntity<Void> responseEntity = testRestTemplate.postForEntity("/api/users", user1, Void.class);
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         //loginUser
         LoginData loginData = new LoginData();

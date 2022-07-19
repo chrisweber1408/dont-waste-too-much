@@ -1,4 +1,4 @@
-export interface game {
+export interface Game {
     id? : string,
     gameName : string,
     approved? : boolean

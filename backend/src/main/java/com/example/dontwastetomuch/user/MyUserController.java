@@ -20,7 +20,7 @@ public class MyUserController {
         try {
             userService.createNewUser(userCreationData);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
