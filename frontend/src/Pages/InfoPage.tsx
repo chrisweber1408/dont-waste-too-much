@@ -1,6 +1,6 @@
 import {useParams} from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
-import {editGame, getApprovedGame} from "../service/apiService";
+import {editGame, getOneGame, postToMyGames} from "../service/apiService";
 
 
 export default function InfoPage(){
@@ -8,11 +8,12 @@ export default function InfoPage(){
     const {id} = useParams()
     const [gameName, setGameName] = useState("")
     const [errorMessageId, setErrorMessageId] = useState("")
+    const [errorMessageFav, setErrorMessageFav] = useState("")
 
 
     const fetchGame = useCallback( ()=>{
         if(id){
-            getApprovedGame(id)
+            getOneGame(id)
                 .then(response => response.data)
                 .then(data => {
                     setGameName(data.gameName)
@@ -33,6 +34,13 @@ export default function InfoPage(){
                 .then(fetchGame)
     }
 
+    function addToMyGames(){
+        if(id){
+            postToMyGames(id)
+                .catch(()=> setErrorMessageFav("Game already added to your list"))
+        }
+    }
+
     return(
         <div>
             <div>
@@ -40,7 +48,9 @@ export default function InfoPage(){
             </div>
             <div>
                 {errorMessageId && <div>{errorMessageId}</div>}
+                {errorMessageFav && <div>{errorMessageFav}</div>}
                 <div>{gameName}</div>
+                <button onClick={addToMyGames}>AddToMyGames</button>
                 <button onClick={switchStatus}>AdminSwitch</button>
             </div>
         </div>

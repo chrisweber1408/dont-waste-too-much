@@ -6,6 +6,7 @@ import {
 } from "../service/apiService";
 import {useEffect, useState} from "react";
 import {Game} from "../service/model";
+import {useNavigate} from "react-router-dom";
 
 export default function MainPage(){
 
@@ -16,6 +17,7 @@ export default function MainPage(){
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
     const [errorMessageCreateApprovedGame, setErrorMessageCreateApprovedGame] = useState("")
     const [errorMessageCreateUnapprovedGames, setErrorMessageCreateUnapprovedGames] = useState("")
+    const nav = useNavigate()
 
 
     useEffect(()=>{
@@ -67,6 +69,9 @@ export default function MainPage(){
                 Admin
                 <input type={"text"} placeholder={"Game to add"} value={adminGame} onChange={event => setAdminGame(event.target.value)}/>
                 <button onClick={saveAdminGame}>Add Game</button>
+            </div>
+            <div>
+                <button onClick={()=> nav("/myGames")}>MyGames</button>
             </div>
             <div>
                 <GamesGallery games={games}/>

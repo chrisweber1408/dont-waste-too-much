@@ -1,8 +1,14 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.dto.UserGameDTO;
+import com.example.dontwastetomuch.user.GameData;
+import com.example.dontwastetomuch.user.MyUser;
+import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -11,6 +17,7 @@ import java.util.List;
 public class GameController {
 
     private final GameService gameService;
+    private final MyUserRepo myUserRepo;
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,4 +46,25 @@ public class GameController {
         Game game = getOneGame(gameId);
         gameService.editGame(game);
     }
+
+    @PutMapping("/myGames/{gameId}")
+    public void addMyGame(@PathVariable String gameId, Principal principal){
+        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+        gameService.addMyGame(myUser, gameId);
+    }
+
+    @GetMapping("/myGames")
+    public List<UserGameDTO> getAllMyGames(Principal principal){
+        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+        return gameService.getAllMyGames(myUser).stream()
+                .map(gameData -> {
+                    UserGameDTO userGameDTO = new UserGameDTO();
+                    userGameDTO.setUsername(myUser.getUsername());
+                    userGameDTO.setGameName(gameService.getOneGame(gameData.getGameId()).getGameName());
+                    userGameDTO.setPlaytime(gameData.getPlaytime());
+                    userGameDTO.setSpentMoney(gameData.getMoney());
+                    return userGameDTO;
+                }).toList();
+    }
+
 }

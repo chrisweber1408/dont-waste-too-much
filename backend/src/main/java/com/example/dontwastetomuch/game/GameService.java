@@ -1,17 +1,21 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.user.GameData;
+import com.example.dontwastetomuch.user.MyUser;
+import com.example.dontwastetomuch.user.MyUserRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.rmi.AlreadyBoundException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class GameService {
 
     private final GameRepo gameRepo;
+    private final MyUserRepo myUserRepo;
 
-    public GameService(GameRepo gameRepo) {
-        this.gameRepo = gameRepo;
-    }
 
     public void addAdminGame(Game game) {
         game.setApproved(true);
@@ -39,5 +43,20 @@ public class GameService {
             game.setApproved(true);
             gameRepo.save(game);
         }
+    }
+
+    public void addMyGame(MyUser myUser, String gameId) {
+        GameData gameData = new GameData(gameId);
+        if (myUser.getGameData().contains(gameData)){
+            throw new IllegalStateException("Game already added to your list");
+        } else {
+            myUser.addGameData(gameData);
+            myUserRepo.save(myUser);
+        }
+
+    }
+
+    public List<GameData> getAllMyGames(MyUser myUser) {
+        return myUser.getGameData();
     }
 }

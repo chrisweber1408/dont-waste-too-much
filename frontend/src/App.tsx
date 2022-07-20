@@ -4,6 +4,7 @@ import WelcomePage from "./Pages/WelcomePage";
 import RegisterPage from "./Pages/RegisterPage";
 import MainPage from "./Pages/MainPage";
 import InfoPage from "./Pages/InfoPage";
+import MyUserGames from "./components/MyUserGames";
 
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
                 <Route path={"/register"} element={<RegisterPage/>}/>
                 <Route path={"/main"} element={<MainPage/>}/>
                 <Route path={"/infos/:id"} element={<InfoPage/>}/>
+                <Route path={"/myGames"} element={<MyUserGames/>}/>
             </Routes>
         </BrowserRouter>
     )
