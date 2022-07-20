@@ -24,3 +24,9 @@ export interface MyUserCreationData{
     password: string
     passwordRepeat: string
 }
+
+export interface UserGameDTO{
+    username: string
+    gameName: string
+    gameData: GameData
+}

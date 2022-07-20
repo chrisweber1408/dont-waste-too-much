@@ -6,6 +6,7 @@ import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.rmi.AlreadyBoundException;
 import java.util.List;
 
 @Service
@@ -46,8 +47,13 @@ public class GameService {
 
     public void addMyGame(MyUser myUser, String gameId) {
         GameData gameData = new GameData(gameId);
-        myUser.addGameData(gameData);
-        myUserRepo.save(myUser);
+        if (myUser.getGameData().contains(gameData)){
+            throw new IllegalStateException("Game already added to your list");
+        } else {
+            myUser.addGameData(gameData);
+            myUserRepo.save(myUser);
+        }
+
     }
 
     public List<GameData> getAllMyGames(MyUser myUser) {

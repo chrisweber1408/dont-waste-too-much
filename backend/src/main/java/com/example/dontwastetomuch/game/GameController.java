@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.dto.UserGameDTO;
 import com.example.dontwastetomuch.user.GameData;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
@@ -53,9 +54,16 @@ public class GameController {
     }
 
     @GetMapping("/myGames")
-    public List<GameData> getAllMyGames(Principal principal){
+    public List<UserGameDTO> getAllMyGames(Principal principal){
         MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
-        return gameService.getAllMyGames(myUser);
+        return gameService.getAllMyGames(myUser).stream()
+                .map(gameData -> {
+                    UserGameDTO userGameDTO = new UserGameDTO();
+                    userGameDTO.setUsername(myUser.getUsername());
+                    userGameDTO.setGameName(gameService.getOneGame(gameData.getGameId()).getGameName());
+                    userGameDTO.setGameData(gameData);
+                    return userGameDTO;
+                }).toList();
     }
 
 }

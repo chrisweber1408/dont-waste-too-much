@@ -8,6 +8,7 @@ export default function InfoPage(){
     const {id} = useParams()
     const [gameName, setGameName] = useState("")
     const [errorMessageId, setErrorMessageId] = useState("")
+    const [errorMessageFav, setErrorMessageFav] = useState("")
 
 
     const fetchGame = useCallback( ()=>{
@@ -36,6 +37,7 @@ export default function InfoPage(){
     function addToMyGames(){
         if(id){
             postToMyGames(id)
+                .catch(()=> setErrorMessageFav("Game already added to your list"))
         }
     }
 
@@ -46,6 +48,7 @@ export default function InfoPage(){
             </div>
             <div>
                 {errorMessageId && <div>{errorMessageId}</div>}
+                {errorMessageFav && <div>{errorMessageFav}</div>}
                 <div>{gameName}</div>
                 <button onClick={addToMyGames}>AddToMyGames</button>
                 <button onClick={switchStatus}>AdminSwitch</button>

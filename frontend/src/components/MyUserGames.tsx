@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
-import {fetchAllMyGames} from "../service/apiService";
-import {GameData} from "../service/model";
+import {deleteMyGame, fetchAllMyGames} from "../service/apiService";
+import {GameData, UserGameDTO} from "../service/model";
 
 export default function MyUserGames(){
 
-    const [games, setGames] = useState<Array<GameData>>([])
+    const [games, setGames] = useState<Array<UserGameDTO>>([])
     const [errorMessage, setErrorMessage] = useState("")
+    const [gameId, setGameId] = useState("")
 
     useEffect(()=>{
         fetchAll()
@@ -13,7 +14,7 @@ export default function MyUserGames(){
 
     const fetchAll = ()=>{
         fetchAllMyGames()
-            .then((gameDataFromDb:Array<GameData>) => setGames(gameDataFromDb))
+            .then((gameDataFromDb) => setGames(gameDataFromDb))
             .catch(()=> setErrorMessage("The games could not be loaded"))
     }
 
@@ -25,8 +26,9 @@ export default function MyUserGames(){
                 {errorMessage && <div>{errorMessage}</div>}
             </div>
             <div>
-                {games.map(game => <li>{game.playtime}</li>)}
-                {games.map(game => <li>{game.money}</li>)}
+                {games.map(game => <div>
+                    Gamename: {game.gameName} Playtime: {game.gameData.playtime} spent Money: {game.gameData.money}
+                </div>)}
             </div>
         </div>
     )

@@ -1,7 +1,6 @@
 package com.example.dontwastetomuch.user;
 
 import lombok.Data;
-import org.springframework.data.mongodb.core.index.Indexed;
 
 @Data
 public class GameData {

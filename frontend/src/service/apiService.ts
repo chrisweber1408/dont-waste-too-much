@@ -1,4 +1,4 @@
-import {Game, GameData, LoginData, LoginResponse, MyUserCreationData} from "./model";
+import {Game, GameData, LoginData, LoginResponse, MyUserCreationData, UserGameDTO} from "./model";
 import axios, {AxiosResponse} from "axios";
 
 let requestConfig = {
@@ -34,7 +34,11 @@ export function postToMyGames(gameId: string){
 
 export function fetchAllMyGames(){
     return axios.get("/api/game/myGames", requestConfig)
-        .then((response: AxiosResponse<Array<GameData>>) => response.data)
+        .then((response: AxiosResponse<Array<UserGameDTO>>) => response.data)
+}
+
+export function deleteMyGame(gameId: string){
+    return axios.delete("/api/game/myGame/" + gameId, requestConfig)
 }
 
 
