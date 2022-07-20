@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.dto.UserGameDTO;
 import com.example.dontwastetomuch.user.GameData;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
@@ -35,6 +36,7 @@ public class GameService {
         return gameRepo.findById(gameId).orElseThrow();
     }
 
+
     public void editGame(Game game) {
         if (game.isApproved()) {
             game.setApproved(false);
@@ -45,13 +47,14 @@ public class GameService {
         }
     }
 
+
     public void addMyGame(MyUser myUser, String gameId) {
         GameData gameData = new GameData(gameId);
-        if (myUser.getGameData().contains(gameData)){
-            throw new IllegalStateException("Game already added to your list");
-        } else {
+        if (myUser.getGameData() == null || !myUser.getGameData().contains(gameData)){
             myUser.addGameData(gameData);
             myUserRepo.save(myUser);
+        } else {
+            throw new IllegalStateException("Game already added to your list");
         }
 
     }

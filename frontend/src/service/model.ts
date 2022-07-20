@@ -24,4 +24,5 @@ export interface UserGameDTO{
     gameName: string
     playtime: number
     spentMoney: number
+    gameId: string
 }

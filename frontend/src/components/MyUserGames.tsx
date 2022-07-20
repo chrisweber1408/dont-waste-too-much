@@ -1,11 +1,13 @@
 import {useEffect, useState} from "react";
 import {fetchAllMyGames} from "../service/apiService";
 import {UserGameDTO} from "../service/model";
+import {useNavigate} from "react-router-dom";
 
 export default function MyUserGames(){
 
     const [games, setGames] = useState<Array<UserGameDTO>>([])
     const [errorMessage, setErrorMessage] = useState("")
+    const nav = useNavigate()
 
     useEffect(()=>{
         fetchAll()
@@ -25,7 +27,7 @@ export default function MyUserGames(){
                 {errorMessage && <div>{errorMessage}</div>}
             </div>
             <div>
-                {games.map(game => <div>
+                {games.map(game => <div onClick={()=> nav("/infos/" + game.gameId)}>
                     GameName: {game.gameName} Playtime: {game.playtime} spent Money: {game.spentMoney}
                 </div>)}
             </div>
