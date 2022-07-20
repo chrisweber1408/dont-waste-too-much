@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.user.MyUserRepo;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -14,7 +15,8 @@ class GameServiceTest {
         //given
         Game game = new Game("Fifa22", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
-        GameService gameService = new GameService(gameRepo);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
         //when
         gameService.addAdminGame(game);
         //then
@@ -28,7 +30,8 @@ class GameServiceTest {
         Game game2 = new Game("FIFA 22", true);
         Game game3 = new Game("Rocket League", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
-        GameService gameService = new GameService(gameRepo);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
         Mockito.when(gameRepo.findAll()).thenReturn(List.of(game1, game2, game3));
         //when
         List<Game> allGames = gameService.getAllGames();
@@ -42,7 +45,8 @@ class GameServiceTest {
         //given
         Game game = new Game("FIFA 22", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
-        GameService gameService = new GameService(gameRepo);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
         Mockito.when(gameRepo.findById("1337")).thenReturn(Optional.of(game));
         //when
         Game actual = gameService.getOneGame("1337");
@@ -57,7 +61,8 @@ class GameServiceTest {
         Game gameToEdit = new Game("123","FIFA 22", true);
         Game savedGame = new Game("123","FIFA 22", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
-        GameService gameService = new GameService(gameRepo);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
         //when
         Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(savedGame));
         Mockito.when(gameRepo.save(gameToEdit)).thenReturn(gameToEdit);

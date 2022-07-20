@@ -1,12 +1,11 @@
 import {useEffect, useState} from "react";
-import {deleteMyGame, fetchAllMyGames} from "../service/apiService";
-import {GameData, UserGameDTO} from "../service/model";
+import {fetchAllMyGames} from "../service/apiService";
+import {UserGameDTO} from "../service/model";
 
 export default function MyUserGames(){
 
     const [games, setGames] = useState<Array<UserGameDTO>>([])
     const [errorMessage, setErrorMessage] = useState("")
-    const [gameId, setGameId] = useState("")
 
     useEffect(()=>{
         fetchAll()
