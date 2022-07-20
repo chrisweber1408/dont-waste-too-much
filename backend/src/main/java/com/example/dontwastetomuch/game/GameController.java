@@ -37,14 +37,26 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}")
-    public Game getOneGame(@PathVariable String gameId){
-        return gameService.getOneGame(gameId);
+    public UserGameDTO getOneGame(@PathVariable String gameId, Principal principal){
+        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+        UserGameDTO userGameDTO = new UserGameDTO();
+        userGameDTO.setUsername(myUser.getUsername());
+        userGameDTO.setGameName(gameService.getOneGame(gameId).getGameName());
+        userGameDTO.setPlaytime(userGameDTO.getPlaytime());
+        userGameDTO.setSpentMoney(userGameDTO.getSpentMoney());
+        userGameDTO.setGameId(gameId);
+        userGameDTO.setApproved(gameService.getOneGame(gameId).isApproved());
+        return userGameDTO;
     }
 
     @PutMapping("/{gameId}")
-    public void editGame(@PathVariable String gameId){
-        Game game = getOneGame(gameId);
-        gameService.editGame(game);
+    public void editGame(@PathVariable String gameId, Principal principal){
+        UserGameDTO userGameDTO = getOneGame(gameId, principal);
+        Game game1 = new Game();
+        game1.setGameName(userGameDTO.getGameName());
+        game1.setApproved(userGameDTO.isApproved());
+        game1.setId(gameId);
+        gameService.editGame(game1);
     }
 
     @PutMapping("/myGames/{gameId}")

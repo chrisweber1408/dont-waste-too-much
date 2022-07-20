@@ -25,4 +25,5 @@ export interface UserGameDTO{
     playtime: number
     spentMoney: number
     gameId: string
+    approved: boolean
 }
