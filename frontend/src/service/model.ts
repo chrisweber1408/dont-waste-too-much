@@ -28,5 +28,6 @@ export interface MyUserCreationData{
 export interface UserGameDTO{
     username: string
     gameName: string
-    gameData: GameData
+    playtime: number
+    spentMoney: number
 }

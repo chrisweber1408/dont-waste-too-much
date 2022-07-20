@@ -27,7 +27,7 @@ export default function MyUserGames(){
             </div>
             <div>
                 {games.map(game => <div>
-                    Gamename: {game.gameName} Playtime: {game.gameData.playtime} spent Money: {game.gameData.money}
+                    GameName: {game.gameName} Playtime: {game.playtime} spent Money: {game.spentMoney}
                 </div>)}
             </div>
         </div>

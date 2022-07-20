@@ -61,7 +61,8 @@ public class GameController {
                     UserGameDTO userGameDTO = new UserGameDTO();
                     userGameDTO.setUsername(myUser.getUsername());
                     userGameDTO.setGameName(gameService.getOneGame(gameData.getGameId()).getGameName());
-                    userGameDTO.setGameData(gameData);
+                    userGameDTO.setPlaytime(gameData.getPlaytime());
+                    userGameDTO.setSpentMoney(gameData.getMoney());
                     return userGameDTO;
                 }).toList();
     }
