@@ -1,39 +1,41 @@
 import {Game, LoginData, LoginResponse, MyUserCreationData, UserGameDTO} from "./model";
 import axios, {AxiosResponse} from "axios";
 
-let requestConfig = {
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`
+function requestConfig(){
+    return {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`
+        }
     }
 }
 
 export function createAdminGame(game: Game){
-    return axios.post("/api/game/admin", game, requestConfig)
+    return axios.post("/api/game/admin", game, requestConfig())
 }
 
 export function createUserGame(game: Game){
-    return axios.post("/api/game/user", game, requestConfig)
+    return axios.post("/api/game/user", game, requestConfig())
 }
 
 export function fetchAllGames(){
-    return axios.get("/api/game", requestConfig)
+    return axios.get("/api/game", requestConfig())
         .then((response: AxiosResponse<Array<Game>>) => response.data)
 }
 
 export function getOneGame(gameId: string){
-    return axios.get("/api/game/" + gameId, requestConfig)
+    return axios.get("/api/game/" + gameId, requestConfig())
 }
 
 export function editGame(gameId: string){
-    return axios.put("/api/game/" + gameId, gameId, requestConfig)
+    return axios.put("/api/game/" + gameId, gameId, requestConfig())
 }
 
 export function postToMyGames(gameId: string){
-    return axios.put("/api/game/myGames/" + gameId, gameId, requestConfig)
+    return axios.put("/api/game/myGames/" + gameId, gameId, requestConfig())
 }
 
 export function fetchAllMyGames(){
-    return axios.get("/api/game/myGames", requestConfig)
+    return axios.get("/api/game/myGames", requestConfig())
         .then((response: AxiosResponse<Array<UserGameDTO>>) => response.data)
 }
 

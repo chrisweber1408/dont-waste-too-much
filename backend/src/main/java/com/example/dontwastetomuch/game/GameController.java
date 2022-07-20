@@ -63,6 +63,7 @@ public class GameController {
                     userGameDTO.setGameName(gameService.getOneGame(gameData.getGameId()).getGameName());
                     userGameDTO.setPlaytime(gameData.getPlaytime());
                     userGameDTO.setSpentMoney(gameData.getMoney());
+                    userGameDTO.setGameId(gameService.getOneGame(gameData.getGameId()).getId());
                     return userGameDTO;
                 }).toList();
     }

@@ -6,7 +6,7 @@ import {editGame, getOneGame, postToMyGames} from "../service/apiService";
 export default function InfoPage(){
 
     const {id} = useParams()
-    const [gameName, setGameName] = useState("")
+    const [gameName, setGameName] = useState(0)
     const [errorMessageId, setErrorMessageId] = useState("")
     const [errorMessageFav, setErrorMessageFav] = useState("")
 
@@ -50,7 +50,9 @@ export default function InfoPage(){
                 {errorMessageId && <div>{errorMessageId}</div>}
                 {errorMessageFav && <div>{errorMessageFav}</div>}
                 <div>{gameName}</div>
-                <button onClick={addToMyGames}>AddToMyGames</button>
+                <div>
+                    <input type={"number"}/><button>Add</button>
+                </div>
                 <button onClick={switchStatus}>AdminSwitch</button>
             </div>
         </div>
