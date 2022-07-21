@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +49,7 @@ public class GameService {
 
     public void addMyGame(MyUser myUser, String gameId) {
         GameData gameData = new GameData(gameId);
-        if (myUser.getGameData() == null || !myUser.getGameData().contains(gameData)){
+        if (myUser.getGameData() == null || myUser.getGameData().stream().noneMatch(gameData1 -> gameId.equals(gameData1.getGameId()))){
             myUser.addGameData(gameData);
             myUserRepo.save(myUser);
         } else {
