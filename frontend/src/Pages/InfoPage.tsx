@@ -63,10 +63,16 @@ export default function InfoPage(){
             <div>
                 {errorMessageId && <div>{errorMessageId}</div>}
                 <div>{gameName}</div>
-                <div>{newPlaytime}</div>
-                <div>{game.spentMoney}</div>
+                <div>Spent money: {game.spentMoney}</div>
+                <div>Playtime: {game.playtime}</div>
                 <div>
-                    <input type={"number"} onChange={event => setNewSpentMoney(event.target.valueAsNumber)} /><button onClick={updateGame} >Add</button>
+                    New spent money<input type={"number"} onChange={event => setNewSpentMoney(event.target.valueAsNumber)} />
+                </div>
+                <div>
+                    New playtime<input type={"number"} onChange={event => setNewPlaytime(event.target.valueAsNumber)} />
+                </div>
+                <div>
+                    <button onClick={updateGame} >Add</button>
                 </div>
                 <button onClick={switchStatus}>AdminSwitch</button>
             </div>

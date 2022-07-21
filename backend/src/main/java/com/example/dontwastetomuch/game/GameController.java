@@ -83,15 +83,9 @@ public class GameController {
 
     @PutMapping("/myGames/update")
     public void updateGameStats(@RequestBody UserGameDTO userGameDTO, Principal principal){
-        Game game = new Game();
-        game.setApproved(userGameDTO.isApproved());
-        game.setGameName(userGameDTO.getGameName());
-        game.setId(userGameDTO.getGameId());
-        GameData gameData = new GameData(game.getId());
-        gameData.setMoney(userGameDTO.getSpentMoney());
-        gameData.setPlaytime(userGameDTO.getPlaytime());
         MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-        user.setGameData(List.of(gameData));
+        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setMoney(userGameDTO.getSpentMoney());
+        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setPlaytime(userGameDTO.getPlaytime());
         gameService.updateGameStats(user);
     }
 
