@@ -1,6 +1,7 @@
 package com.example.dontwastetomuch.game;
 
 
+import com.example.dontwastetomuch.dto.UserGameDTO;
 import com.example.dontwastetomuch.user.LoginData;
 import com.example.dontwastetomuch.user.LoginResponse;
 import com.example.dontwastetomuch.user.MyUserCreationData;
@@ -51,6 +52,10 @@ public class GameControllerIT {
         //getAllGames
         ResponseEntity<Game[]> forEntity1 = testRestTemplate.exchange("/api/game", HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game[].class);
         Assertions.assertThat(forEntity1.getBody()).hasSize(2);
+
+        //addOneGameToMyGames
+        ResponseEntity<UserGameDTO> responseEntity3 = testRestTemplate.exchange("/api/game/myGames/" + game1.getId(), HttpMethod.PUT, new HttpEntity<>(createHeader(token)), UserGameDTO.class);
+        Assertions.assertThat(responseEntity3.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         //getOneById
         ResponseEntity<Game> forEntity2 = testRestTemplate.exchange("/api/game/" + game1.getId(), HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game.class);
