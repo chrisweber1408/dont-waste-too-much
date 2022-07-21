@@ -66,6 +66,12 @@ public class GameController {
         gameService.addMyGame(myUser, gameId);
     }
 
+    @DeleteMapping("/myGames/{gameId}")
+    public void removeGameFromMyList(@PathVariable String gameId, Principal principal){
+        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+        gameService.removeMyGame(myUser, gameId);
+    }
+
     @GetMapping("/myGames")
     public List<UserGameDTO> fetchAllMyGames(Principal principal){
         MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();

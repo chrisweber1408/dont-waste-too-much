@@ -47,7 +47,7 @@ public class GameService {
     }
 
 
-    public void addMyGame(MyUser myUser, String gameId) {
+    public void addMyGame(MyUser myUser, String gameId){
         GameData gameData = new GameData(gameId);
         if (myUser.getGameData() == null || myUser.getGameData().stream().noneMatch(gameData1 -> gameId.equals(gameData1.getGameId()))){
             myUser.addGameData(gameData);
@@ -55,7 +55,13 @@ public class GameService {
         } else {
             throw new IllegalStateException("Game already added to your list");
         }
+    }
 
+    public void removeMyGame(MyUser myUser, String gameId){
+        MyUser user = myUserRepo.findById(myUser.getId()).orElseThrow();
+        GameData data = user.getGameData().stream().filter(game -> gameId.equals(game.getGameId())).findAny().orElseThrow();
+        user.getGameData().remove(data);
+        myUserRepo.save(user);
     }
 
     public List<GameData> getAllMyGames(MyUser myUser) {

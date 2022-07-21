@@ -34,6 +34,10 @@ export function postToMyGames(gameId: string){
     return axios.put("/api/game/myGames/" + gameId, gameId, requestConfig())
 }
 
+export function removeGameFromMyList(gameId: string){
+    return axios.delete("/api/game/myGames/" + gameId, requestConfig())
+}
+
 export function fetchAllMyGames(){
     return axios.get("/api/game/myGames", requestConfig())
         .then((response: AxiosResponse<Array<UserGameDTO>>) => response.data)
