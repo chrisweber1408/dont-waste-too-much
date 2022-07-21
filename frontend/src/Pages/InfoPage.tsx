@@ -4,7 +4,6 @@ import {
     switchGameStatus,
     getOneGame,
     updateGameStats,
-    postToMyGames,
     removeGameFromMyList
 } from "../service/apiService";
 import {UserGameDTO} from "../service/model";
