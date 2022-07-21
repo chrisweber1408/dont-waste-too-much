@@ -26,17 +26,21 @@ export function getOneGame(gameId: string){
     return axios.get("/api/game/" + gameId, requestConfig())
 }
 
-export function editGame(gameId: string){
+export function switchGameStatus(gameId: string){
     return axios.put("/api/game/" + gameId, gameId, requestConfig())
 }
 
 export function postToMyGames(gameId: string){
-    return axios.put("/api/game/myGames/" + gameId, gameId, requestConfig())
+    return axios.put("/api/game/myGames/" + gameId, requestConfig())
 }
 
 export function fetchAllMyGames(){
     return axios.get("/api/game/myGames", requestConfig())
         .then((response: AxiosResponse<Array<UserGameDTO>>) => response.data)
+}
+
+export function updateGameStats(userGameDTO: UserGameDTO){
+    return axios.put("/api/game/myGames/update", userGameDTO, requestConfig())
 }
 
 

@@ -67,7 +67,7 @@ class GameServiceTest {
         Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(savedGame));
         Mockito.when(gameRepo.save(gameToEdit)).thenReturn(gameToEdit);
         //then
-        Assertions.assertThatNoException().isThrownBy(()-> gameService.editGame(gameToEdit));
+        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToEdit));
     }
 
 
