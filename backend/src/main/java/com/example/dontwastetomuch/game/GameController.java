@@ -5,6 +5,7 @@ import com.example.dontwastetomuch.user.GameData;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,24 +38,36 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}")
-    public Game getOneGame(@PathVariable String gameId){
-        return gameService.getOneGame(gameId);
+    public UserGameDTO getOneGame(@PathVariable String gameId, Principal principal){
+        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+        UserGameDTO userGameDTO = new UserGameDTO();
+        userGameDTO.setUsername(myUser.getUsername());
+        userGameDTO.setGameName(gameService.getOneGame(gameId).getGameName());
+        userGameDTO.setPlaytime(myUser.getGameData().stream().filter(gameData ->  gameId.equals(gameData.getGameId())).findAny().orElseThrow().getPlaytime());
+        userGameDTO.setSpentMoney(myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow().getMoney());
+        userGameDTO.setGameId(gameId);
+        userGameDTO.setApproved(gameService.getOneGame(gameId).isApproved());
+        return userGameDTO;
     }
 
     @PutMapping("/{gameId}")
-    public void editGame(@PathVariable String gameId){
-        Game game = getOneGame(gameId);
-        gameService.editGame(game);
+    public void switchGameStatus(@PathVariable String gameId, Principal principal){
+        UserGameDTO userGameDTO = getOneGame(gameId, principal);
+        Game game1 = new Game();
+        game1.setGameName(userGameDTO.getGameName());
+        game1.setApproved(userGameDTO.isApproved());
+        game1.setId(gameId);
+        gameService.switchStatus(game1);
     }
 
     @PutMapping("/myGames/{gameId}")
-    public void addMyGame(@PathVariable String gameId, Principal principal){
+    public void postToMyGames(@PathVariable String gameId, Principal principal){
         MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
         gameService.addMyGame(myUser, gameId);
     }
 
     @GetMapping("/myGames")
-    public List<UserGameDTO> getAllMyGames(Principal principal){
+    public List<UserGameDTO> fetchAllMyGames(Principal principal){
         MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
         return gameService.getAllMyGames(myUser).stream()
                 .map(gameData -> {
@@ -66,6 +79,14 @@ public class GameController {
                     userGameDTO.setGameId(gameService.getOneGame(gameData.getGameId()).getId());
                     return userGameDTO;
                 }).toList();
+    }
+
+    @PutMapping("/myGames/update")
+    public void updateGameStats(@RequestBody UserGameDTO userGameDTO, Principal principal){
+        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setMoney(userGameDTO.getSpentMoney());
+        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setPlaytime(userGameDTO.getPlaytime());
+        gameService.updateGameStats(user);
     }
 
 }

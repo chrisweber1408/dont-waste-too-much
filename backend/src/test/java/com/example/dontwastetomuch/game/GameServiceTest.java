@@ -1,5 +1,7 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.user.GameData;
+import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -56,7 +58,7 @@ class GameServiceTest {
 
 
     @Test
-    void shouldEditOneGame(){
+    void shouldSwitchGameStatus(){
         //given
         Game gameToEdit = new Game("123","FIFA 22", true);
         Game savedGame = new Game("123","FIFA 22", true);
@@ -67,8 +69,26 @@ class GameServiceTest {
         Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(savedGame));
         Mockito.when(gameRepo.save(gameToEdit)).thenReturn(gameToEdit);
         //then
-        Assertions.assertThatNoException().isThrownBy(()-> gameService.editGame(gameToEdit));
+        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToEdit));
     }
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

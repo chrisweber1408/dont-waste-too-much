@@ -12,5 +12,6 @@ public class UserGameDTO {
     private String gameId;
     private double spentMoney;
     private double playtime;
+    private boolean approved;
 
 }

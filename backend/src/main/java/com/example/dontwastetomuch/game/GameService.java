@@ -1,14 +1,13 @@
 package com.example.dontwastetomuch.game;
 
-import com.example.dontwastetomuch.dto.UserGameDTO;
 import com.example.dontwastetomuch.user.GameData;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.rmi.AlreadyBoundException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class GameService {
     }
 
 
-    public void editGame(Game game) {
+    public void switchStatus(Game game) {
         if (game.isApproved()) {
             game.setApproved(false);
             gameRepo.save(game);
@@ -50,7 +49,7 @@ public class GameService {
 
     public void addMyGame(MyUser myUser, String gameId) {
         GameData gameData = new GameData(gameId);
-        if (myUser.getGameData() == null || !myUser.getGameData().contains(gameData)){
+        if (myUser.getGameData() == null || myUser.getGameData().stream().noneMatch(gameData1 -> gameId.equals(gameData1.getGameId()))){
             myUser.addGameData(gameData);
             myUserRepo.save(myUser);
         } else {
@@ -62,4 +61,30 @@ public class GameService {
     public List<GameData> getAllMyGames(MyUser myUser) {
         return myUser.getGameData();
     }
+
+    public void updateGameStats(MyUser user) {
+        myUserRepo.save(user);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
