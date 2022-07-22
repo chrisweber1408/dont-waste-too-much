@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.user;
 
+import com.example.dontwastetomuch.game.GameData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

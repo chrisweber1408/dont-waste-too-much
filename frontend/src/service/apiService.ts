@@ -30,7 +30,7 @@ export function switchGameStatus(gameId: string){
     return axios.put("/api/game/" + gameId, gameId, requestConfig())
 }
 
-export function postToMyGames(gameId: string){
+export function putToMyGames(gameId: string){
     return axios.put("/api/game/myGames/" + gameId, gameId, requestConfig())
 }
 
