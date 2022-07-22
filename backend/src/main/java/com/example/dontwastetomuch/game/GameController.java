@@ -1,11 +1,9 @@
 package com.example.dontwastetomuch.game;
 
 import com.example.dontwastetomuch.dto.UserGameDTO;
-import com.example.dontwastetomuch.user.GameData;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,9 +59,15 @@ public class GameController {
     }
 
     @PutMapping("/myGames/{gameId}")
-    public void postToMyGames(@PathVariable String gameId, Principal principal){
+    public void putToMyGames(@PathVariable String gameId, Principal principal){
         MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
         gameService.addMyGame(myUser, gameId);
+    }
+
+    @DeleteMapping("/myGames/{gameId}")
+    public void removeGameFromMyList(@PathVariable String gameId, Principal principal){
+        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+        gameService.removeMyGame(myUser, gameId);
     }
 
     @GetMapping("/myGames")

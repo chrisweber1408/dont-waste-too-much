@@ -1,6 +1,6 @@
 import {Game} from "../service/model";
 import {useNavigate} from "react-router-dom";
-import {postToMyGames} from "../service/apiService";
+import {putToMyGames} from "../service/apiService";
 import {useState} from "react";
 
 
@@ -18,7 +18,7 @@ export default function GamesGallery(props: GamesGalleryProps) {
 
     function addToMyGames(id: string | undefined){
         if(id){
-            postToMyGames(id)
+            putToMyGames(id)
                 .catch(()=> setErrorMessageFav("Game already added to your list"))
         }
     }

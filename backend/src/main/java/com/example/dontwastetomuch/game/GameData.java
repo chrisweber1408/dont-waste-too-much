@@ -1,4 +1,4 @@
-package com.example.dontwastetomuch.user;
+package com.example.dontwastetomuch.game;
 
 import lombok.Data;
 

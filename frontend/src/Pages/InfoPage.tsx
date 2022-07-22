@@ -1,6 +1,11 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
-import {switchGameStatus, getOneGame, updateGameStats} from "../service/apiService";
+import {
+    switchGameStatus,
+    getOneGame,
+    updateGameStats,
+    removeGameFromMyList
+} from "../service/apiService";
 import {UserGameDTO} from "../service/model";
 
 
@@ -12,6 +17,7 @@ export default function InfoPage(){
     const [newPlaytime, setNewPlaytime] = useState(0)
     const [newSpentMoney, setNewSpentMoney] = useState(0)
     const [errorMessageId, setErrorMessageId] = useState("")
+    const nav = useNavigate()
 
 
     const fetchGame = useCallback( ()=>{
@@ -54,6 +60,12 @@ export default function InfoPage(){
             .then(fetchGame)
     }
 
+    const removeGame = ()=>{
+        if(id)
+            removeGameFromMyList(id)
+                .then(()=> nav("/main"))
+    }
+
 
     return(
         <div>
@@ -73,6 +85,9 @@ export default function InfoPage(){
                 </div>
                 <div>
                     <button onClick={updateGame} >Add</button>
+                </div>
+                <div>
+                    <button onClick={removeGame} >Delete</button>
                 </div>
                 <button onClick={switchStatus}>AdminSwitch</button>
             </div>
