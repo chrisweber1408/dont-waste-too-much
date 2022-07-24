@@ -1,0 +1,7 @@
+
+.header{
+    display: flex;
+    justify-content: center;
+    color: white;
+    text-shadow: #380808 0.1em 0.1em 0.1em;
+}

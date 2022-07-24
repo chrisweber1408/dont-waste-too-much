@@ -5,6 +5,8 @@ import com.example.dontwastetomuch.user.MyUserRepo;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,11 +17,12 @@ class GameServiceTest {
     void shouldAddAGame(){
         //given
         Game game = new Game("Fifa22", true);
+        MyUser user = new MyUser();
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
         GameService gameService = new GameService(gameRepo, myUserRepo);
         //when
-        gameService.addAdminGame(game);
+        gameService.addGame(game, user);
         //then
         Mockito.verify(gameRepo).save(game);
     }

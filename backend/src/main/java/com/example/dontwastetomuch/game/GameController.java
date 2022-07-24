@@ -18,16 +18,11 @@ public class GameController {
     private final GameService gameService;
     private final MyUserRepo myUserRepo;
 
-    @PostMapping("/user")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void addUserGame(@RequestBody Game game){
-        gameService.addUserGame(game);
-    }
-
-    @PostMapping("/admin")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addAdminGame(@RequestBody Game game){
-        gameService.addAdminGame(game);
+    public void addGame(@RequestBody Game game, Principal principal){
+        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+        gameService.addGame(game, user);
     }
     
     @GetMapping()
@@ -56,6 +51,12 @@ public class GameController {
         game1.setApproved(userGameDTO.isApproved());
         game1.setId(gameId);
         gameService.switchStatus(game1);
+    }
+
+    @DeleteMapping("/{gameId}")
+    public void deleteOneGame(@PathVariable String gameId, Principal principal){
+        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+        gameService.deleteGame(myUser, gameId);
     }
 
     @PutMapping("/myGames/{gameId}")
@@ -92,5 +93,4 @@ public class GameController {
         user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setPlaytime(userGameDTO.getPlaytime());
         gameService.updateGameStats(user);
     }
-
 }

@@ -1,36 +1,28 @@
 import GamesGallery from "../components/GamesGallery";
-import {
-    createAdminGame,
-    createUserGame,
-    fetchAllGames
-} from "../service/apiService";
-import {useEffect, useState} from "react";
+import {createGame, fetchAllGames, sendLogin} from "../service/apiService";
+import {FormEvent, useEffect, useState} from "react";
 import {Game} from "../service/model";
 import {useNavigate} from "react-router-dom";
+import Header from "../components/header/Header";
+import {Button, Grid, Input, TextField} from "@mui/material";
 
 export default function MainPage(){
 
 
-    const [userGame, setUserGame] = useState(localStorage.getItem("userGame") ?? "")
-    const [adminGame, setAdminGame] = useState(localStorage.getItem("adminGame") ?? "")
+    const [game, setGame] = useState(localStorage.getItem("game") ?? "")
     const [games, setGames] = useState<Array<Game>>([])
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
-    const [errorMessageCreateApprovedGame, setErrorMessageCreateApprovedGame] = useState("")
-    const [errorMessageCreateUnapprovedGames, setErrorMessageCreateUnapprovedGames] = useState("")
+    const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
     const nav = useNavigate()
 
 
     useEffect(()=>{
-        localStorage.setItem("userGame", userGame)
-    },[userGame])
-
-    useEffect(()=>{
-        localStorage.setItem("adminGame", adminGame)
-    },[adminGame])
+        localStorage.setItem("game", game)
+    },[game])
 
     useEffect(()=>{
         fetchAllApprovedGames()
-    },[userGame, adminGame])
+    },[game])
 
     const fetchAllApprovedGames = ()=>{
         fetchAllGames()
@@ -39,17 +31,11 @@ export default function MainPage(){
             .catch(()=> setErrorMessageLoadGames("The games could not be loaded"))
     }
 
-    function saveAdminGame(){
-        createAdminGame({gameName: adminGame})
-            .then(()=> setAdminGame(""))
-            .then(()=> setErrorMessageCreateApprovedGame(""))
-            .catch(()=> setErrorMessageCreateApprovedGame("The game already exists"))
-    }
-    function saveUserGame(){
-        createUserGame({gameName: userGame})
-            .then(()=> setUserGame(""))
-            .then(()=> setErrorMessageCreateUnapprovedGames(""))
-            .catch(()=> setErrorMessageCreateUnapprovedGames("The game already exists"))
+    function saveGame(){
+        createGame({gameName: game})
+            .then(()=> setGame(""))
+            .then(()=> setErrorMessageCreateGame(""))
+            .catch(()=> setErrorMessageCreateGame("The game already exists"))
     }
 
 
@@ -57,21 +43,18 @@ export default function MainPage(){
 
     return(
         <div>
+            <Header/>
             <span>{errorMessageLoadGames}</span>
-            <span>{errorMessageCreateApprovedGame}</span>
-            <span>{errorMessageCreateUnapprovedGames}</span>
+            <span>{errorMessageCreateGame}</span>
             <div>
-                User
-                <input type={"text"} placeholder={"Game to add"} value={userGame} onChange={event => setUserGame(event.target.value)}/>
-                <button onClick={saveUserGame}>Add Game</button>
-            </div>
-            <div>
-                Admin
-                <input type={"text"} placeholder={"Game to add"} value={adminGame} onChange={event => setAdminGame(event.target.value)}/>
-                <button onClick={saveAdminGame}>Add Game</button>
-            </div>
-            <div>
-                <button onClick={()=> nav("/myGames")}>MyGames</button>
+                <form onSubmit={saveGame}>
+                    <Grid textAlign={"center"} margin={1}>
+                        <TextField type={"text"}  variant={"outlined"} color={"success"} label={"Add a game"} value={game} onChange={event => setGame(event.target.value)}/>
+                    </Grid>
+                    <Grid textAlign={"center"} margin={1}>
+                        <Button variant={"contained"} type={"submit"} color={"success"}>Add Game</Button>
+                    </Grid>
+                </form>
             </div>
             <div>
                 <GamesGallery games={games}/>

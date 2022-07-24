@@ -5,11 +5,12 @@ import RegisterPage from "./Pages/RegisterPage";
 import MainPage from "./Pages/MainPage";
 import InfoPage from "./Pages/InfoPage";
 import MyUserGames from "./components/MyUserGames";
+import "./App.css"
 
 
 export default function App() {
 
-    return(
+    return (
         <BrowserRouter>
             <Routes>
                 <Route path={"/"} element={<WelcomePage/>}/>
