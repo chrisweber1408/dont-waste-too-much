@@ -20,13 +20,13 @@ export default function Header(){
                 <h1 className={"header"}>Dont waste too much!</h1>
             </div>
             <Grid container>
-                <Grid onClick={()=> nav("/main")} item xs={4} textAlign={"center"} borderBottom={2} borderTop={2} borderLeft={2} marginBottom={2}>
+                <Grid onClick={()=> nav("/main")} item xs={3} textAlign={"center"} border={2} borderRadius={4} margin={2}>
                     <HomeIcon fontSize={"large"}></HomeIcon>
                 </Grid>
-                <Grid onClick={()=> nav("/myGames")} item xs={4} textAlign={"center"} borderBottom={2} borderTop={2} marginBottom={2}>
+                <Grid onClick={()=> nav("/myGames")} item xs={3} textAlign={"center"} border={2} borderRadius={4} margin={2}>
                     <SportsEsportsIcon fontSize={"large"}></SportsEsportsIcon>
                 </Grid>
-                <Grid onClick={()=> nav("/")} onClickCapture={logout} item xs={4} textAlign={"center"} borderBottom={2} borderTop={2} borderRight={2} marginBottom={2}>
+                <Grid onClick={()=> nav("/")} onClickCapture={logout} item xs={3} textAlign={"center"} border={2} borderRadius={4} margin={2}>
                     <LogoutIcon fontSize={"large"}></LogoutIcon>
                 </Grid>
             </Grid>

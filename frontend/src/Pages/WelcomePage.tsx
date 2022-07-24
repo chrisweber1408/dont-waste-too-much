@@ -3,8 +3,6 @@ import {FormEvent, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {sendLogin} from "../service/apiService";
 import Header from "../components/header/Header";
-import LoginIcon from '@mui/icons-material/Login';
-
 
 export default function RegisterPage() {
 

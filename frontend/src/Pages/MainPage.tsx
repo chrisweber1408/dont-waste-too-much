@@ -1,10 +1,9 @@
 import GamesGallery from "../components/GamesGallery";
-import {createGame, fetchAllGames, sendLogin} from "../service/apiService";
-import {FormEvent, useEffect, useState} from "react";
+import {createGame, fetchAllGames} from "../service/apiService";
+import {useEffect, useState} from "react";
 import {Game} from "../service/model";
-import {useNavigate} from "react-router-dom";
 import Header from "../components/header/Header";
-import {Button, Grid, Input, TextField} from "@mui/material";
+import {Button, Grid, TextField} from "@mui/material";
 
 export default function MainPage(){
 
@@ -13,7 +12,6 @@ export default function MainPage(){
     const [games, setGames] = useState<Array<Game>>([])
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
     const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
-    const nav = useNavigate()
 
 
     useEffect(()=>{
