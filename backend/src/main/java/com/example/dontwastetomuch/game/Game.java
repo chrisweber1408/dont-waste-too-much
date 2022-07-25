@@ -20,9 +20,9 @@ public class Game {
     private String gameName;
     private boolean approved;
 
-    public Game(String gameName, boolean approved) {
+    public Game(String id, String gameName) {
+        this.id = id;
         this.gameName = gameName;
-        this.approved = approved;
     }
 
     public Game(String gameName){

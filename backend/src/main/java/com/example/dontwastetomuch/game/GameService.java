@@ -15,13 +15,8 @@ public class GameService {
     private final MyUserRepo myUserRepo;
 
 
-    public void addAdminGame(Game game) {
-        game.setApproved(true);
-        gameRepo.save(game);
-    }
-
-    public void addUserGame(Game game) {
-        game.setApproved(false);
+    public void addGame(Game game, MyUser user) {
+        game.setApproved(user.getRoles().stream().anyMatch(roles -> roles.contains("admin")));
         gameRepo.save(game);
     }
 
@@ -44,6 +39,15 @@ public class GameService {
         }
     }
 
+    public void deleteGame(MyUser myUser, String gameId){
+        Game game = gameRepo.findById(gameId).orElseThrow();
+        if (myUser.getRoles().stream().anyMatch(roles -> roles.contains("admin"))){
+            gameRepo.delete(game);
+        } else {
+            throw new IllegalStateException("No admin!");
+        }
+    }
+
 
     public void addMyGame(MyUser myUser, String gameId){
         GameData gameData = new GameData(gameId);
@@ -56,10 +60,9 @@ public class GameService {
     }
 
     public void removeMyGame(MyUser myUser, String gameId){
-        MyUser user = myUserRepo.findById(myUser.getId()).orElseThrow();
-        GameData data = user.getGameData().stream().filter(game -> gameId.equals(game.getGameId())).findAny().orElseThrow();
-        user.getGameData().remove(data);
-        myUserRepo.save(user);
+        GameData data = myUser.getGameData().stream().filter(game -> gameId.equals(game.getGameId())).findAny().orElseThrow();
+        myUser.getGameData().remove(data);
+        myUserRepo.save(myUser);
     }
 
     public List<GameData> getAllMyGames(MyUser myUser) {

@@ -9,12 +9,8 @@ function requestConfig(){
     }
 }
 
-export function createAdminGame(game: Game){
-    return axios.post("/api/game/admin", game, requestConfig())
-}
-
-export function createUserGame(game: Game){
-    return axios.post("/api/game/user", game, requestConfig())
+export function createGame(game: Game){
+    return axios.post("/api/game", game, requestConfig())
 }
 
 export function fetchAllGames(){
@@ -45,6 +41,10 @@ export function fetchAllMyGames(){
 
 export function updateGameStats(userGameDTO: UserGameDTO){
     return axios.put("/api/game/myGames/update", userGameDTO, requestConfig())
+}
+
+export function deleteGame(gameId: string){
+    return axios.delete("/api/game/" + gameId, requestConfig())
 }
 
 

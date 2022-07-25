@@ -1,10 +1,10 @@
-import {Button, TextField} from "@mui/material";
+import {Button, Grid, TextField} from "@mui/material";
 import {FormEvent, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {sendLogin} from "../service/apiService";
+import Header from "../components/header/Header";
 
-
-export default function RegisterPage(){
+export default function RegisterPage() {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -12,37 +12,32 @@ export default function RegisterPage(){
 
     const nav = useNavigate()
 
-    function login(formEvent: FormEvent){
+    function login(formEvent: FormEvent) {
         formEvent.preventDefault()
         sendLogin({username, password})
             .then(data => localStorage.setItem("jwt", data.jwt))
-            .then(()=> nav("/main"))
+            .then(() => nav("/main"))
     }
 
-    return(
+    return (
         <div>
-            <div>
-                <h2 className={"header"}>Login Page</h2>
-            </div>
+            <Header/>
             <div>
                 <form onSubmit={login}>
-                    <span className={"input"}>
-                        <TextField  label="Username" variant="outlined" className={"inputfield"} type="text" value={username}
-                                    onChange={event => setUsername(event.target.value)}/>
-                    </span>
-                    <span className={"input"}>
-                        <TextField type={"password"} label="Password" variant="outlined" value={password}
+                    <Grid textAlign={"center"} margin={1}>
+                        <TextField label="Username" variant="outlined" color={"success"} type="text" value={username}
+                                   onChange={event => setUsername(event.target.value)}/>
+                    </Grid>
+                    <Grid textAlign={"center"} margin={1}>
+                        <TextField type={"password"} label="Password" color={"success"} variant="outlined" value={password}
                                    onChange={event => setPassword(event.target.value)}/>
-                    </span>
-                    <span className={"input"}>
-                        <Button variant="contained" type="submit">Confirm</Button>
-                    </span>
-                    <div className={"input"}>
-                        <Button onClick={()=>nav("/register")} variant="contained">Register</Button>
-                    </div>
-                    <div className={"input"}>
-                        <Button onClick={()=>nav("/")} variant="contained">Back</Button>
-                    </div>
+                    </Grid>
+                    <Grid item xs={6} textAlign={"center"}>
+                        <Button onClick={() => nav("/register")} variant="contained" color={"success"}>Register</Button>
+                    </Grid>
+                    <Grid item xs={6} textAlign={"center"} margin={1}>
+                        <Button variant="contained" type="submit" color={"success"}>Login</Button>
+                    </Grid>
                 </form>
                 <div className="g-signin2" data-onsuccess="onSignIn"></div>
             </div>

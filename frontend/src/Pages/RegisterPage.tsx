@@ -1,7 +1,8 @@
-import {Button, TextField} from "@mui/material";
+import {Button, Grid, TextField} from "@mui/material";
 import {FormEvent, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {registerUser} from "../service/apiService";
+import Header from "../components/header/Header";
 
 
 export default function RegisterPage(){
@@ -20,29 +21,30 @@ export default function RegisterPage(){
 
     return(
         <div>
+            <Header/>
             <div>
-                <h2 className={"header"}>Register Page</h2>
+                <h2 className={"header"}>Nice to meet you!</h2>
             </div>
             <div>
                 <form onSubmit={register}>
-                    <div className={"input"}>
-                        <TextField  label="Username" variant="outlined" className={"inputfield"} type="text" value={username}
+                    <Grid textAlign={"center"} margin={1}>
+                        <TextField  label="Username" variant="outlined" color={"success"} className={"inputfield"} type="text" value={username}
                                     onChange={event => setUsername(event.target.value)}/>
-                    </div>
-                    <div className={"input"}>
-                        <TextField type={"password"} label="Password" variant="outlined" value={password}
+                    </Grid>
+                    <Grid textAlign={"center"} margin={1}>
+                        <TextField type={"password"} label="Password" color={"success"} variant="outlined" value={password}
                                    onChange={event => setPassword(event.target.value)}/>
-                    </div>
-                    <div className={"input"}>
-                        <TextField type={"password"} label="Password" variant="outlined" value={passwordRepeat}
+                    </Grid>
+                    <Grid textAlign={"center"} margin={1}>
+                        <TextField type={"password"} label="Password" color={"success"} variant="outlined" value={passwordRepeat}
                                    onChange={event => setPasswordRepeat(event.target.value)}/>
-                    </div>
-                    <div className={"input"}>
-                        <Button variant="contained" type="submit">Confirm</Button>
-                    </div>
-                    <div className={"input"}>
-                        <Button onClick={()=>nav("/")} variant="contained">Back</Button>
-                    </div>
+                    </Grid>
+                    <Grid textAlign={"center"} margin={1}>
+                        <Button variant="contained" type="submit" color={"success"} >Confirm</Button>
+                    </Grid>
+                    <Grid textAlign={"center"} margin={1}>
+                        <Button onClick={()=>nav("/")} variant="contained" color={"success"} >Back</Button>
+                    </Grid>
                 </form>
             </div>
         </div>

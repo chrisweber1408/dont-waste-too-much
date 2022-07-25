@@ -7,6 +7,12 @@ import {
     removeGameFromMyList
 } from "../service/apiService";
 import {UserGameDTO} from "../service/model";
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import Header from "../components/header/Header";
+import {Grid, Switch} from "@mui/material";
+import PaidIcon from '@mui/icons-material/Paid';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 
 
 export default function InfoPage(){
@@ -17,6 +23,7 @@ export default function InfoPage(){
     const [newPlaytime, setNewPlaytime] = useState(0)
     const [newSpentMoney, setNewSpentMoney] = useState(0)
     const [errorMessageId, setErrorMessageId] = useState("")
+    const [roles, setRoles] = useState([""])
     const nav = useNavigate()
 
 
@@ -38,6 +45,12 @@ export default function InfoPage(){
     useEffect(()=>{
         fetchGame()
     },[fetchGame])
+
+    useEffect(()=>{
+        const decoded = window.atob(localStorage.getItem("jwt")!.split('.')[1])
+        const decodeJWT = JSON.parse(decoded)
+        setRoles(decodeJWT.roles)
+    },[])
 
 
     const switchStatus = ()=>{
@@ -69,27 +82,35 @@ export default function InfoPage(){
 
     return(
         <div>
-            <div>
-                <h3>Game Page</h3>
-            </div>
+            <Header/>
+            <Grid textAlign={"center"}>
+                <h1>{gameName}</h1>
+            </Grid>
             <div>
                 {errorMessageId && <div>{errorMessageId}</div>}
-                <div>{gameName}</div>
-                <div>Spent money: {game.spentMoney}</div>
-                <div>Playtime: {game.playtime}</div>
-                <div>
-                    New spent money<input type={"number"} onChange={event => setNewSpentMoney(event.target.valueAsNumber)} />
-                </div>
-                <div>
-                    New playtime<input type={"number"} onChange={event => setNewPlaytime(event.target.valueAsNumber)} />
-                </div>
-                <div>
-                    <button onClick={updateGame} >Add</button>
-                </div>
-                <div>
-                    <button onClick={removeGame} >Delete</button>
-                </div>
-                <button onClick={switchStatus}>AdminSwitch</button>
+                <Grid sx={{fontSize: 35}} textAlign={"center"} >
+                    <PaidIcon /> {game.spentMoney} €
+                </Grid>
+                <Grid sx={{fontSize: 35}} textAlign={"center"} >
+                    <AccessTimeFilledIcon /> {game.playtime} h
+                </Grid>
+                <Grid textAlign={"center"}>
+                    <input placeholder={"Add spent Money"} type={"number"} inputMode={"numeric"} onChange={event => setNewSpentMoney(event.target.valueAsNumber)} />
+                </Grid>
+                <Grid textAlign={"center"}>
+                    <input placeholder={"Add time played"} type={"number"} inputMode={"numeric"} onChange={event => setNewPlaytime(event.target.valueAsNumber)} />
+                </Grid>
+                <Grid container>
+                    <Grid item xs={6} textAlign={"center"}>
+                        <AddIcon onClick={updateGame} >Add</AddIcon>
+                    </Grid>
+                    <Grid item xs={6} textAlign={"center"}>
+                        <DeleteIcon onClick={removeGame}>Delete</DeleteIcon>
+                    </Grid>
+                </Grid>
+                {roles.indexOf("admin") === 0 && <Grid textAlign={"center"} sx={{fontSize: 20}}>
+                     <Switch checked={game.approved} onClick={switchStatus}/>Approved status!
+                </Grid>}
             </div>
         </div>
     )
