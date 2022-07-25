@@ -27,7 +27,7 @@ public class GameControllerIT {
 
         //addUser
         MyUserCreationData user1 = new MyUserCreationData();
-        user1.setUsername("Hans");
+        user1.setUsername("hans");
         user1.setPassword("123");
         user1.setPasswordRepeat("123");
         ResponseEntity<Void> responseEntity = testRestTemplate.postForEntity("/api/users", user1, Void.class);
@@ -35,7 +35,7 @@ public class GameControllerIT {
 
         //loginUser
         LoginData loginData = new LoginData();
-        loginData.setUsername("Hans");
+        loginData.setUsername("hans");
         loginData.setPassword("123");
         ResponseEntity<LoginResponse> loginResponseResponseEntity = testRestTemplate.postForEntity("/api/login", loginData, LoginResponse.class);
         Assertions.assertThat(loginResponseResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -43,17 +43,17 @@ public class GameControllerIT {
 
         //addUserGame
         String token = loginResponseResponseEntity.getBody().getJwt();
-        Game game1 = new Game("123", "FIFA 22", false);
-        ResponseEntity<Void> responseEntity1 = testRestTemplate.exchange("/api/game/user", HttpMethod.POST, new HttpEntity<>(game1, createHeader(token)), Void.class);
+        Game game1 = new Game("1", "FIFA 22");
+        ResponseEntity<Void> responseEntity1 = testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game1, createHeader(token)), Void.class);
         Assertions.assertThat(responseEntity1.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         //addAdminGame
-        Game game2 = new Game("1234", "game2", true);
-        Game game3 = new Game("1235", "game3", true);
-        Game game4 = new Game("1236", "game4", true);
-        ResponseEntity<Void> responseEntity2 = testRestTemplate.exchange("/api/game/admin", HttpMethod.POST, new HttpEntity<>(game2, createHeader(token)), Void.class);
-        testRestTemplate.exchange("/api/game/admin", HttpMethod.POST, new HttpEntity<>(game3, createHeader(token)), Void.class);
-        testRestTemplate.exchange("/api/game/admin", HttpMethod.POST, new HttpEntity<>(game4, createHeader(token)), Void.class);
+        Game game2 = new Game("2", "game2");
+        Game game3 = new Game("3", "game3");
+        Game game4 = new Game("4", "game4");
+        ResponseEntity<Void> responseEntity2 = testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game2, createHeader(token)), Void.class);
+        testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game3, createHeader(token)), Void.class);
+        testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game4, createHeader(token)), Void.class);
         Assertions.assertThat(responseEntity2.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         //getAllGames
@@ -71,6 +71,7 @@ public class GameControllerIT {
         Assertions.assertThat(Objects.requireNonNull(forEntity2.getBody()).getGameName()).isEqualTo("FIFA 22");
 
         //switchStatus
+        Assertions.assertThat(forEntity2.getBody().isApproved()).isEqualTo(false);
         ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/game/" + game1.getId(), HttpMethod.PUT, new HttpEntity<>(createHeader(token)), Void.class);
         Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
         ResponseEntity<Game> forEntity3 = testRestTemplate.exchange("/api/game/" + game1.getId(), HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game.class);

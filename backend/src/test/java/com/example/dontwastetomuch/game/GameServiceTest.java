@@ -16,8 +16,9 @@ class GameServiceTest {
     @Test
     void shouldAddAGame(){
         //given
-        Game game = new Game("Fifa22", true);
+        Game game = new Game("1", "Fifa22", true);
         MyUser user = new MyUser();
+        user.setRoles(List.of("admin"));
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
         GameService gameService = new GameService(gameRepo, myUserRepo);
@@ -30,9 +31,9 @@ class GameServiceTest {
     @Test
     void shouldListAllGames(){
         //given
-        Game game1 = new Game("League of Legends", true);
-        Game game2 = new Game("FIFA 22", true);
-        Game game3 = new Game("Rocket League", true);
+        Game game1 = new Game("2", "League of Legends", true);
+        Game game2 = new Game("3", "FIFA 22", true);
+        Game game3 = new Game("4", "Rocket League", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
         GameService gameService = new GameService(gameRepo, myUserRepo);
@@ -47,7 +48,7 @@ class GameServiceTest {
     @Test
     void shouldGetOneGameWithGameId(){
         //given
-        Game game = new Game("FIFA 22", true);
+        Game game = new Game("5","FIFA 22", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
         GameService gameService = new GameService(gameRepo, myUserRepo);
@@ -61,7 +62,7 @@ class GameServiceTest {
     @Test
     void shouldGetNoGameWithWrongGameId(){
         //given
-        Game game = new Game("FIFA 22", true);
+        Game game = new Game("6", "FIFA 22", true);
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
         GameService gameService = new GameService(gameRepo, myUserRepo);
