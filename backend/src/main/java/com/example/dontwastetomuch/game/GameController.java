@@ -37,7 +37,9 @@ public class GameController {
         userGameDTO.setUsername(myUser.getUsername());
         userGameDTO.setGameName(gameService.getOneGame(gameId).getGameName());
         userGameDTO.setPlaytime(myUser.getGameData().stream().filter(gameData ->  gameId.equals(gameData.getGameId())).findAny().orElseThrow().getPlaytime());
-        userGameDTO.setSpentMoney(myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow().getMoney());
+        userGameDTO.setSpentMoneyGame(myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyGame());
+        userGameDTO.setSpentMoneyCoins(myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyCoins());
+        userGameDTO.setSpentMoneyGamePass(myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyGamePass());
         userGameDTO.setGameId(gameId);
         userGameDTO.setApproved(gameService.getOneGame(gameId).isApproved());
         return userGameDTO;
@@ -80,7 +82,9 @@ public class GameController {
                     userGameDTO.setUsername(myUser.getUsername());
                     userGameDTO.setGameName(gameService.getOneGame(gameData.getGameId()).getGameName());
                     userGameDTO.setPlaytime(gameData.getPlaytime());
-                    userGameDTO.setSpentMoney(gameData.getMoney());
+                    userGameDTO.setSpentMoneyGamePass(gameData.getSpentMoneyGamePass());
+                    userGameDTO.setSpentMoneyGame(gameData.getSpentMoneyGame());
+                    userGameDTO.setSpentMoneyCoins(gameData.getSpentMoneyCoins());
                     userGameDTO.setGameId(gameService.getOneGame(gameData.getGameId()).getId());
                     return userGameDTO;
                 }).toList();
@@ -89,7 +93,9 @@ public class GameController {
     @PutMapping("/myGames/update")
     public void updateGameStats(@RequestBody UserGameDTO userGameDTO, Principal principal){
         MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setMoney(userGameDTO.getSpentMoney());
+        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGame(userGameDTO.getSpentMoneyGame());
+        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGamePass(userGameDTO.getSpentMoneyGamePass());
+        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyCoins(userGameDTO.getSpentMoneyCoins());
         user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setPlaytime(userGameDTO.getPlaytime());
         gameService.updateGameStats(user);
     }

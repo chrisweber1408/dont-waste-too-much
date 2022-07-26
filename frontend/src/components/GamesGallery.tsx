@@ -7,13 +7,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 
 interface GamesGalleryProps {
-    games: Array<Game>
+    games: Game
 }
 
 export default function GamesGallery(props: GamesGalleryProps) {
 
-    const approvedGames = props.games.filter(game => game.approved)
-    const unapprovedGames = props.games.filter(game => !game.approved)
     const [errorMessageFav, setErrorMessageFav] = useState("")
     const [errorMessageDelete, setErrorMessageDelete] = useState("")
     const [roles, setRoles] = useState([""])
@@ -46,26 +44,13 @@ export default function GamesGallery(props: GamesGalleryProps) {
                 {errorMessageDelete}
             </div>
             <div>
-                Approved Games
-                {approvedGames.map(game =>
                     <Grid margin={1} border={2} borderRadius={2}>
                         <Grid container>
-                            <Grid item xs={8} margin={1} sx={{fontSize:20}}>{game.gameName}</Grid>
-                            <Grid item xs={1} margin={1}>{roles.indexOf("admin") === 0 && <DeleteForeverIcon onClick={()=>deleteOneGame(game.id)}></DeleteForeverIcon>}</Grid>
-                            <Grid item xs={1} margin={1}><AddIcon onClick={()=> addToMyGames(game.id)}>Add</AddIcon></Grid>
+                            <Grid item xs={8} margin={1} sx={{fontSize:20}}>{props.games.gameName}</Grid>
+                            <Grid item xs={1} margin={1}>{roles.indexOf("admin") === 0 && <DeleteForeverIcon onClick={()=>deleteOneGame(props.games.id)}></DeleteForeverIcon>}</Grid>
+                            <Grid item xs={1} margin={1}><AddIcon onClick={()=> addToMyGames(props.games.id)}>Add</AddIcon></Grid>
                         </Grid>
-                    </Grid>)}
-            </div>
-            <div>
-                Unapproved Games
-                {unapprovedGames.map(game =>
-                    <Grid margin={1} border={2} borderRadius={2}>
-                        <Grid container>
-                            <Grid item xs={8} margin={1} sx={{fontSize:20}}>{game.gameName}</Grid>
-                            <Grid item xs={1} margin={1}>{roles.indexOf("admin") === 0 && <DeleteForeverIcon onClick={()=>deleteOneGame(game.id)}></DeleteForeverIcon>}</Grid>
-                            <Grid item xs={1} margin={1}><AddIcon onClick={()=> addToMyGames(game.id)}>Add</AddIcon></Grid>
-                        </Grid>
-                    </Grid>)}
+                    </Grid>
             </div>
         </div>
     )

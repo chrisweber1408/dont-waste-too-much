@@ -35,7 +35,7 @@ export default function MyUserGames(){
                         <Grid item xs={12} textAlign={"center"} margin={1}>{game.gameName}</Grid>
                         <Grid container margin={1}>
                             <Grid item xs={6} textAlign={"center"}>Playtime: {game.playtime}</Grid>
-                            <Grid item xs={6} textAlign={"center"}>spent Money: {game.spentMoney}</Grid>
+                            <Grid item xs={6} textAlign={"center"}>spent Money: {game.spentMoneyCoins + game.spentMoneyGamePass + game.spentMoneyGame}</Grid>
                         </Grid>
                      </Grid>)}
             </div>

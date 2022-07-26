@@ -14,8 +14,10 @@ public class UserGameDTO {
     private String username;
     private String gameName;
     private String gameId;
-    private double spentMoney;
     private double playtime;
+    private double spentMoneyGamePass;
+    private double spentMoneyCoins;
+    private double spentMoneyGame;
     private boolean approved;
 
 }

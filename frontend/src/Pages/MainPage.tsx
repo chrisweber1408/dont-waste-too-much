@@ -8,15 +8,10 @@ import {Button, Grid, TextField} from "@mui/material";
 export default function MainPage(){
 
 
-    const [game, setGame] = useState(localStorage.getItem("game") ?? "")
+    const [game, setGame] = useState("")
     const [games, setGames] = useState<Array<Game>>([])
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
     const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
-
-
-    useEffect(()=>{
-        localStorage.setItem("game", game)
-    },[game])
 
     useEffect(()=>{
         fetchAllApprovedGames()
@@ -35,6 +30,10 @@ export default function MainPage(){
             .then(()=> setErrorMessageCreateGame(""))
             .catch(()=> setErrorMessageCreateGame("The game already exists"))
     }
+
+    const searchGames = games
+        .filter(g => g.gameName.toLowerCase().includes(game.toLowerCase()))
+        .map(search => <Grid key={search.id}><GamesGallery games={search}/></Grid>)
 
 
 
@@ -55,7 +54,7 @@ export default function MainPage(){
                 </form>
             </div>
             <div>
-                <GamesGallery games={games}/>
+                {searchGames}
             </div>
         </div>
 
