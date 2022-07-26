@@ -6,7 +6,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -123,17 +122,25 @@ class GameServiceTest {
         MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
         GameService gameService = new GameService(gameRepo, myUserRepo);
         gameService.addMyGame(user, "1");
-        double money = user.getGameData().get(0).getMoney();
+        double spentMoneyGame = user.getGameData().get(0).getSpentMoneyGame();
+        double spentMoneyGamePass = user.getGameData().get(0).getSpentMoneyGamePass();
+        double spentMoneyCoins = user.getGameData().get(0).getSpentMoneyCoins();
         double playtime = user.getGameData().get(0).getPlaytime();
         //when
-        user.getGameData().get(0).setMoney(5);
+        user.getGameData().get(0).setSpentMoneyGame(5);
+        user.getGameData().get(0).setSpentMoneyGamePass(5);
+        user.getGameData().get(0).setSpentMoneyCoins(5);
         user.getGameData().get(0).setPlaytime(10);
-        double newMoney = user.getGameData().get(0).getMoney();
+        double newSpentMoneyGame = user.getGameData().get(0).getSpentMoneyGame();
+        double newSpentMoneyGamePass = user.getGameData().get(0).getSpentMoneyGamePass();
+        double newSpentMoneyCoins = user.getGameData().get(0).getSpentMoneyCoins();
         double newPlaytime = user.getGameData().get(0).getPlaytime();
         //then
         Mockito.verify(myUserRepo).save(user);
         Assertions.assertThat(newPlaytime).isNotEqualTo(playtime);
-        Assertions.assertThat(newMoney).isNotEqualTo(money);
+        Assertions.assertThat(newSpentMoneyGame).isNotEqualTo(spentMoneyGame);
+        Assertions.assertThat(newSpentMoneyGamePass).isNotEqualTo(spentMoneyGamePass);
+        Assertions.assertThat(newSpentMoneyCoins).isNotEqualTo(spentMoneyCoins);
     }
 
     @Test

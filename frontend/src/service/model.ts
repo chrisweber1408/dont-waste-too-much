@@ -23,7 +23,9 @@ export interface UserGameDTO{
     username: string
     gameName: string
     playtime: number
-    spentMoney: number
+    spentMoneyGamePass: number
+    spentMoneyCoins: number
+    spentMoneyGame: number
     gameId: string
     approved: boolean
 }

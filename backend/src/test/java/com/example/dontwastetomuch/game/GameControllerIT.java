@@ -13,7 +13,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -83,20 +82,30 @@ public class GameControllerIT {
         Assertions.assertThat(exchange1.getBody()).hasSize(3);
 
         //updateGameStatsFromOneOfMyGames
-        UserGameDTO userGameDTO = new UserGameDTO("Hans", "FIFA 22", game1.getId(), 0, 0, true);
+        UserGameDTO userGameDTO = new UserGameDTO("Hans", "FIFA 22", game1.getId(), 0, 0,  0, 0, true);
         double oldPlaytime = userGameDTO.getPlaytime();
-        double oldSpentMoney = userGameDTO.getSpentMoney();
-        userGameDTO.setSpentMoney(10);
+        double oldSpentMoneyGame = userGameDTO.getSpentMoneyGame();
+        double oldSpentMoneyCoins = userGameDTO.getSpentMoneyCoins();
+        double oldSpentMoneyGamePass = userGameDTO.getSpentMoneyGamePass();
+        userGameDTO.setSpentMoneyGame(60);
+        userGameDTO.setSpentMoneyCoins(25);
+        userGameDTO.setSpentMoneyGamePass(10);
         userGameDTO.setPlaytime(120);
         ResponseEntity<Void> exchange4 = testRestTemplate.exchange("/api/game/myGames/update", HttpMethod.PUT, new HttpEntity<>(userGameDTO, createHeader(token)), Void.class);
         Assertions.assertThat(exchange4.getStatusCode()).isEqualTo(HttpStatus.OK);
         ResponseEntity<UserGameDTO[]> exchange5 = testRestTemplate.exchange("/api/game/myGames", HttpMethod.GET, new HttpEntity<>(createHeader(token)), UserGameDTO[].class);
         double playtime = Arrays.stream(Objects.requireNonNull(exchange5.getBody())).filter(gameData -> game1.getId().equals(gameData.getGameId())).findAny().orElseThrow().getPlaytime();
-        double spentMoney = Arrays.stream(Objects.requireNonNull(exchange5.getBody())).filter(gameData -> game1.getId().equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoney();
+        double spentMoneyCoins = Arrays.stream(Objects.requireNonNull(exchange5.getBody())).filter(gameData -> game1.getId().equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyCoins();
+        double spentMoneyGame = Arrays.stream(Objects.requireNonNull(exchange5.getBody())).filter(gameData -> game1.getId().equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyGame();
+        double spentMoneyGamePass = Arrays.stream(Objects.requireNonNull(exchange5.getBody())).filter(gameData -> game1.getId().equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyGamePass();
         Assertions.assertThat(oldPlaytime).isNotEqualTo(playtime);
-        Assertions.assertThat(oldSpentMoney).isNotEqualTo(spentMoney);
+        Assertions.assertThat(oldSpentMoneyGame).isNotEqualTo(spentMoneyGame);
+        Assertions.assertThat(oldSpentMoneyCoins).isNotEqualTo(spentMoneyCoins);
+        Assertions.assertThat(oldSpentMoneyGamePass).isNotEqualTo(spentMoneyGamePass);
         Assertions.assertThat(playtime).isEqualTo(120);
-        Assertions.assertThat(spentMoney).isEqualTo(10);
+        Assertions.assertThat(spentMoneyCoins).isEqualTo(25);
+        Assertions.assertThat(spentMoneyGame).isEqualTo(60);
+        Assertions.assertThat(spentMoneyGamePass).isEqualTo(10);
 
         //removeOneGameFromMyList
         ResponseEntity<Void> exchange2 = testRestTemplate.exchange("/api/game/myGames/" + game1.getId(), HttpMethod.DELETE, new HttpEntity<>(createHeader(token)), Void.class);
