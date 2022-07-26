@@ -9,7 +9,7 @@ import {
 import {UserGameDTO} from "../service/model";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Header from "../components/header/Header";
-import {Grid, Input, Switch, TextField} from "@mui/material";
+import {Grid, Switch, TextField} from "@mui/material";
 import PaidIcon from '@mui/icons-material/Paid';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import {Add} from "@mui/icons-material";
