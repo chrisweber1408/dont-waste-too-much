@@ -13,6 +13,8 @@ import {Grid, Switch, TextField} from "@mui/material";
 import PaidIcon from '@mui/icons-material/Paid';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import {Add} from "@mui/icons-material";
+import {SpentMoneyDoughnut} from "../components/charts/SpentMoneyDoughnut";
+import {MoneyVsPlaytimeDoughnut} from "../components/charts/MoneyVsPlaytimeDoughnut";
 
 
 export default function InfoPage() {
@@ -84,7 +86,6 @@ export default function InfoPage() {
                 .then(() => nav("/main"))
     }
 
-
     return (
         <div>
             <Header/>
@@ -105,7 +106,7 @@ export default function InfoPage() {
                                    value={newPlaytime} onChange={event => setNewPlaytime(parseInt(event.target.value))}/>
                     </Grid>
                     <Grid item xs={6} textAlign={"center"} marginTop={1}>
-                        <TextField label={"Game prize"} color={"success"} variant={"outlined"} type={"number"} size={"small"}
+                        <TextField label={"Game price"} color={"success"} variant={"outlined"} type={"number"} size={"small"}
                                    inputMode={"numeric"} value={newSpentMoneyGame} onChange={event => setNewSpentMoneyGame(parseInt(event.target.value))}/>
                     </Grid>
                     <Grid item xs={6} textAlign={"center"} marginBottom={1}>
@@ -129,6 +130,14 @@ export default function InfoPage() {
                     <Switch checked={game.approved} onClick={switchStatus}/>Approved status!
                 </Grid>}
             </form>
+            <Grid container>
+                <Grid item xs={6} textAlign={"center"}>
+                    <SpentMoneyDoughnut Game={game}/>
+                </Grid>
+                <Grid item xs={6} textAlign={"center"}>
+                    <MoneyVsPlaytimeDoughnut Game={game}/>
+                </Grid>
+            </Grid>
         </div>
     )
 }
