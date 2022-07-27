@@ -24,19 +24,25 @@ public class GameService {
         return gameRepo.findAll();
     }
 
-    public Game getOneGame(String gameId) {
+    public Game getOneOfMyGames(String gameId) {
         return gameRepo.findById(gameId).orElseThrow();
     }
 
 
-    public void switchStatus(Game game) {
-        if (game.isApproved()) {
-            game.setApproved(false);
-            gameRepo.save(game);
-        }else {
-            game.setApproved(true);
-            gameRepo.save(game);
+    public void switchStatus(Game game, MyUser user) {
+        if (!user.getRoles().stream().anyMatch(roles -> roles.contains("admin"))){
+            throw new IllegalArgumentException("No admin logged in");
+        } else {
+            if (game.isApproved()) {
+                game.setApproved(false);
+                gameRepo.save(game);
+            }else {
+                game.setApproved(true);
+                gameRepo.save(game);
+            }
         }
+
+
     }
 
     public void deleteGame(MyUser myUser, String gameId){

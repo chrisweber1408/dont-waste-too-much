@@ -4,7 +4,7 @@ import {Chart, ArcElement, Legend, Tooltip, Title} from "chart.js"
 Chart.register(ArcElement, Legend, Tooltip, Title);
 
 interface gameDoughnutProps{
-    Game: UserGameDTO
+    game: UserGameDTO
 }
 
 export function SpentMoneyDoughnut(props: gameDoughnutProps){
@@ -32,7 +32,7 @@ export function SpentMoneyDoughnut(props: gameDoughnutProps){
         ],
         datasets: [{
             label: 'Spent money',
-            data: [props.Game.spentMoneyGame, props.Game.spentMoneyCoins, props.Game.spentMoneyGamePass],
+            data: [props.game.spentMoneyGame, props.game.spentMoneyCoins, props.game.spentMoneyGamePass],
             borderColor: "black",
             backgroundColor: [
                 'rgb(243,121,147)',

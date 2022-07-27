@@ -2,9 +2,7 @@ package com.example.dontwastetomuch.game;
 
 
 import com.example.dontwastetomuch.dto.UserGameDTO;
-import com.example.dontwastetomuch.user.LoginData;
-import com.example.dontwastetomuch.user.LoginResponse;
-import com.example.dontwastetomuch.user.MyUserCreationData;
+import com.example.dontwastetomuch.user.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -20,6 +19,14 @@ public class GameControllerIT {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+    @Autowired
+    private MyUserRepo myUserRepo;
+
+    private void setUserAsAdmin(String username){
+        MyUser user = myUserRepo.findByUsername(username).orElseThrow();
+        user.setRoles(List.of("admin"));
+        myUserRepo.save(user);
+    }
 
     @Test
     void shouldTestTheController(){
@@ -40,20 +47,17 @@ public class GameControllerIT {
         Assertions.assertThat(loginResponseResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         Assertions.assertThat(Objects.requireNonNull(loginResponseResponseEntity.getBody()).getJwt()).isNotBlank();
 
-        //addUserGame
+        //addUserGames
         String token = loginResponseResponseEntity.getBody().getJwt();
         Game game1 = new Game("1", "FIFA 22");
-        ResponseEntity<Void> responseEntity1 = testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game1, createHeader(token)), Void.class);
-        Assertions.assertThat(responseEntity1.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-
-        //addAdminGame
         Game game2 = new Game("2", "game2");
         Game game3 = new Game("3", "game3");
         Game game4 = new Game("4", "game4");
-        ResponseEntity<Void> responseEntity2 = testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game2, createHeader(token)), Void.class);
+        ResponseEntity<Void> responseEntity1 = testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game1, createHeader(token)), Void.class);
+        Assertions.assertThat(responseEntity1.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game2, createHeader(token)), Void.class);
         testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game3, createHeader(token)), Void.class);
         testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(game4, createHeader(token)), Void.class);
-        Assertions.assertThat(responseEntity2.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         //getAllGames
         ResponseEntity<Game[]> forEntity1 = testRestTemplate.exchange("/api/game", HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game[].class);
@@ -65,16 +69,17 @@ public class GameControllerIT {
         testRestTemplate.exchange("/api/game/myGames/" + game3.getId(), HttpMethod.PUT, new HttpEntity<>(createHeader(token)), Void.class);
         Assertions.assertThat(responseEntity3.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        //getOneById
+        //getOneOfMyGamesByIdCreatedByUser
         ResponseEntity<Game> forEntity2 = testRestTemplate.exchange("/api/game/" + game1.getId(), HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game.class);
         Assertions.assertThat(Objects.requireNonNull(forEntity2.getBody()).getGameName()).isEqualTo("FIFA 22");
+        Assertions.assertThat(Objects.requireNonNull(forEntity2.getBody()).isApproved()).isEqualTo(false);
 
-        //switchStatus
+        //switchStatusShouldFallAsUser
         Assertions.assertThat(forEntity2.getBody().isApproved()).isEqualTo(false);
         ResponseEntity<Void> exchange = testRestTemplate.exchange("/api/game/" + game1.getId(), HttpMethod.PUT, new HttpEntity<>(createHeader(token)), Void.class);
-        Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         ResponseEntity<Game> forEntity3 = testRestTemplate.exchange("/api/game/" + game1.getId(), HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game.class);
-        Assertions.assertThat(Objects.requireNonNull(forEntity3.getBody()).isApproved()).isEqualTo(true);
+        Assertions.assertThat(Objects.requireNonNull(forEntity3.getBody()).isApproved()).isEqualTo(false);
 
         //listAllMyGames
         ResponseEntity<UserGameDTO[]> exchange1 = testRestTemplate.exchange("/api/game/myGames", HttpMethod.GET, new HttpEntity<>(createHeader(token)), UserGameDTO[].class);
@@ -112,6 +117,31 @@ public class GameControllerIT {
         Assertions.assertThat(exchange2.getStatusCode()).isEqualTo(HttpStatus.OK);
         ResponseEntity<UserGameDTO[]> exchange3 = testRestTemplate.exchange("/api/game/myGames", HttpMethod.GET, new HttpEntity<>(createHeader(token)), UserGameDTO[].class);
         Assertions.assertThat(exchange3.getBody()).hasSize(2);
+
+        //addAdminRole
+        setUserAsAdmin(user1.getUsername());
+
+        //addAdminGame
+        Game adminGame = new Game("5","Fall Guys");
+        ResponseEntity<Void> responseEntityAdmin = testRestTemplate.exchange("/api/game", HttpMethod.POST, new HttpEntity<>(adminGame, createHeader(token)), Void.class);
+        Assertions.assertThat(responseEntityAdmin.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+        //addOneGameToMyList
+        ResponseEntity<Void> exchange6 = testRestTemplate.exchange("/api/game/myGames/" + adminGame.getId(), HttpMethod.PUT, new HttpEntity<>(createHeader(token)), Void.class);
+        Assertions.assertThat(exchange6.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        //getOneOfMyGamesByIdCreatedByAdmin
+        ResponseEntity<Game> exchange7 = testRestTemplate.exchange("/api/game/" + adminGame.getId(), HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game.class);
+        Assertions.assertThat(Objects.requireNonNull(exchange7.getBody()).getGameName()).isEqualTo("Fall Guys");
+        Assertions.assertThat(Objects.requireNonNull(exchange7.getBody()).isApproved()).isEqualTo(true);
+
+        //switchStatusAsAdmin
+        Assertions.assertThat(exchange7.getBody().isApproved()).isEqualTo(true);
+        ResponseEntity<Void> exchange8 = testRestTemplate.exchange("/api/game/" + adminGame.getId(), HttpMethod.PUT, new HttpEntity<>(createHeader(token)), Void.class);
+        Assertions.assertThat(exchange8.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ResponseEntity<Game> exchange9 = testRestTemplate.exchange("/api/game/" + adminGame.getId(), HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game.class);
+        Assertions.assertThat(Objects.requireNonNull(exchange9.getBody()).isApproved()).isEqualTo(false);
+
     }
 
     private HttpHeaders createHeader(String token){

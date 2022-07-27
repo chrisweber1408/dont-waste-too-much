@@ -5,6 +5,7 @@ import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -31,28 +32,34 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}")
-    public UserGameDTO getOneGame(@PathVariable String gameId, Principal principal){
+    public UserGameDTO getOneOfMyGames(@PathVariable String gameId, Principal principal){
         MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
         UserGameDTO userGameDTO = new UserGameDTO();
         userGameDTO.setUsername(myUser.getUsername());
-        userGameDTO.setGameName(gameService.getOneGame(gameId).getGameName());
+        userGameDTO.setGameName(gameService.getOneOfMyGames(gameId).getGameName());
         userGameDTO.setPlaytime(myUser.getGameData().stream().filter(gameData ->  gameId.equals(gameData.getGameId())).findAny().orElseThrow().getPlaytime());
         userGameDTO.setSpentMoneyGame(myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyGame());
         userGameDTO.setSpentMoneyCoins(myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyCoins());
         userGameDTO.setSpentMoneyGamePass(myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow().getSpentMoneyGamePass());
         userGameDTO.setGameId(gameId);
-        userGameDTO.setApproved(gameService.getOneGame(gameId).isApproved());
+        userGameDTO.setApproved(gameService.getOneOfMyGames(gameId).isApproved());
         return userGameDTO;
     }
 
     @PutMapping("/{gameId}")
-    public void switchGameStatus(@PathVariable String gameId, Principal principal){
-        UserGameDTO userGameDTO = getOneGame(gameId, principal);
-        Game game1 = new Game();
-        game1.setGameName(userGameDTO.getGameName());
-        game1.setApproved(userGameDTO.isApproved());
-        game1.setId(gameId);
-        gameService.switchStatus(game1);
+    public ResponseEntity<Void> switchGameStatus(@PathVariable String gameId, Principal principal){
+        try {
+            MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+            UserGameDTO userGameDTO = getOneOfMyGames(gameId, principal);
+            Game game1 = new Game();
+            game1.setGameName(userGameDTO.getGameName());
+            game1.setApproved(userGameDTO.isApproved());
+            game1.setId(gameId);
+            gameService.switchStatus(game1, user);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @DeleteMapping("/{gameId}")
@@ -80,12 +87,12 @@ public class GameController {
                 .map(gameData -> {
                     UserGameDTO userGameDTO = new UserGameDTO();
                     userGameDTO.setUsername(myUser.getUsername());
-                    userGameDTO.setGameName(gameService.getOneGame(gameData.getGameId()).getGameName());
+                    userGameDTO.setGameName(gameService.getOneOfMyGames(gameData.getGameId()).getGameName());
                     userGameDTO.setPlaytime(gameData.getPlaytime());
                     userGameDTO.setSpentMoneyGamePass(gameData.getSpentMoneyGamePass());
                     userGameDTO.setSpentMoneyGame(gameData.getSpentMoneyGame());
                     userGameDTO.setSpentMoneyCoins(gameData.getSpentMoneyCoins());
-                    userGameDTO.setGameId(gameService.getOneGame(gameData.getGameId()).getId());
+                    userGameDTO.setGameId(gameService.getOneOfMyGames(gameData.getGameId()).getId());
                     return userGameDTO;
                 }).toList();
     }

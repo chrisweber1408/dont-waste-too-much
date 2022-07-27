@@ -132,10 +132,10 @@ export default function InfoPage() {
             </form>
             <Grid container>
                 <Grid item xs={6} textAlign={"center"}>
-                    <SpentMoneyDoughnut Game={game}/>
+                    <SpentMoneyDoughnut game={game}/>
                 </Grid>
                 <Grid item xs={6} textAlign={"center"}>
-                    <MoneyVsPlaytimeDoughnut Game={game}/>
+                    <MoneyVsPlaytimeDoughnut game={game}/>
                 </Grid>
             </Grid>
         </div>
