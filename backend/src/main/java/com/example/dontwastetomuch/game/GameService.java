@@ -77,18 +77,11 @@ public class GameService {
     }
 
     public void updateGameStats(MyUser user, NewStatsDTO newStatsDTO) {
-        double playtime = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().getPlaytime();
-        double spentMoneyGame = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().getSpentMoneyGame();
-        double spentMoneyCoins = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().getSpentMoneyCoins();
-        double spentMoneyGamePass = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().getSpentMoneyGamePass();
-        double newPlaytime = playtime + newStatsDTO.getAddedPlaytime();
-        double newSpentMoneyGame = spentMoneyGame + newStatsDTO.getAddedSpentMoneyGame();
-        double newSpentMoneyCoins = spentMoneyCoins + newStatsDTO.getAddedSpentMoneyCoins();
-        double newSpentMoneyGamePass = spentMoneyGamePass + newStatsDTO.getAddedSpentMoneyGamePass();
-        user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setPlaytime(newPlaytime);
-        user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGame(newSpentMoneyGame);
-        user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyCoins(newSpentMoneyCoins);
-        user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGamePass(newSpentMoneyGamePass);
+        GameData gameData = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow();
+        gameData.setPlaytime(gameData.getPlaytime() + newStatsDTO.getAddedPlaytime());
+        gameData.setSpentMoneyGame(gameData.getSpentMoneyGame() + newStatsDTO.getAddedSpentMoneyGame());
+        gameData.setSpentMoneyCoins(gameData.getSpentMoneyCoins() + newStatsDTO.getAddedSpentMoneyCoins());
+        gameData.setSpentMoneyGamePass(gameData.getSpentMoneyGamePass() + newStatsDTO.getAddedSpentMoneyGamePass());
         myUserRepo.save(user);
     }
 }
