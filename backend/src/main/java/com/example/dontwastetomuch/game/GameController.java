@@ -104,9 +104,3 @@ public class GameController {
         gameService.updateGameStats(user, newStatsDTO);
     }
 }
-/*
-        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGame(userGameDTO.getSpentMoneyGame());
-        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGamePass(userGameDTO.getSpentMoneyGamePass());
-        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyCoins(userGameDTO.getSpentMoneyCoins());
-        user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setPlaytime(userGameDTO.getPlaytime());
- */
