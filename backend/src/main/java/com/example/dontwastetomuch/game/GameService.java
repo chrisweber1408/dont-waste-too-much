@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.dto.NewStatsDTO;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,19 @@ public class GameService {
         return myUser.getGameData();
     }
 
-    public void updateGameStats(MyUser user) {
+    public void updateGameStats(MyUser user, NewStatsDTO newStatsDTO) {
+        double playtime = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().getPlaytime();
+        double spentMoneyGame = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().getSpentMoneyGame();
+        double spentMoneyCoins = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().getSpentMoneyCoins();
+        double spentMoneyGamePass = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().getSpentMoneyGamePass();
+        double newPlaytime = playtime + newStatsDTO.getAddedPlaytime();
+        double newSpentMoneyGame = spentMoneyGame + newStatsDTO.getAddedSpentMoneyGame();
+        double newSpentMoneyCoins = spentMoneyCoins + newStatsDTO.getAddedSpentMoneyCoins();
+        double newSpentMoneyGamePass = spentMoneyGamePass + newStatsDTO.getAddedSpentMoneyGamePass();
+        user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setPlaytime(newPlaytime);
+        user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGame(newSpentMoneyGame);
+        user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyCoins(newSpentMoneyCoins);
+        user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGamePass(newSpentMoneyGamePass);
         myUserRepo.save(user);
     }
 }

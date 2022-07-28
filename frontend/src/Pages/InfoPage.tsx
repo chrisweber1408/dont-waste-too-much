@@ -64,14 +64,11 @@ export default function InfoPage() {
     const submitForm = (event: FormEvent) => {
         event.preventDefault()
         updateGameStats({
-            "username": game.username,
-            "gameName": game.gameName,
-            "playtime": game.playtime + newPlaytime,
-            "spentMoneyGamePass":  game.spentMoneyGamePass + newSpentMoneyGamePass,
-            "spentMoneyCoins": game.spentMoneyCoins + newSpentMoneyCoins,
-            "spentMoneyGame": game.spentMoneyGame + newSpentMoneyGame,
             "gameId": game.gameId,
-            "approved": game.approved
+            "addedPlaytime": newPlaytime,
+            "addedSpentMoneyGamePass": newSpentMoneyGamePass,
+            "addedSpentMoneyCoins": newSpentMoneyCoins,
+            "addedSpentMoneyGame": newSpentMoneyGame,
         })
             .then(() => setNewPlaytime(0))
             .then(() => setNewSpentMoneyGame(0))
@@ -103,19 +100,19 @@ export default function InfoPage() {
                 <Grid container spacing={2}>
                     <Grid item xs={6} textAlign={"center"} marginTop={1}>
                         <TextField label={"Time to add"} color={"success"} variant={"outlined"} type={"number"} size={"small"}
-                                   value={newPlaytime} onChange={event => setNewPlaytime(parseInt(event.target.value))}/>
+                                   value={newPlaytime} onChange={event => setNewPlaytime(parseFloat(event.target.value))}/>
                     </Grid>
                     <Grid item xs={6} textAlign={"center"} marginTop={1}>
                         <TextField label={"Game price"} color={"success"} variant={"outlined"} type={"number"} size={"small"}
-                                   inputMode={"numeric"} value={newSpentMoneyGame} onChange={event => setNewSpentMoneyGame(parseInt(event.target.value))}/>
+                                   inputMode={"numeric"} value={newSpentMoneyGame} onChange={event => setNewSpentMoneyGame(parseFloat(event.target.value))}/>
                     </Grid>
                     <Grid item xs={6} textAlign={"center"} marginBottom={1}>
                         <TextField label={"Coins/Skins"} color={"success"} variant={"outlined"} type={"number"} size={"small"}
-                                   inputMode={"numeric"} value={newSpentMoneyCoins} onChange={event => setNewSpentMoneyCoins(parseInt(event.target.value))}/>
+                                   inputMode={"numeric"} value={newSpentMoneyCoins} onChange={event => setNewSpentMoneyCoins(parseFloat(event.target.value))}/>
                     </Grid>
                     <Grid item xs={6} textAlign={"center"} marginBottom={1}>
                         <TextField label={"Game pass"} color={"success"} variant={"outlined"} type={"number"} size={"small"}
-                                   inputMode={"numeric"} value={newSpentMoneyGamePass} onChange={event => setNewSpentMoneyGamePass(parseInt(event.target.value))}/>
+                                   inputMode={"numeric"} value={newSpentMoneyGamePass} onChange={event => setNewSpentMoneyGamePass(parseFloat(event.target.value))}/>
                     </Grid>
                 </Grid>
                 <Grid container>

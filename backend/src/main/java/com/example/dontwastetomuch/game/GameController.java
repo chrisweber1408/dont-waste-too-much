@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.dto.NewStatsDTO;
 import com.example.dontwastetomuch.dto.UserGameDTO;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
@@ -98,12 +99,14 @@ public class GameController {
     }
 
     @PutMapping("/myGames/update")
-    public void updateGameStats(@RequestBody UserGameDTO userGameDTO, Principal principal){
+    public void updateGameStats(@RequestBody NewStatsDTO newStatsDTO, Principal principal){
         MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+        gameService.updateGameStats(user, newStatsDTO);
+    }
+}
+/*
         user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGame(userGameDTO.getSpentMoneyGame());
         user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyGamePass(userGameDTO.getSpentMoneyGamePass());
         user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setSpentMoneyCoins(userGameDTO.getSpentMoneyCoins());
         user.getGameData().stream().filter(game -> userGameDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow().setPlaytime(userGameDTO.getPlaytime());
-        gameService.updateGameStats(user);
-    }
-}
+ */

@@ -29,3 +29,13 @@ export interface UserGameDTO{
     gameId: string
     approved: boolean
 }
+
+export interface NewStatsDTO{
+
+    gameId: string
+    addedPlaytime: number
+    addedSpentMoneyGamePass: number
+    addedSpentMoneyCoins: number
+    addedSpentMoneyGame: number
+
+}
