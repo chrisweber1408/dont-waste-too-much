@@ -25,6 +25,7 @@ public class MyUser {
     private List<String> roles;
     private List<GameData> gameData;
 
+
     public void addGameData(GameData gameData) {
         if(this.gameData == null){
             this.gameData = new ArrayList<>();

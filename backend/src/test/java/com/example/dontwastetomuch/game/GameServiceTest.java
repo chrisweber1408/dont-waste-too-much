@@ -53,7 +53,7 @@ class GameServiceTest {
         GameService gameService = new GameService(gameRepo, myUserRepo);
         Mockito.when(gameRepo.findById("1337")).thenReturn(Optional.of(game));
         //when
-        Game actual = gameService.getOneGame("1337");
+        Game actual = gameService.getOneOfMyGames("1337");
         //then
         Assertions.assertThat(actual).isEqualTo(game);
     }
@@ -67,7 +67,7 @@ class GameServiceTest {
         GameService gameService = new GameService(gameRepo, myUserRepo);
         Mockito.when(gameRepo.findById("1337")).thenReturn(Optional.of(game));
         //then
-        Assertions.assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> gameService.getOneGame("1336"));
+        Assertions.assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> gameService.getOneOfMyGames("1336"));
     }
 
     @Test
@@ -78,11 +78,13 @@ class GameServiceTest {
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
         GameService gameService = new GameService(gameRepo, myUserRepo);
+        GameData gameData = new GameData("1");
+        MyUser user = new MyUser("1", "hans", "123", List.of("admin"), List.of(gameData));
         //when
         Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(savedGame));
         Mockito.when(gameRepo.save(gameToEdit)).thenReturn(gameToEdit);
         //then
-        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToEdit));
+        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToEdit, user));
     }
 
     @Test
