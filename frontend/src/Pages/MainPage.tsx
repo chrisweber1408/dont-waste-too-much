@@ -4,7 +4,6 @@ import {useEffect, useState} from "react";
 import {Game} from "../service/model";
 import Header from "../components/header/Header";
 import {Button, Grid, TextField} from "@mui/material";
-import {Simulate} from "react-dom/test-utils";
 
 export default function MainPage(){
 
