@@ -69,7 +69,7 @@ public class GameService {
         if (myUser.getRoles().stream().anyMatch(roles -> roles.contains("admin"))){
             gameRepo.delete(game);
         } else {
-            throw new IllegalStateException("No admin!");
+            throw new IllegalArgumentException("No admin!");
         }
     }
 

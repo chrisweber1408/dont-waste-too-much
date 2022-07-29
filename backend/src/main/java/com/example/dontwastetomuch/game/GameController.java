@@ -82,9 +82,14 @@ public class GameController {
     }
 
     @DeleteMapping("/{gameId}")
-    public void deleteOneGame(@PathVariable String gameId, Principal principal){
-        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
-        gameService.deleteGame(myUser, gameId);
+    public ResponseEntity<Void> deleteOneGame(@PathVariable String gameId, Principal principal){
+        try{
+            MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+            gameService.deleteGame(myUser, gameId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PutMapping("/myGames/{gameId}")
