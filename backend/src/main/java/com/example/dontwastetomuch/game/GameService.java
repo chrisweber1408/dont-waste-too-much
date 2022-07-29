@@ -92,7 +92,11 @@ public class GameService {
     }
 
     public List<GameData> getAllMyGames(MyUser myUser) {
-        return myUser.getGameData();
+        if (myUser.getGameData().isEmpty()){
+            throw new NoSuchElementException("Add some games to your list");
+        } else {
+            return myUser.getGameData();
+        }
     }
 
     public void updateGameStats(MyUser user, NewStatsDTO newStatsDTO) {
