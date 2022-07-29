@@ -45,29 +45,34 @@ public class GameController {
     }
 
     @GetMapping("/{gameId}")
-    public UserGameDTO getOneOfMyGames(@PathVariable String gameId, Principal principal){
-        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
-        UserGameDTO userGameDTO = new UserGameDTO();
-        userGameDTO.setUsername(myUser.getUsername());
-        userGameDTO.setGameName(gameService.getOneOfMyGames(gameId).getGameName());
-        GameData gameData1 = myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow();
-        userGameDTO.setPlaytime(gameData1.getPlaytime());
-        userGameDTO.setSpentMoneyGame(gameData1.getSpentMoneyGame());
-        userGameDTO.setSpentMoneyCoins(gameData1.getSpentMoneyCoins());
-        userGameDTO.setSpentMoneyGamePass(gameData1.getSpentMoneyGamePass());
-        userGameDTO.setGameId(gameId);
-        userGameDTO.setApproved(gameService.getOneOfMyGames(gameId).isApproved());
-        return userGameDTO;
+    public ResponseEntity<UserGameDTO> getOneOfMyGames(@PathVariable String gameId, Principal principal){
+        try{
+            MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+            UserGameDTO userGameDTO = new UserGameDTO();
+            userGameDTO.setUsername(myUser.getUsername());
+            userGameDTO.setGameName(gameService.getOneOfMyGames(gameId).getGameName());
+            GameData gameData1 = myUser.getGameData().stream().filter(gameData -> gameId.equals(gameData.getGameId())).findAny().orElseThrow();
+            userGameDTO.setPlaytime(gameData1.getPlaytime());
+            userGameDTO.setSpentMoneyGame(gameData1.getSpentMoneyGame());
+            userGameDTO.setSpentMoneyCoins(gameData1.getSpentMoneyCoins());
+            userGameDTO.setSpentMoneyGamePass(gameData1.getSpentMoneyGamePass());
+            userGameDTO.setGameId(gameId);
+            userGameDTO.setApproved(gameService.getOneOfMyGames(gameId).isApproved());
+            return ResponseEntity.ok(userGameDTO);
+        } catch (NoSuchElementException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PutMapping("/{gameId}")
     public ResponseEntity<Void> switchGameStatus(@PathVariable String gameId, Principal principal){
         try {
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-            UserGameDTO userGameDTO = getOneOfMyGames(gameId, principal);
+            ResponseEntity<UserGameDTO> userGameDTO = getOneOfMyGames(gameId, principal);
             Game game1 = new Game();
-            game1.setGameName(userGameDTO.getGameName());
-            game1.setApproved(userGameDTO.isApproved());
+            game1.setGameName(userGameDTO.getBody().getGameName());
+            game1.setApproved(userGameDTO.getBody().isApproved());
             game1.setId(gameId);
             gameService.switchStatus(game1, user);
             return ResponseEntity.status(HttpStatus.OK).build();

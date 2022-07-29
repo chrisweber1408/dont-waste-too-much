@@ -39,7 +39,12 @@ public class GameService {
     }
 
     public Game getOneOfMyGames(String gameId) {
-        return gameRepo.findById(gameId).orElseThrow();
+        if (gameRepo.findById(gameId).isEmpty()){
+            throw new NoSuchElementException("Game not found");
+        } else {
+            return gameRepo.findById(gameId).orElseThrow();
+        }
+
     }
 
 
