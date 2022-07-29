@@ -77,9 +77,15 @@ public class GameController {
     }
 
     @DeleteMapping("/myGames/{gameId}")
-    public void removeGameFromMyList(@PathVariable String gameId, Principal principal){
-        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
-        gameService.removeMyGame(myUser, gameId);
+    public ResponseEntity<Void> removeGameFromMyList(@PathVariable String gameId, Principal principal){
+        try {
+            MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+            gameService.removeMyGame(myUser, gameId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+        }
+
     }
 
     @GetMapping("/myGames")
