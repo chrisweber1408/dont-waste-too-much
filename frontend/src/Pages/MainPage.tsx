@@ -22,7 +22,11 @@ export default function MainPage(){
         fetchAllGames()
             .then((games: Array<Game>) => setGames(games))
             .then(()=> setErrorMessageLoadGames(""))
-            .catch(()=> setErrorMessageLoadGames("The games could not be loaded"))
+            .catch((error) => {
+                if (error.response){
+                    setErrorMessageLoadGames(error.response.data)
+                }
+            })
     }
 
     function saveGame(){
@@ -47,8 +51,6 @@ export default function MainPage(){
     return(
         <div>
             <Header/>
-            <Grid textAlign={"center"}>{errorMessageLoadGames}</Grid>
-            <Grid textAlign={"center"} color={"red"}>{errorMessageCreateGame}</Grid>
             <div>
                 <Grid>
                     <Grid textAlign={"center"} margin={1}>
@@ -59,6 +61,8 @@ export default function MainPage(){
                     </Grid>
                 </Grid>
             </div>
+            <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageLoadGames}</Grid>
+            <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageCreateGame}</Grid>
             <div>
                 {searchGames}
             </div>

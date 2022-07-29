@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,12 @@ public class GameService {
     }
 
     public List<Game> getAllGames() {
-        return gameRepo.findAll();
+        if (gameRepo.findAll().isEmpty()){
+            throw new NoSuchElementException("List is empty");
+        } else {
+            return gameRepo.findAll();
+        }
+
     }
 
     public Game getOneOfMyGames(String gameId) {

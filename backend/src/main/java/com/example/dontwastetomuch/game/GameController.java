@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/game")
@@ -32,10 +33,15 @@ public class GameController {
         }
 
     }
-    
+
     @GetMapping()
-    public List<Game> getAllGames(){
-        return gameService.getAllGames();
+    public ResponseEntity<List<Game>> getAllGames(){
+        try {
+            return ResponseEntity.ok(gameService.getAllGames());
+        } catch (NoSuchElementException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("/{gameId}")
@@ -95,20 +101,24 @@ public class GameController {
     }
 
     @GetMapping("/myGames")
-    public List<UserGameDTO> fetchAllMyGames(Principal principal){
-        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
-        return gameService.getAllMyGames(myUser).stream()
-                .map(gameData -> {
-                    UserGameDTO userGameDTO = new UserGameDTO();
-                    userGameDTO.setUsername(myUser.getUsername());
-                    userGameDTO.setGameName(gameService.getOneOfMyGames(gameData.getGameId()).getGameName());
-                    userGameDTO.setPlaytime(gameData.getPlaytime());
-                    userGameDTO.setSpentMoneyGamePass(gameData.getSpentMoneyGamePass());
-                    userGameDTO.setSpentMoneyGame(gameData.getSpentMoneyGame());
-                    userGameDTO.setSpentMoneyCoins(gameData.getSpentMoneyCoins());
-                    userGameDTO.setGameId(gameService.getOneOfMyGames(gameData.getGameId()).getId());
-                    return userGameDTO;
-                }).toList();
+    public ResponseEntity<List<UserGameDTO>> fetchAllMyGames(Principal principal){
+        try{
+            MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+            return ResponseEntity.ok(gameService.getAllMyGames(myUser).stream()
+                    .map(gameData -> {
+                        UserGameDTO userGameDTO = new UserGameDTO();
+                        userGameDTO.setUsername(myUser.getUsername());
+                        userGameDTO.setGameName(gameService.getOneOfMyGames(gameData.getGameId()).getGameName());
+                        userGameDTO.setPlaytime(gameData.getPlaytime());
+                        userGameDTO.setSpentMoneyGamePass(gameData.getSpentMoneyGamePass());
+                        userGameDTO.setSpentMoneyGame(gameData.getSpentMoneyGame());
+                        userGameDTO.setSpentMoneyCoins(gameData.getSpentMoneyCoins());
+                        userGameDTO.setGameId(gameService.getOneOfMyGames(gameData.getGameId()).getId());
+                        return userGameDTO;
+                    }).toList());
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/myGames/update")
