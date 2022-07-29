@@ -17,8 +17,13 @@ public class GameService {
 
 
     public void addGame(Game game, MyUser user) {
-        game.setApproved(user.getRoles().stream().anyMatch(roles -> roles.contains("admin")));
-        gameRepo.save(game);
+        if (gameRepo.findByGameName(game.getGameName()).isEmpty()){
+            game.setApproved(user.getRoles().stream().anyMatch(roles -> roles.contains("admin")));
+            gameRepo.save(game);
+        } else {
+            throw new IllegalArgumentException("Game already existing");
+        }
+
     }
 
     public List<Game> getAllGames() {

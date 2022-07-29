@@ -22,9 +22,15 @@ public class GameController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void addGame(@RequestBody Game game, Principal principal){
-        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-        gameService.addGame(game, user);
+    public ResponseEntity<Void> addGame(@RequestBody Game game, Principal principal){
+        try {
+            MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+            gameService.addGame(game, user);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+        }
+
     }
     
     @GetMapping()

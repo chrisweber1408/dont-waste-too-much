@@ -11,7 +11,7 @@ export default function MainPage(){
     const [game, setGame] = useState("")
     const [games, setGames] = useState<Array<Game>>([])
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
-    const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
+    const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("111")
 
     useEffect(()=>{
         fetchAllApprovedGames()
