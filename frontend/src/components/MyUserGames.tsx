@@ -8,7 +8,7 @@ import {Grid} from "@mui/material";
 export default function MyUserGames(){
 
     const [games, setGames] = useState<Array<UserGameDTO>>([])
-    const [errorMessage, setErrorMessage] = useState("")
+    const [errorMessageLoadMyGames, setErrorMessageLoadMyGames] = useState("")
     const nav = useNavigate()
 
     useEffect(()=>{
@@ -18,7 +18,11 @@ export default function MyUserGames(){
     const fetchAll = ()=>{
         fetchAllMyGames()
             .then((gameDataFromDb) => setGames(gameDataFromDb))
-            .catch(()=> setErrorMessage("The games could not be loaded"))
+            .catch((error) => {
+                if (error.response){
+                    setErrorMessageLoadMyGames(error.response.data)
+                }
+            })
     }
 
 
@@ -27,7 +31,7 @@ export default function MyUserGames(){
         <div>
             <Header/>
             <div>
-                {errorMessage && <div>{errorMessage}</div>}
+                <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageLoadMyGames}</Grid>
             </div>
             <div>
                 {games.map(game =>

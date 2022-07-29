@@ -21,15 +21,24 @@ export default function MainPage(){
         fetchAllGames()
             .then((games: Array<Game>) => setGames(games))
             .then(()=> setErrorMessageLoadGames(""))
-            .catch(()=> setErrorMessageLoadGames("The games could not be loaded"))
+            .catch((error) => {
+                if (error.response){
+                    setErrorMessageLoadGames(error.response.data)
+                }
+            })
     }
 
     function saveGame(){
         createGame({gameName: game})
             .then(()=> setGame(""))
             .then(()=> setErrorMessageCreateGame(""))
-            .catch(()=> setErrorMessageCreateGame("The game already exists"))
+            .catch((error) => {
+                if (error.response){
+                    setErrorMessageCreateGame(error.response.data)
+                }
+            })
     }
+
 
     const searchGames = games
         .filter(g => g.gameName.toLowerCase().includes(game.toLowerCase()))
@@ -41,18 +50,18 @@ export default function MainPage(){
     return(
         <div>
             <Header/>
-            <span>{errorMessageLoadGames}</span>
-            <span>{errorMessageCreateGame}</span>
             <div>
-                <form onSubmit={saveGame}>
+                <Grid>
                     <Grid textAlign={"center"} margin={1}>
                         <TextField type={"text"}  variant={"outlined"} color={"success"} label={"Add a game"} value={game} onChange={event => setGame(event.target.value)}/>
                     </Grid>
                     <Grid textAlign={"center"} margin={1}>
-                        <Button variant={"contained"} type={"submit"} color={"success"}>Add Game</Button>
+                        <Button onClick={saveGame} variant={"contained"} color={"success"}>Add Game</Button>
                     </Grid>
-                </form>
+                </Grid>
             </div>
+            <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageLoadGames}</Grid>
+            <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageCreateGame}</Grid>
             <div>
                 {searchGames}
             </div>

@@ -26,7 +26,7 @@ export default function InfoPage() {
     const [newSpentMoneyGamePass, setNewSpentMoneyGamePass] = useState(0)
     const [newSpentMoneyCoins, setNewSpentMoneyCoins] = useState(0)
     const [newSpentMoneyGame, setNewSpentMoneyGame] = useState(0)
-    const [errorMessageId, setErrorMessageId] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
     const [roles, setRoles] = useState([""])
     const nav = useNavigate()
 
@@ -39,8 +39,12 @@ export default function InfoPage() {
                     setGame(data)
                     setGameName(data.gameName)
                 })
-                .then(() => setErrorMessageId(""))
-                .catch(() => setErrorMessageId("The game could not be loaded"))
+                .then(() => setErrorMessage(""))
+                .catch((error) => {
+                    if (error.response){
+                        setErrorMessage(error.response.data)
+                    }
+                })
         }
     }, [id])
 
@@ -59,6 +63,12 @@ export default function InfoPage() {
         if (id)
             switchGameStatus(id)
                 .then(fetchGame)
+                .then(() => setErrorMessage(""))
+                .catch((error) => {
+                    if (error.response){
+                        setErrorMessage(error.response.data)
+                    }
+                })
     }
 
     const submitForm = (event: FormEvent) => {
@@ -75,6 +85,11 @@ export default function InfoPage() {
             .then(() => setNewSpentMoneyCoins(0))
             .then(() => setNewSpentMoneyGamePass(0))
             .then(fetchGame)
+            .catch((error) => {
+                if (error.response){
+                    setErrorMessage(error.response.data)
+                }
+            })
     }
 
     const removeGame = () => {
@@ -88,9 +103,9 @@ export default function InfoPage() {
             <Header/>
             <Grid textAlign={"center"}>
                 <h1>{gameName}</h1>
+                <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessage}</Grid>
             </Grid>
             <form onSubmit={submitForm}>
-                {errorMessageId && <div>{errorMessageId}</div>}
                 <Grid sx={{fontSize: 35}} textAlign={"center"}>
                     <AccessTimeFilledIcon/> {game.playtime} h
                 </Grid>

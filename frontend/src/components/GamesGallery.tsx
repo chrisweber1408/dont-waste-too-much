@@ -24,24 +24,33 @@ export default function GamesGallery(props: GamesGalleryProps) {
 
 
     function addToMyGames(id: string | undefined){
-        if(id){
+        if(id) {
             putToMyGames(id)
-                .catch(()=> setErrorMessageFav("Game already added to your list"))
+                .catch((error) => {
+                    if (error.response) {
+                        setErrorMessageFav(error.response.data)
+                    }
+                })
         }
     }
 
     function deleteOneGame(id: string | undefined){
-        if(id)
+        if(id) {
             deleteGame(id)
                 .then(fetchAllGames)
-                .catch(()=> setErrorMessageDelete("Game could not be deleted"))
+                .catch((error) => {
+                    if (error.response) {
+                        setErrorMessageDelete(error.response.data)
+                    }
+                })
+        }
     }
 
     return (
         <div>
             <div>
-                {errorMessageFav}
-                {errorMessageDelete}
+                <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageFav}</Grid>
+                <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageDelete}</Grid>
             </div>
             <div>
                     <Grid margin={1} border={2} borderRadius={2}>
