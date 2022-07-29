@@ -63,6 +63,12 @@ export default function InfoPage() {
         if (id)
             switchGameStatus(id)
                 .then(fetchGame)
+                .then(() => setErrorMessage(""))
+                .catch((error) => {
+                    if (error.response){
+                        setErrorMessage(error.response.data)
+                    }
+                })
     }
 
     const submitForm = (event: FormEvent) => {
