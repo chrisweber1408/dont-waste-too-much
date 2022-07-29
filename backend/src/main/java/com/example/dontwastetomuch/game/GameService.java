@@ -106,16 +106,12 @@ public class GameService {
 
     public void updateGameStats(MyUser user, NewStatsDTO newStatsDTO) {
         GameData gameData = user.getGameData().stream().filter(game -> newStatsDTO.getGameId().equals(game.getGameId())).findAny().orElseThrow();
-        if (gameData.getGameId().equals(newStatsDTO.getGameId())){
-            gameData.setPlaytime(gameData.getPlaytime() + newStatsDTO.getAddedPlaytime());
-            gameData.setSpentMoneyGame(gameData.getSpentMoneyGame() + newStatsDTO.getAddedSpentMoneyGame());
-            gameData.setSpentMoneyCoins(gameData.getSpentMoneyCoins() + newStatsDTO.getAddedSpentMoneyCoins());
-            gameData.setSpentMoneyGamePass(gameData.getSpentMoneyGamePass() + newStatsDTO.getAddedSpentMoneyGamePass());
-            myUserRepo.save(user);
-        } else {
-            throw new NoSuchElementException("Game doesn't exist");
-        }
-
+        gameData.getGameId().equals(newStatsDTO.getGameId());
+        gameData.setPlaytime(gameData.getPlaytime() + newStatsDTO.getAddedPlaytime());
+        gameData.setSpentMoneyGame(gameData.getSpentMoneyGame() + newStatsDTO.getAddedSpentMoneyGame());
+        gameData.setSpentMoneyCoins(gameData.getSpentMoneyCoins() + newStatsDTO.getAddedSpentMoneyCoins());
+        gameData.setSpentMoneyGamePass(gameData.getSpentMoneyGamePass() + newStatsDTO.getAddedSpentMoneyGamePass());
+        myUserRepo.save(user);
     }
 }
 
