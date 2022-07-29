@@ -137,8 +137,13 @@ public class GameController {
     }
 
     @PutMapping("/myGames/update")
-    public void updateGameStats(@RequestBody NewStatsDTO newStatsDTO, Principal principal){
-        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-        gameService.updateGameStats(user, newStatsDTO);
+    public ResponseEntity updateGameStats(@RequestBody NewStatsDTO newStatsDTO, Principal principal){
+        try{
+            MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+            gameService.updateGameStats(user, newStatsDTO);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

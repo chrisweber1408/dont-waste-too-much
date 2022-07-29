@@ -85,6 +85,11 @@ export default function InfoPage() {
             .then(() => setNewSpentMoneyCoins(0))
             .then(() => setNewSpentMoneyGamePass(0))
             .then(fetchGame)
+            .catch((error) => {
+                if (error.response){
+                    setErrorMessage(error.response.data)
+                }
+            })
     }
 
     const removeGame = () => {
