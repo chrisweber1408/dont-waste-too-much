@@ -93,9 +93,14 @@ public class GameController {
     }
 
     @PutMapping("/myGames/{gameId}")
-    public void putToMyGames(@PathVariable String gameId, Principal principal){
-        MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
-        gameService.addMyGame(myUser, gameId);
+    public ResponseEntity<Void> putToMyGames(@PathVariable String gameId, Principal principal){
+        try {
+            MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+            gameService.addMyGame(myUser, gameId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @DeleteMapping("/myGames/{gameId}")

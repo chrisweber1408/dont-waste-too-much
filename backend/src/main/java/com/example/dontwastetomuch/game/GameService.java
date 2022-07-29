@@ -80,7 +80,7 @@ public class GameService {
             myUser.addGameData(gameData);
             myUserRepo.save(myUser);
         } else {
-            throw new IllegalArgumentException("Game already added to your list");
+            throw new IllegalArgumentException("Game already added");
         }
     }
 
