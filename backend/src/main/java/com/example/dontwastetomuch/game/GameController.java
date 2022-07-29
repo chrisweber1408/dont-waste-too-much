@@ -27,7 +27,7 @@ public class GameController {
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
             gameService.addGame(game, user);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException | IllegalStateException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
         }
 

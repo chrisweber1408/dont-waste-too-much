@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {Game} from "../service/model";
 import Header from "../components/header/Header";
 import {Button, Grid, TextField} from "@mui/material";
+import {Simulate} from "react-dom/test-utils";
 
 export default function MainPage(){
 
@@ -11,7 +12,7 @@ export default function MainPage(){
     const [game, setGame] = useState("")
     const [games, setGames] = useState<Array<Game>>([])
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
-    const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("111")
+    const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
 
     useEffect(()=>{
         fetchAllApprovedGames()
@@ -28,8 +29,13 @@ export default function MainPage(){
         createGame({gameName: game})
             .then(()=> setGame(""))
             .then(()=> setErrorMessageCreateGame(""))
-            .catch(()=> setErrorMessageCreateGame("The game already exists"))
+            .catch((error) => {
+                if (error.response){
+                    setErrorMessageCreateGame(error.response.data)
+                }
+            })
     }
+
 
     const searchGames = games
         .filter(g => g.gameName.toLowerCase().includes(game.toLowerCase()))
@@ -41,17 +47,17 @@ export default function MainPage(){
     return(
         <div>
             <Header/>
-            <span>{errorMessageLoadGames}</span>
-            <span>{errorMessageCreateGame}</span>
+            <Grid textAlign={"center"}>{errorMessageLoadGames}</Grid>
+            <Grid textAlign={"center"} color={"red"}>{errorMessageCreateGame}</Grid>
             <div>
-                <form onSubmit={saveGame}>
+                <Grid>
                     <Grid textAlign={"center"} margin={1}>
                         <TextField type={"text"}  variant={"outlined"} color={"success"} label={"Add a game"} value={game} onChange={event => setGame(event.target.value)}/>
                     </Grid>
                     <Grid textAlign={"center"} margin={1}>
-                        <Button variant={"contained"} type={"submit"} color={"success"}>Add Game</Button>
+                        <Button onClick={saveGame} variant={"contained"} color={"success"}>Add Game</Button>
                     </Grid>
-                </form>
+                </Grid>
             </div>
             <div>
                 {searchGames}
