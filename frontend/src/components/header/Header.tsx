@@ -20,14 +20,22 @@ export default function Header(){
                 <h1 className={"header"}>Dont waste too much!</h1>
             </div>
             <Grid container>
-                <Grid onClick={()=> nav("/main")} item xs={3} textAlign={"center"} border={2} borderRadius={4} margin={2}>
+                <Grid item xs={0.5}>
+                </Grid>
+                <Grid onClick={()=> nav("/main")} item xs={3} textAlign={"center"} border={2} borderRadius={4}>
                     <HomeIcon fontSize={"large"}></HomeIcon>
                 </Grid>
-                <Grid onClick={()=> nav("/myGames")} item xs={3} textAlign={"center"} border={2} borderRadius={4} margin={2}>
+                <Grid item xs={1}>
+                </Grid>
+                <Grid onClick={()=> nav("/myGames")} item xs={3} textAlign={"center"} border={2} borderRadius={4}>
                     <SportsEsportsIcon fontSize={"large"}></SportsEsportsIcon>
                 </Grid>
-                <Grid onClick={()=> nav("/")} onClickCapture={logout} item xs={3} textAlign={"center"} border={2} borderRadius={4} margin={2}>
+                <Grid item xs={1}>
+                </Grid>
+                <Grid onClick={()=> nav("/")} onClickCapture={logout} item xs={3} textAlign={"center"} border={2} borderRadius={4}>
                     <LogoutIcon fontSize={"large"}></LogoutIcon>
+                </Grid>
+                <Grid item xs={0.5}>
                 </Grid>
             </Grid>
         </div>
