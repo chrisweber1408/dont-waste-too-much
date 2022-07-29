@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/game")
@@ -27,7 +28,7 @@ public class GameController {
         try {
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
             gameService.addGame(game, user);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (IllegalArgumentException | IllegalStateException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
         }
@@ -71,7 +72,7 @@ public class GameController {
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
             ResponseEntity<UserGameDTO> userGameDTO = getOneOfMyGames(gameId, principal);
             Game game1 = new Game();
-            game1.setGameName(userGameDTO.getBody().getGameName());
+            game1.setGameName(Objects.requireNonNull(userGameDTO.getBody()).getGameName());
             game1.setApproved(userGameDTO.getBody().isApproved());
             game1.setId(gameId);
             gameService.switchStatus(game1, user);
