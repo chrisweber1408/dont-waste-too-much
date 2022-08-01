@@ -6,6 +6,7 @@ import MainPage from "./Pages/MainPage";
 import InfoPage from "./Pages/InfoPage";
 import MyUserGames from "./components/MyUserGames";
 import "./App.css"
+import CommunityGameInfoPage from "./Pages/CommunityGameInfoPage";
 
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
                 <Route path={"/main"} element={<MainPage/>}/>
                 <Route path={"/infos/:id"} element={<InfoPage/>}/>
                 <Route path={"/myGames"} element={<MyUserGames/>}/>
+                <Route path={"/communityGameInfo/:id"} element={<CommunityGameInfoPage/>}/>
             </Routes>
         </BrowserRouter>
     )

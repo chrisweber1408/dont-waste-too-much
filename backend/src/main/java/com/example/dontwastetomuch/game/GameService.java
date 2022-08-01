@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.dto.CommunityStatsDTO;
 import com.example.dontwastetomuch.dto.NewStatsDTO;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.DoubleStream;
 
 @Service
 @RequiredArgsConstructor
@@ -112,6 +114,59 @@ public class GameService {
         gameData.setSpentMoneyCoins(gameData.getSpentMoneyCoins() + newStatsDTO.getAddedSpentMoneyCoins());
         gameData.setSpentMoneyGamePass(gameData.getSpentMoneyGamePass() + newStatsDTO.getAddedSpentMoneyGamePass());
         myUserRepo.save(user);
+    }
+
+    public CommunityStatsDTO getOneCommunityGame(String gameId) {
+        List<MyUser> myUsersByGameDataContains = myUserRepo.findAllByGameDataGameId(gameId);
+        double sumPlaytime = getPlaytime(myUsersByGameDataContains)
+                .sum();
+        double averagePlaytime = getPlaytime(myUsersByGameDataContains)
+                .average().orElseThrow();
+        double sumSpentMoneyGame = getSpentMoneyGame(myUsersByGameDataContains)
+                .sum();
+        double averageSpentMoneyGame = getSpentMoneyGame(myUsersByGameDataContains)
+                .average().orElseThrow();
+        double sumSpentMoneyCoins = getSpentMoneyCoins(myUsersByGameDataContains)
+                .sum();
+        double averageSpentMoneyCoins = getSpentMoneyCoins(myUsersByGameDataContains)
+                .average().orElseThrow();
+        double sumSpentMoneyGamePass = getSpentMoneyGamePass(myUsersByGameDataContains)
+                .sum();
+        double averageSpentMoneyGamePass = getSpentMoneyGamePass(myUsersByGameDataContains)
+                .average().orElseThrow();
+
+        CommunityStatsDTO communityStatsDTO = new CommunityStatsDTO();
+        communityStatsDTO.setGameName(gameRepo.findById(gameId).orElseThrow().getGameName());
+        communityStatsDTO.setTotalPlaytime(sumPlaytime);
+        communityStatsDTO.setAveragePlaytime(averagePlaytime);
+        communityStatsDTO.setTotalSpentMoneyGame(sumSpentMoneyGame);
+        communityStatsDTO.setAverageSpentMoneyGame(averageSpentMoneyGame);
+        communityStatsDTO.setTotalSpentMoneyCoins(sumSpentMoneyCoins);
+        communityStatsDTO.setAverageSpentMoneyCoins(averageSpentMoneyCoins);
+        communityStatsDTO.setTotalSpentMoneyGamePass(sumSpentMoneyGamePass);
+        communityStatsDTO.setAverageSpentMoneyGamePass(averageSpentMoneyGamePass);
+        return communityStatsDTO;
+    }
+
+    private DoubleStream getPlaytime(List<MyUser> myUsersByGameDataContains) {
+        return myUsersByGameDataContains.stream()
+                .flatMap(myUser -> myUser.getGameData().stream())
+                .mapToDouble(GameData::getPlaytime);
+    }
+    private DoubleStream getSpentMoneyGame(List<MyUser> myUsersByGameDataContains) {
+        return myUsersByGameDataContains.stream()
+                .flatMap(myUser -> myUser.getGameData().stream())
+                .mapToDouble(GameData::getSpentMoneyGame);
+    }
+    private DoubleStream getSpentMoneyCoins(List<MyUser> myUsersByGameDataContains) {
+        return myUsersByGameDataContains.stream()
+                .flatMap(myUser -> myUser.getGameData().stream())
+                .mapToDouble(GameData::getSpentMoneyCoins);
+    }
+    private DoubleStream getSpentMoneyGamePass(List<MyUser> myUsersByGameDataContains) {
+        return myUsersByGameDataContains.stream()
+                .flatMap(myUser -> myUser.getGameData().stream())
+                .mapToDouble(GameData::getSpentMoneyGamePass);
     }
 }
 
