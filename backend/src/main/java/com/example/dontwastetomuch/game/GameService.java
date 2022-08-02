@@ -46,7 +46,6 @@ public class GameService {
         } else {
             return gameRepo.findById(gameId).orElseThrow();
         }
-
     }
 
 
@@ -82,7 +81,7 @@ public class GameService {
             myUser.addGameData(gameData);
             myUserRepo.save(myUser);
         } else {
-            throw new IllegalArgumentException("Game already added");
+            throw new IllegalArgumentException("Game already added!");
         }
     }
 
@@ -92,15 +91,15 @@ public class GameService {
             myUser.getGameData().remove(data);
             myUserRepo.save(myUser);
         } else {
-            throw new IllegalArgumentException("Game not found");
+            throw new IllegalArgumentException("Game not found!");
         }
 
 
     }
 
     public List<GameData> getAllMyGames(MyUser myUser) {
-        if (myUser.getGameData().isEmpty()){
-            throw new NoSuchElementException("Add some games to your list");
+        if (myUser.getGameData() == null || myUser.getGameData().isEmpty()){
+            throw new NoSuchElementException("Add some games to your list!");
         } else {
             return myUser.getGameData();
         }
