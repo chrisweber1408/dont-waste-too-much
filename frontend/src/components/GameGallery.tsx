@@ -57,7 +57,7 @@ export default function GameGallery(props: GamesGalleryProps) {
             <div>
                 <Grid margin={1} border={2} borderRadius={2}>
                     <Grid container>
-                        <Grid onClick={() => nav("/communityGameInfo/" + props.game.id)} item xs={8.45} margin={1}
+                        <Grid onClick={() => nav("/communityGameInfo/" + props.game.id)} item xs={8.3} margin={1}
                               sx={{fontSize: 20}}>{props.game.gameName}</Grid>
                         <Grid item xs={0.5} margin={1}>{props.game.approved === false && roles.indexOf("admin") === 0 &&
                             <ReportIcon/>}</Grid>
