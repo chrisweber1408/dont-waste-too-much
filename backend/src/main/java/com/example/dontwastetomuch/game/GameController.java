@@ -151,7 +151,11 @@ public class GameController {
     }
 
     @GetMapping("/communityGame/{gameId}")
-    public CommunityStatsDTO getOneCommunityGame(@PathVariable String gameId){
-        return gameService.getOneCommunityGame(gameId);
+    public ResponseEntity<CommunityStatsDTO> getOneCommunityGame(@PathVariable String gameId){
+        try{
+            return ResponseEntity.ok(gameService.getOneCommunityGame(gameId));
+        } catch (NoSuchElementException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

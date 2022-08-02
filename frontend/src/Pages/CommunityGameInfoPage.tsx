@@ -42,22 +42,24 @@ export default function CommunityGameInfoPage(){
                 <h1>{game.gameName}</h1>
                 <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessage}</Grid>
             </Grid>
-            <Grid container>
-                <Grid item xs={6} textAlign={"center"}>
-                    <TotalCommunitySpentMoneyDoughnut game={game}/>
+            {!errorMessage && <div>
+                <Grid container>
+                    <Grid item xs={6} textAlign={"center"}>
+                        <TotalCommunitySpentMoneyDoughnut game={game}/>
+                    </Grid>
+                    <Grid item xs={6} textAlign={"center"}>
+                        <TotalCommunityMoneyVsPlaytimeDoughnut game={game}/>
+                    </Grid>
                 </Grid>
-                <Grid item xs={6} textAlign={"center"}>
-                    <TotalCommunityMoneyVsPlaytimeDoughnut game={game}/>
+                <Grid container>
+                    <Grid item xs={12} textAlign={"center"}>
+                        <AverageCommunitySpentMoneyDoughnut game={game}/>
+                    </Grid>
+                    <Grid item xs={12} textAlign={"center"}>
+                        <AverageCommunityMoneyVsPlaytimeDoughnut game={game}/>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Grid container>
-                <Grid item xs={12} textAlign={"center"}>
-                    <AverageCommunitySpentMoneyDoughnut game={game}/>
-                </Grid>
-                <Grid item xs={12} textAlign={"center"}>
-                    <AverageCommunityMoneyVsPlaytimeDoughnut game={game}/>
-                </Grid>
-            </Grid>
+            </div>}
         </div>
     )
 }
