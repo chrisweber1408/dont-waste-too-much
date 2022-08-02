@@ -1,5 +1,6 @@
 package com.example.dontwastetomuch.game;
 
+import com.example.dontwastetomuch.dto.CommunityStatsDTO;
 import com.example.dontwastetomuch.dto.NewStatsDTO;
 import com.example.dontwastetomuch.dto.UserGameDTO;
 import com.example.dontwastetomuch.user.MyUser;
@@ -13,6 +14,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/game")
@@ -144,6 +146,15 @@ public class GameController {
             gameService.updateGameStats(user, newStatsDTO);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/communityGame/{gameId}")
+    public ResponseEntity<CommunityStatsDTO> getOneCommunityGame(@PathVariable String gameId){
+        try{
+            return ResponseEntity.ok(gameService.getOneCommunityGame(gameId));
+        } catch (NoSuchElementException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }

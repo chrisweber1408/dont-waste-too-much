@@ -47,6 +47,10 @@ export function deleteGame(gameId: string){
     return axios.delete("/api/game/" + gameId, requestConfig())
 }
 
+export function getOneCommunityGame(gameId: string){
+    return axios.get("/api/game/communityGame/" + gameId, requestConfig())
+}
+
 
 
 
