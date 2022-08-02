@@ -43,11 +43,12 @@ export interface NewStatsDTO{
 export interface CommunityStatsDTO{
 
     gameName: string
-    playtime: number
+    totalPlaytime: number
     totalSpentMoneyGame: number
     totalSpentMoneyCoins: number
     totalSpentMoneyGamePass: number
-    averageSpentMoneyGam: number
+    averagePlaytime: number
+    averageSpentMoneyGame: number
     averageSpentMoneyCoins: number
     averageSpentMoneyGamePass: number
 
