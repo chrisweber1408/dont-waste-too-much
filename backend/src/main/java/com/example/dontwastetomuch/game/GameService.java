@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +69,10 @@ public class GameService {
     public void deleteGame(MyUser myUser, String gameId){
         Game game = gameRepo.findById(gameId).orElseThrow();
         if (myUser.getRoles().stream().anyMatch(roles -> roles.contains("admin"))){
+            List<MyUser> myUsersByGameDataContains = myUserRepo.findAllByGameDataGameId(gameId);
+            for (MyUser myUsersByGameDataContain : myUsersByGameDataContains) {
+                removeMyGame(myUsersByGameDataContain, gameId);
+            }
             gameRepo.delete(game);
         } else {
             throw new IllegalArgumentException("No admin!");

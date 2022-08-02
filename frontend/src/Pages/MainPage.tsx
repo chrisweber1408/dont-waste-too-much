@@ -1,4 +1,4 @@
-import GamesGallery from "../components/GamesGallery";
+import GameGallery from "../components/GameGallery";
 import {createGame, fetchAllGames} from "../service/apiService";
 import {useEffect, useState} from "react";
 import {Game} from "../service/model";
@@ -14,10 +14,10 @@ export default function MainPage(){
     const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
 
     useEffect(()=>{
-        fetchAllApprovedGames()
+        fetchAllCommunityGames()
     },[game])
 
-    const fetchAllApprovedGames = ()=>{
+    const fetchAllCommunityGames = ()=>{
         fetchAllGames()
             .then((games: Array<Game>) => setGames(games))
             .then(()=> setErrorMessageLoadGames(""))
@@ -42,7 +42,7 @@ export default function MainPage(){
 
     const searchGames = games
         .filter(g => g.gameName.toLowerCase().includes(game.toLowerCase()))
-        .map(search => <Grid key={search.id}><GamesGallery games={search}/></Grid>)
+        .map(search => <Grid key={search.id}><GameGallery game={search}/></Grid>)
 
 
 

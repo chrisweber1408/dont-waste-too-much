@@ -1,9 +1,9 @@
 import {useCallback, useEffect, useState} from "react";
-import {getOneCommunityGame} from "../service/apiService";
+import {getOneCommunityGame, switchGameStatus} from "../service/apiService";
 import {useParams} from "react-router-dom";
 import {CommunityStatsDTO} from "../service/model";
 import Header from "../components/header/Header";
-import {Grid} from "@mui/material";
+import {Grid, Switch} from "@mui/material";
 import {TotalCommunityMoneyVsPlaytimeDoughnut} from "../components/charts/TotalCommunityMoneyVsPlaytimeDoughnut";
 import {TotalCommunitySpentMoneyDoughnut} from "../components/charts/TotalCommunitySpentMoneyDoughnut";
 import {AverageCommunitySpentMoneyDoughnut} from "../components/charts/AverageCommunitySpentMoneyDoughnut";
@@ -34,6 +34,7 @@ export default function CommunityGameInfoPage(){
     useEffect(() => {
         fetchGame()
     }, [fetchGame])
+
 
     return(
         <div>
