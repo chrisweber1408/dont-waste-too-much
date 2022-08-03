@@ -81,6 +81,7 @@ export default function EditPage(){
             .then(()=> nav("/main"))
     }
 
+
     return(
         <div>
             <Header/>
