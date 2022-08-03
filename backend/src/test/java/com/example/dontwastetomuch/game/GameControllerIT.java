@@ -159,8 +159,17 @@ public class GameControllerIT {
         Assertions.assertThat(Objects.requireNonNull(getOneGameToEdit.getBody()).getGameName()).isEqualTo("FIFA 22");
 
         //editOneGameAsAdmin
-        ResponseEntity<Void> editOneGame = testRestTemplate.exchange("/api/game/edit", HttpMethod.PUT, new HttpEntity<>(game1, createHeader(token)), Void.class);
+        Game gameToEdit = new Game("1", "testGame");
+        ResponseEntity<Void> editOneGame = testRestTemplate.exchange("/api/game/edit", HttpMethod.PUT, new HttpEntity<>(gameToEdit, createHeader(token)), Void.class);
         Assertions.assertThat(editOneGame.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ResponseEntity<Game> getEditedGame = testRestTemplate.exchange("/api/game/edit/" + game1.getId(), HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game.class);
+        Assertions.assertThat(Objects.requireNonNull(getEditedGame.getBody()).getGameName()).isEqualTo("testGame");
+
+        //deleteOneGame
+        ResponseEntity<Void> deleteGame = testRestTemplate.exchange("/api/game/" + gameToEdit.getId(), HttpMethod.DELETE, new HttpEntity<>(createHeader(token)), Void.class);
+        Assertions.assertThat(deleteGame.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ResponseEntity<Game> test = testRestTemplate.exchange("/api/game/edit/" + gameToEdit.getId(), HttpMethod.GET, new HttpEntity<>(createHeader(token)), Game.class);
+        Assertions.assertThat(test.getBody()).isNull();
     }
 
     private HttpHeaders createHeader(String token){
