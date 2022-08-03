@@ -5,11 +5,12 @@ import com.example.dontwastetomuch.dto.NewStatsDTO;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.DoubleStream;
 
 @Service
@@ -51,7 +52,7 @@ public class GameService {
 
 
     public void switchStatus(Game game, MyUser user) {
-        if (!user.getRoles().stream().anyMatch(roles -> roles.contains("admin"))){
+        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))){
             throw new IllegalArgumentException("No admin logged in");
         } else {
             if (game.isApproved()) {
@@ -177,11 +178,24 @@ public class GameService {
                 .mapToDouble(GameData::getSpentMoneyGamePass);
     }
 
-    public Game getOneGameToEdit(String gameId) {
+    public Game getOneGameToEdit(String gameId, Principal principal) {
+        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
+            throw new IllegalArgumentException("No admin logged in");
+        }
         if (gameRepo.findById(gameId).isEmpty()){
             throw new NoSuchElementException("Game not found!");
         } else {
             return gameRepo.findById(gameId).orElseThrow();
+        }
+    }
+
+    public void editOneGame(Game game, Principal principal) {
+        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
+            throw new NoSuchElementException("No admin logged in");
+        } else {
+            gameRepo.save(game);
         }
     }
 }

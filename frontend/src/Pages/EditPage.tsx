@@ -1,5 +1,5 @@
 import Header from "../components/header/Header";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useCallback, useEffect, useState} from "react";
 import {deleteGame, editOneGame, fetchAllGames, getOneGameToEdit, switchGameStatus} from "../service/apiService";
 import {Button, Grid, Switch, TextField} from "@mui/material";
@@ -13,6 +13,7 @@ export default function EditPage(){
     const [gameName, setGameName] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
     const [roles, setRoles] = useState([""])
+    const nav = useNavigate()
 
     const fetchGame = useCallback(() => {
         if (id) {
@@ -57,6 +58,7 @@ export default function EditPage(){
         if (id) {
             deleteGame(id)
                 .then(fetchAllGames)
+                .then(()=> nav("/main"))
                 .catch((error) => {
                     if (error.response) {
                         setErrorMessage(error.response.data)
@@ -65,13 +67,18 @@ export default function EditPage(){
         }
     }
 
+    const saveGame = ()=>{
+        editGame()
+    }
+
     const editGame = ()=>{
         editOneGame({
             "id": game.id,
             "gameName": gameName,
             "approved": game.approved
         })
-            .then()
+            .then(fetchGame)
+            .then(()=> nav("/main"))
     }
 
     return(
@@ -87,11 +94,11 @@ export default function EditPage(){
                 <Grid>
                     <TextField type={"text"}  variant={"outlined"} color={"success"} value={gameName} onChange={event => setGameName(event.target.value)}/>
                 </Grid>
-                <Grid margin={1}>
-                    <Button onClick={()=> editGame} variant={"contained"} color={"success"}>Save name</Button>
+                <Grid margin={3}>
+                    <Button onClick={()=> saveGame()} variant={"contained"} color={"success"}>Save name</Button>
                 </Grid>
-                <Grid item xs={0.5} margin={1}>{roles.indexOf("admin") === 0 &&
-                    <DeleteForeverIcon onClick={() => deleteOneGame(game.id)}></DeleteForeverIcon>}</Grid>
+                <Grid item xs={0.5} margin={3}>{roles.indexOf("admin") === 0 &&
+                    <DeleteForeverIcon fontSize={"large"} onClick={() => deleteOneGame(game.id)}></DeleteForeverIcon>}</Grid>
             </Grid>
         </div>
     )

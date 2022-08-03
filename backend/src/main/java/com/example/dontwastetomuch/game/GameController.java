@@ -71,7 +71,7 @@ public class GameController {
     public ResponseEntity<Void> switchGameStatus(@PathVariable String gameId, Principal principal){
         try {
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-            ResponseEntity<Game> game = getOneGameToEdit(gameId);
+            ResponseEntity<Game> game = getOneGameToEdit(gameId, principal);
             Game game1 = new Game();
             game1.setGameName(Objects.requireNonNull(game.getBody()).getGameName());
             game1.setApproved(game.getBody().isApproved());
@@ -159,11 +159,21 @@ public class GameController {
     }
 
     @GetMapping("/edit/{gameId}")
-    public ResponseEntity<Game> getOneGameToEdit(@PathVariable String gameId){
+    public ResponseEntity<Game> getOneGameToEdit(@PathVariable String gameId, Principal principal){
         try{
-            return ResponseEntity.ok(gameService.getOneGameToEdit(gameId));
+            return ResponseEntity.ok(gameService.getOneGameToEdit(gameId, principal));
         } catch (NoSuchElementException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<Void> editOneGame(@RequestBody Game game, Principal principal){
+        try {
+            gameService.editOneGame(game, principal);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
 }
