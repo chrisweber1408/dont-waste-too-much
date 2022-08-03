@@ -35,6 +35,7 @@ export default function CommunityGameInfoPage(){
         fetchGame()
     }, [fetchGame])
 
+
     return(
         <div>
             <Header/>

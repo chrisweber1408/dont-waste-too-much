@@ -51,6 +51,14 @@ export function getOneCommunityGame(gameId: string){
     return axios.get("/api/game/communityGame/" + gameId, requestConfig())
 }
 
+export function getOneGameToEdit(gameId: string){
+    return axios.get("/api/game/edit/" + gameId, requestConfig())
+}
+
+export function editOneGame(game: Game){
+    return axios.put("/api/game/edit", game, requestConfig())
+}
+
 
 
 

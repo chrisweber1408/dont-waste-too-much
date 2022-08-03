@@ -5,10 +5,13 @@ import com.example.dontwastetomuch.dto.NewStatsDTO;
 import com.example.dontwastetomuch.user.MyUser;
 import com.example.dontwastetomuch.user.MyUserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.DoubleStream;
 
 @Service
@@ -42,16 +45,16 @@ public class GameService {
 
     public Game getOneOfMyGames(String gameId) {
         if (gameRepo.findById(gameId).isEmpty()){
-            throw new NoSuchElementException("Game not found");
+            throw new IllegalArgumentException("Game not found");
         } else {
             return gameRepo.findById(gameId).orElseThrow();
         }
-
     }
 
 
-    public void switchStatus(Game game, MyUser user) {
-        if (!user.getRoles().stream().anyMatch(roles -> roles.contains("admin"))){
+    public void switchStatus(String gameId, MyUser user) {
+        Game game = getOneGameToEdit(gameId, user);
+        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))){
             throw new IllegalArgumentException("No admin logged in");
         } else {
             if (game.isApproved()) {
@@ -62,13 +65,15 @@ public class GameService {
                 gameRepo.save(game);
             }
         }
-
-
     }
 
     public void deleteGame(MyUser myUser, String gameId){
         Game game = gameRepo.findById(gameId).orElseThrow();
         if (myUser.getRoles().stream().anyMatch(roles -> roles.contains("admin"))){
+            List<MyUser> myUsersByGameDataContains = myUserRepo.findAllByGameDataGameId(gameId);
+            for (MyUser myUsersByGameDataContain : myUsersByGameDataContains) {
+                removeMyGame(myUsersByGameDataContain, gameId);
+            }
             gameRepo.delete(game);
         } else {
             throw new IllegalArgumentException("No admin!");
@@ -82,7 +87,7 @@ public class GameService {
             myUser.addGameData(gameData);
             myUserRepo.save(myUser);
         } else {
-            throw new IllegalArgumentException("Game already added");
+            throw new IllegalArgumentException("Game already added!");
         }
     }
 
@@ -92,15 +97,15 @@ public class GameService {
             myUser.getGameData().remove(data);
             myUserRepo.save(myUser);
         } else {
-            throw new IllegalArgumentException("Game not found");
+            throw new IllegalArgumentException("Game not found!");
         }
 
 
     }
 
     public List<GameData> getAllMyGames(MyUser myUser) {
-        if (myUser.getGameData().isEmpty()){
-            throw new NoSuchElementException("Add some games to your list");
+        if (myUser.getGameData() == null || myUser.getGameData().isEmpty()){
+            throw new IllegalArgumentException("Add some games to your list!");
         } else {
             return myUser.getGameData();
         }
@@ -171,6 +176,26 @@ public class GameService {
         return myUsersByGameDataContains.stream()
                 .flatMap(myUser -> myUser.getGameData().stream())
                 .mapToDouble(GameData::getSpentMoneyGamePass);
+    }
+
+    public Game getOneGameToEdit(String gameId, MyUser user) {
+        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
+            throw new IllegalArgumentException("No admin logged in");
+        }
+        if (gameRepo.findById(gameId).isEmpty()){
+            throw new IllegalStateException("Game not found!");
+        } else {
+            return gameRepo.findById(gameId).orElseThrow();
+        }
+    }
+
+    public void editOneGame(Game game, Principal principal) {
+        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
+            throw new NoSuchElementException("No admin logged in");
+        } else {
+            gameRepo.save(game);
+        }
     }
 }
 

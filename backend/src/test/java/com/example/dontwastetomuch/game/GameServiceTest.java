@@ -67,8 +67,9 @@ class GameServiceTest {
         GameService gameService = new GameService(gameRepo, myUserRepo);
         Mockito.when(gameRepo.findById("1337")).thenReturn(Optional.of(game));
         //then
-        Assertions.assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> gameService.getOneOfMyGames("1336"));
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> gameService.getOneOfMyGames("1336"));
     }
+
 
     @Test
     void shouldSwitchGameStatus(){
@@ -84,8 +85,9 @@ class GameServiceTest {
         Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(savedGame));
         Mockito.when(gameRepo.save(gameToEdit)).thenReturn(gameToEdit);
         //then
-        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToEdit, user));
+        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToEdit.getId(), user));
     }
+
 
     @Test
     void shouldAddAGameToMyGames(){
