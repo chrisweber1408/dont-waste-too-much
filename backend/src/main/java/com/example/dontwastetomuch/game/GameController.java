@@ -9,12 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.NoSuchFileException;
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/game")
@@ -32,11 +29,10 @@ public class GameController {
             gameService.addGame(game, user);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (IllegalArgumentException | IllegalStateException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
     }
 
     @GetMapping()
@@ -44,7 +40,7 @@ public class GameController {
         try {
             return ResponseEntity.ok(gameService.getAllGames());
         } catch (NoSuchElementException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }
@@ -65,7 +61,7 @@ public class GameController {
             userGameDTO.setApproved(gameService.getOneOfMyGames(gameId).isApproved());
             return ResponseEntity.ok(userGameDTO);
         } catch (IllegalArgumentException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -79,7 +75,7 @@ public class GameController {
             gameService.switchStatus(gameId, user);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -92,7 +88,7 @@ public class GameController {
             gameService.deleteGame(myUser, gameId);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -105,7 +101,7 @@ public class GameController {
             gameService.addMyGame(myUser, gameId);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -118,7 +114,7 @@ public class GameController {
             gameService.removeMyGame(myUser, gameId);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -141,9 +137,7 @@ public class GameController {
                         userGameDTO.setGameId(gameService.getOneOfMyGames(gameData.getGameId()).getId());
                         return userGameDTO;
                     }).toList());
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (NoSuchElementException e){
+        } catch (IllegalArgumentException | NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -154,9 +148,7 @@ public class GameController {
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
             gameService.updateGameStats(user, newStatsDTO);
             return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (IllegalArgumentException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (NoSuchElementException e){
+        } catch (IllegalArgumentException | NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -166,7 +158,7 @@ public class GameController {
         try{
             return ResponseEntity.ok(gameService.getOneCommunityGame(gameId));
         } catch (NoSuchElementException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -176,9 +168,7 @@ public class GameController {
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
             return ResponseEntity.ok(gameService.getOneGameToEdit(gameId, user));
         } catch (IllegalArgumentException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (IllegalStateException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -187,10 +177,11 @@ public class GameController {
     @PutMapping("/edit")
     public ResponseEntity<Void> editOneGame(@RequestBody Game game, Principal principal){
         try {
-            gameService.editOneGame(game, principal);
+            MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
+            gameService.editOneGame(game, myUser);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (NoSuchElementException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

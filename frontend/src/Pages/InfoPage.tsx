@@ -34,11 +34,7 @@ export default function InfoPage() {
                     setGameName(data.gameName)
                 })
                 .then(() => setErrorMessage(""))
-                .catch((error) => {
-                    if (error.response){
-                        setErrorMessage(error.response.data)
-                    }
-                })
+                .catch(()=> setErrorMessage("No"))
         }
     }, [id])
 

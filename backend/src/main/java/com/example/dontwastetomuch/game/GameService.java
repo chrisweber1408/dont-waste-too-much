@@ -181,18 +181,14 @@ public class GameService {
     public Game getOneGameToEdit(String gameId, MyUser user) {
         if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
             throw new IllegalArgumentException("No admin logged in");
-        }
-        if (gameRepo.findById(gameId).isEmpty()){
-            throw new IllegalStateException("Game not found!");
         } else {
             return gameRepo.findById(gameId).orElseThrow();
         }
     }
 
-    public void editOneGame(Game game, Principal principal) {
-        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
-            throw new NoSuchElementException("No admin logged in");
+    public void editOneGame(Game game, MyUser myUser) {
+        if (myUser.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
+            throw new IllegalArgumentException("No admin logged in");
         } else {
             gameRepo.save(game);
         }

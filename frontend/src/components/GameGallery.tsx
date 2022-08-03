@@ -26,11 +26,7 @@ export default function GameGallery(props: GamesGalleryProps) {
     function addToMyGames(id: string | undefined) {
         if (id) {
             putToMyGames(id)
-                .catch((error) => {
-                    if (error.response) {
-                        setErrorMessageFav(error.response.data)
-                    }
-                })
+                .catch(()=>setErrorMessageFav("Game already added!"))
         }
     }
 
