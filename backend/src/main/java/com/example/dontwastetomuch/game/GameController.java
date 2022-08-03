@@ -14,7 +14,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/game")
@@ -72,10 +71,10 @@ public class GameController {
     public ResponseEntity<Void> switchGameStatus(@PathVariable String gameId, Principal principal){
         try {
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-            ResponseEntity<UserGameDTO> userGameDTO = getOneOfMyGames(gameId, principal);
+            ResponseEntity<Game> game = getOneGameToEdit(gameId);
             Game game1 = new Game();
-            game1.setGameName(Objects.requireNonNull(userGameDTO.getBody()).getGameName());
-            game1.setApproved(userGameDTO.getBody().isApproved());
+            game1.setGameName(Objects.requireNonNull(game.getBody()).getGameName());
+            game1.setApproved(game.getBody().isApproved());
             game1.setId(gameId);
             gameService.switchStatus(game1, user);
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -154,6 +153,15 @@ public class GameController {
     public ResponseEntity<CommunityStatsDTO> getOneCommunityGame(@PathVariable String gameId){
         try{
             return ResponseEntity.ok(gameService.getOneCommunityGame(gameId));
+        } catch (NoSuchElementException e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/edit/{gameId}")
+    public ResponseEntity<Game> getOneGameToEdit(@PathVariable String gameId){
+        try{
+            return ResponseEntity.ok(gameService.getOneGameToEdit(gameId));
         } catch (NoSuchElementException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }

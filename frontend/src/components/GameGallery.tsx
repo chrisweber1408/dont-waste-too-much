@@ -1,11 +1,10 @@
 import {Game} from "../service/model";
-import {deleteGame, fetchAllGames, putToMyGames} from "../service/apiService";
+import {putToMyGames} from "../service/apiService";
 import {useEffect, useState} from "react";
 import {Grid} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {useNavigate} from "react-router-dom";
-import ReportIcon from '@mui/icons-material/Report';
+import EditIcon from '@mui/icons-material/Edit';
 
 interface GamesGalleryProps {
     game: Game
@@ -14,7 +13,6 @@ interface GamesGalleryProps {
 export default function GameGallery(props: GamesGalleryProps) {
 
     const [errorMessageFav, setErrorMessageFav] = useState("")
-    const [errorMessageDelete, setErrorMessageDelete] = useState("")
     const [roles, setRoles] = useState([""])
     const nav = useNavigate()
 
@@ -36,33 +34,24 @@ export default function GameGallery(props: GamesGalleryProps) {
         }
     }
 
-    function deleteOneGame(id: string | undefined) {
-        if (id) {
-            deleteGame(id)
-                .then(fetchAllGames)
-                .catch((error) => {
-                    if (error.response) {
-                        setErrorMessageDelete(error.response.data)
-                    }
-                })
-        }
-    }
-
     return (
         <div>
             <div>
                 <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageFav}</Grid>
-                <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageDelete}</Grid>
             </div>
             <div>
                 <Grid margin={1} border={2} borderRadius={2}>
                     <Grid container>
-                        <Grid onClick={() => nav("/communityGameInfo/" + props.game.id)} item xs={8.3} margin={1}
+                        <Grid onClick={() => nav("/communityGameInfo/" + props.game.id)} item xs={9.3} margin={1}
                               sx={{fontSize: 20}}>{props.game.gameName}</Grid>
-                        <Grid item xs={0.5} margin={1}>{props.game.approved === false && roles.indexOf("admin") === 0 &&
-                            <ReportIcon/>}</Grid>
-                        <Grid item xs={0.5} margin={1}>{roles.indexOf("admin") === 0 &&
-                            <DeleteForeverIcon onClick={() => deleteOneGame(props.game.id)}></DeleteForeverIcon>}</Grid>
+                        <Grid item xs={1} onClick={() => nav("/edit/" + props.game.id)}>
+                            <Grid color={"red"} item xs={0.5}
+                                  margin={1}>{props.game.approved === false && roles.indexOf("admin") === 0 &&
+                                <EditIcon/>}</Grid>
+                            <Grid item xs={0.5}
+                                  margin={1}>{props.game.approved === true && roles.indexOf("admin") === 0 &&
+                                <EditIcon/>}</Grid>
+                        </Grid>
                         <Grid item xs={0.5} margin={1}><AddIcon
                             onClick={() => addToMyGames(props.game.id)}>Add</AddIcon></Grid>
                     </Grid>

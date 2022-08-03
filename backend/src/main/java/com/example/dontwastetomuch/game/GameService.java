@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -175,6 +175,14 @@ public class GameService {
         return myUsersByGameDataContains.stream()
                 .flatMap(myUser -> myUser.getGameData().stream())
                 .mapToDouble(GameData::getSpentMoneyGamePass);
+    }
+
+    public Game getOneGameToEdit(String gameId) {
+        if (gameRepo.findById(gameId).isEmpty()){
+            throw new NoSuchElementException("Game not found!");
+        } else {
+            return gameRepo.findById(gameId).orElseThrow();
+        }
     }
 }
 

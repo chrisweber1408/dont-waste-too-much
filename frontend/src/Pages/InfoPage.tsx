@@ -1,15 +1,10 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {FormEvent, useCallback, useEffect, useState} from "react";
-import {
-    switchGameStatus,
-    getOneGame,
-    updateGameStats,
-    removeGameFromMyList
-} from "../service/apiService";
+import {getOneGame, updateGameStats, removeGameFromMyList} from "../service/apiService";
 import {UserGameDTO} from "../service/model";
 import DeleteIcon from '@mui/icons-material/Delete';
 import Header from "../components/header/Header";
-import {Grid, Switch, TextField} from "@mui/material";
+import {Grid, TextField} from "@mui/material";
 import PaidIcon from '@mui/icons-material/Paid';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import {Add} from "@mui/icons-material";
@@ -27,7 +22,6 @@ export default function InfoPage() {
     const [newSpentMoneyCoins, setNewSpentMoneyCoins] = useState(0)
     const [newSpentMoneyGame, setNewSpentMoneyGame] = useState(0)
     const [errorMessage, setErrorMessage] = useState("")
-    const [roles, setRoles] = useState([""])
     const nav = useNavigate()
 
 
@@ -52,24 +46,6 @@ export default function InfoPage() {
         fetchGame()
     }, [fetchGame])
 
-    useEffect(() => {
-        const decoded = window.atob(localStorage.getItem("jwt")!.split('.')[1])
-        const decodeJWT = JSON.parse(decoded)
-        setRoles(decodeJWT.roles)
-    }, [])
-
-
-    const switchStatus = () => {
-        if (id)
-            switchGameStatus(id)
-                .then(fetchGame)
-                .then(() => setErrorMessage(""))
-                .catch((error) => {
-                    if (error.response){
-                        setErrorMessage(error.response.data)
-                    }
-                })
-    }
 
     const submitForm = (event: FormEvent) => {
         event.preventDefault()
@@ -138,9 +114,6 @@ export default function InfoPage() {
                         <DeleteIcon onClick={removeGame}>Delete</DeleteIcon>
                     </Grid>
                 </Grid>
-                {roles.indexOf("admin") === 0 && <Grid textAlign={"center"} sx={{fontSize: 20}}>
-                    <Switch checked={game.approved} onClick={switchStatus}/>Approved status!
-                </Grid>}
             </form>
             <Grid container>
                 <Grid item xs={6} textAlign={"center"}>
