@@ -1,6 +1,7 @@
 package com.example.dontwastetomuch.game;
 
 
+import com.example.dontwastetomuch.dto.CommunityStatsDTO;
 import com.example.dontwastetomuch.dto.NewStatsDTO;
 import com.example.dontwastetomuch.dto.UserGameDTO;
 import com.example.dontwastetomuch.user.*;
@@ -110,6 +111,7 @@ public class GameControllerIT {
         Assertions.assertThat(exchange2.getStatusCode()).isEqualTo(HttpStatus.OK);
         ResponseEntity<UserGameDTO[]> exchange3 = testRestTemplate.exchange("/api/game/myGames", HttpMethod.GET, new HttpEntity<>(createHeader(token)), UserGameDTO[].class);
         Assertions.assertThat(exchange3.getBody()).hasSize(2);
+
 
         //addAdminRole
         setUserAsAdmin(user1.getUsername());

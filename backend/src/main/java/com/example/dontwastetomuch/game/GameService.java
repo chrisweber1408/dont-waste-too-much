@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.DoubleStream;
 
 @Service
@@ -44,14 +45,15 @@ public class GameService {
 
     public Game getOneOfMyGames(String gameId) {
         if (gameRepo.findById(gameId).isEmpty()){
-            throw new NoSuchElementException("Game not found");
+            throw new IllegalArgumentException("Game not found");
         } else {
             return gameRepo.findById(gameId).orElseThrow();
         }
     }
 
 
-    public void switchStatus(Game game, MyUser user) {
+    public void switchStatus(String gameId, MyUser user) {
+        Game game = getOneGameToEdit(gameId, user);
         if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))){
             throw new IllegalArgumentException("No admin logged in");
         } else {
@@ -63,8 +65,6 @@ public class GameService {
                 gameRepo.save(game);
             }
         }
-
-
     }
 
     public void deleteGame(MyUser myUser, String gameId){
@@ -105,7 +105,7 @@ public class GameService {
 
     public List<GameData> getAllMyGames(MyUser myUser) {
         if (myUser.getGameData() == null || myUser.getGameData().isEmpty()){
-            throw new NoSuchElementException("Add some games to your list!");
+            throw new IllegalArgumentException("Add some games to your list!");
         } else {
             return myUser.getGameData();
         }
@@ -178,13 +178,12 @@ public class GameService {
                 .mapToDouble(GameData::getSpentMoneyGamePass);
     }
 
-    public Game getOneGameToEdit(String gameId, Principal principal) {
-        MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
+    public Game getOneGameToEdit(String gameId, MyUser user) {
         if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
             throw new IllegalArgumentException("No admin logged in");
         }
         if (gameRepo.findById(gameId).isEmpty()){
-            throw new NoSuchElementException("Game not found!");
+            throw new IllegalStateException("Game not found!");
         } else {
             return gameRepo.findById(gameId).orElseThrow();
         }
