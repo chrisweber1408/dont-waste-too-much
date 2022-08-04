@@ -48,32 +48,24 @@ public class GameService {
     }
 
 
-    public void switchStatus(String gameId, MyUser user) {
-        Game game = getOneGameToEdit(gameId, user);
-        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))){
-            throw new IllegalArgumentException("No admin logged in");
-        } else {
-            if (game.isApproved()) {
-                game.setApproved(false);
-                gameRepo.save(game);
-            }else {
-                game.setApproved(true);
-                gameRepo.save(game);
-            }
+    public void switchStatus(String gameId) {
+        Game game = getOneGameToEdit(gameId);
+        if (game.isApproved()) {
+            game.setApproved(false);
+            gameRepo.save(game);
+        }else {
+            game.setApproved(true);
+            gameRepo.save(game);
         }
     }
 
-    public void deleteGame(MyUser myUser, String gameId){
+    public void deleteGame(String gameId){
         Game game = gameRepo.findById(gameId).orElseThrow();
-        if (myUser.getRoles().stream().anyMatch(roles -> roles.contains("admin"))){
-            List<MyUser> myUsersByGameDataContains = myUserRepo.findAllByGameDataGameId(gameId);
-            for (MyUser myUsersByGameDataContain : myUsersByGameDataContains) {
-                removeMyGame(myUsersByGameDataContain, gameId);
-            }
-            gameRepo.delete(game);
-        } else {
-            throw new IllegalArgumentException("No admin!");
+        List<MyUser> myUsersByGameDataContains = myUserRepo.findAllByGameDataGameId(gameId);
+        for (MyUser myUsersByGameDataContain : myUsersByGameDataContains) {
+            removeMyGame(myUsersByGameDataContain, gameId);
         }
+        gameRepo.delete(game);
     }
 
 
@@ -174,20 +166,12 @@ public class GameService {
                 .mapToDouble(GameData::getSpentMoneyGamePass);
     }
 
-    public Game getOneGameToEdit(String gameId, MyUser user) {
-        if (user.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
-            throw new IllegalArgumentException("No admin logged in");
-        } else {
-            return gameRepo.findById(gameId).orElseThrow();
-        }
+    public Game getOneGameToEdit(String gameId) {
+        return gameRepo.findById(gameId).orElseThrow();
     }
 
-    public void editOneGame(Game game, MyUser myUser) {
-        if (myUser.getRoles().stream().noneMatch(roles -> roles.contains("admin"))) {
-            throw new IllegalArgumentException("No admin logged in");
-        } else {
-            gameRepo.save(game);
-        }
+    public void editOneGame(Game game) {
+        gameRepo.save(game);
     }
 }
 

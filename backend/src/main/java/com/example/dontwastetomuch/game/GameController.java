@@ -69,10 +69,9 @@ public class GameController {
     }
 
     @PutMapping("/{gameId}")
-    public ResponseEntity<Void> switchGameStatus(@PathVariable String gameId, Principal principal){
+    public ResponseEntity<Void> switchGameStatus(@PathVariable String gameId){
         try {
-            MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-            gameService.switchStatus(gameId, user);
+            gameService.switchStatus(gameId);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -82,10 +81,9 @@ public class GameController {
     }
 
     @DeleteMapping("/{gameId}")
-    public ResponseEntity<Void> deleteOneGame(@PathVariable String gameId, Principal principal){
+    public ResponseEntity<Void> deleteOneGame(@PathVariable String gameId){
         try{
-            MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
-            gameService.deleteGame(myUser, gameId);
+            gameService.deleteGame(gameId);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -163,10 +161,9 @@ public class GameController {
     }
 
     @GetMapping("/edit/{gameId}")
-    public ResponseEntity<Game> getOneGameToEdit(@PathVariable String gameId, Principal principal){
+    public ResponseEntity<Game> getOneGameToEdit(@PathVariable String gameId){
         try{
-            MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
-            return ResponseEntity.ok(gameService.getOneGameToEdit(gameId, user));
+            return ResponseEntity.ok(gameService.getOneGameToEdit(gameId));
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (NoSuchElementException e){
@@ -175,10 +172,9 @@ public class GameController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Void> editOneGame(@RequestBody Game game, Principal principal){
+    public ResponseEntity<Void> editOneGame(@RequestBody Game game){
         try {
-            MyUser myUser = myUserRepo.findById(principal.getName()).orElseThrow();
-            gameService.editOneGame(game, myUser);
+            gameService.editOneGame(game);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
