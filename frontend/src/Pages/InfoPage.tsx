@@ -34,7 +34,7 @@ export default function InfoPage() {
                     setGameName(data.gameName)
                 })
                 .then(() => setErrorMessage(""))
-                .catch(()=> setErrorMessage("No"))
+                .catch(()=> setErrorMessage("No game found!"))
         }
     }, [id])
 
