@@ -5,17 +5,35 @@ import com.example.dontwastetomuch.user.MyUserRepo;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 class GameServiceTest {
 
     @Test
-    void shouldAddAGame(){
+    void shouldAddAGameAsUser(){
         //given
-        Game game = new Game("1", "Fifa22", true);
+        Game game = new Game("1", "Fifa22");
+        MyUser user = new MyUser();
+        user.setRoles(List.of("user"));
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        //when
+        gameService.addGame(game, user);
+        user.setRoles(List.of("admin"));
+        Mockito.when(gameRepo.findById("1")).thenReturn(Optional.of(game));
+        Game oneGameToEdit = gameService.getOneGameToEdit("1", user);
+        boolean approved = oneGameToEdit.isApproved();
+        //then
+        Assertions.assertThat(approved).isEqualTo(false);
+        Mockito.verify(gameRepo).save(game);
+    }
+
+    @Test
+    void shouldAddAGameAsAdmin(){
+        //given
+        Game game = new Game("1", "Fifa22");
         MyUser user = new MyUser();
         user.setRoles(List.of("admin"));
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
@@ -23,7 +41,11 @@ class GameServiceTest {
         GameService gameService = new GameService(gameRepo, myUserRepo);
         //when
         gameService.addGame(game, user);
+        Mockito.when(gameRepo.findById("1")).thenReturn(Optional.of(game));
+        Game oneGameToEdit = gameService.getOneGameToEdit("1", user);
+        boolean approved = oneGameToEdit.isApproved();
         //then
+        Assertions.assertThat(approved).isEqualTo(true);
         Mockito.verify(gameRepo).save(game);
     }
 
@@ -72,21 +94,42 @@ class GameServiceTest {
 
 
     @Test
-    void shouldSwitchGameStatus(){
+    void shouldSwitchGameStatusByAdmin(){
         //given
-        Game gameToEdit = new Game("123","FIFA 22", true);
-        Game savedGame = new Game("123","FIFA 22", true);
+        Game gameToSwitchStatus = new Game("123","FIFA 22");
         GameRepo gameRepo = Mockito.mock(GameRepo.class);
         MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
         GameService gameService = new GameService(gameRepo, myUserRepo);
         GameData gameData = new GameData("1");
         MyUser user = new MyUser("1", "hans", "123", List.of("admin"), List.of(gameData));
         //when
-        Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(savedGame));
-        Mockito.when(gameRepo.save(gameToEdit)).thenReturn(gameToEdit);
+        gameService.addGame(gameToSwitchStatus, user);
+        Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(gameToSwitchStatus));
+        Mockito.when(gameRepo.save(gameToSwitchStatus)).thenReturn(gameToSwitchStatus);
+        gameService.switchStatus("123", user);
         //then
-        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToEdit.getId(), user));
+        Assertions.assertThat(gameToSwitchStatus.isApproved()).isEqualTo(false);
+        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToSwitchStatus.getId(), user));
     }
+
+    @Test
+    void shouldNotSwitchGameStatusByUser(){
+        //given
+        Game gameToSwitchStatus = new Game("123","FIFA 22");
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        GameData gameData = new GameData("1");
+        MyUser user = new MyUser("1", "hans", "123", List.of("user"), List.of(gameData));
+        //when
+        gameService.addGame(gameToSwitchStatus, user);
+        Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(gameToSwitchStatus));
+        Mockito.when(gameRepo.save(gameToSwitchStatus)).thenReturn(gameToSwitchStatus);
+        //then
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(()-> gameService.switchStatus(gameToSwitchStatus.getId(), user));
+    }
+
+
 
 
     @Test
@@ -103,6 +146,21 @@ class GameServiceTest {
     }
 
     @Test
+    void shouldNotAddAGameToMyGamesBecauseAlreadyAdded(){
+        //given
+        MyUser user = new MyUser();
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        //when
+        gameService.addMyGame(user, "123");
+        //then
+        Mockito.verify(myUserRepo).save(user);
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(()-> gameService.addMyGame(user, "123"));
+
+    }
+
+    @Test
     void shouldListMyGames(){
         //given
         MyUser user = new MyUser();
@@ -116,6 +174,17 @@ class GameServiceTest {
         List<GameData> allMyGames = gameService.getAllMyGames(user);
         //then
         Assertions.assertThat(allMyGames).hasSize(3);
+    }
+
+    @Test
+    void shouldNotListMyGamesBecauseNoGameAdded(){
+        //given
+        MyUser user = new MyUser();
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        //then
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(()-> gameService.getAllMyGames(user));
     }
 
     @Test
@@ -161,6 +230,110 @@ class GameServiceTest {
         user.getGameData().remove(2);
         //then
         Assertions.assertThat(gameService.getAllMyGames(user)).hasSize(2);
+    }
+
+    @Test
+    void shouldNotRemoveOneGameFromMyListBecauseNotInMyList(){
+        //given
+        MyUser user = new MyUser();
+        //then
+        Assertions.assertThatExceptionOfType(NullPointerException.class).isThrownBy(()-> user.getGameData().remove(0));
+    }
+
+    @Test
+    void shouldDeleteOneGameAsAdmin(){
+        //given
+        Game game = new Game("1", "Fifa22");
+        MyUser user = new MyUser();
+        user.setRoles(List.of("admin"));
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        gameService.addGame(game,user);
+        //when
+        Mockito.when(gameRepo.findById("1")).thenReturn(Optional.of(game));
+        gameService.deleteGame(user,"1");
+        //then
+        Mockito.verify(gameRepo).delete(game);
+    }
+
+    @Test
+    void shouldNotDeleteOneGameAsUser(){
+        //given
+        Game game = new Game("1", "Fifa22");
+        MyUser user = new MyUser();
+        user.setRoles(List.of("user"));
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        gameService.addGame(game,user);
+        Mockito.when(gameRepo.findById("1")).thenReturn(Optional.of(game));
+        //then
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(()-> gameService.deleteGame(user, "1"));
+    }
+
+    @Test
+    void shouldGetOneGameToEditAsAdmin(){
+        //given
+        Game game = new Game("1", "Fifa22");
+        MyUser user = new MyUser();
+        user.setRoles(List.of("admin"));
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        //when
+        Mockito.when(gameRepo.findById("1")).thenReturn(Optional.of(game));
+        Game oneGameToEdit = gameService.getOneGameToEdit("1", user);
+        //then
+        Assertions.assertThat(oneGameToEdit.getGameName()).isEqualTo("Fifa22");
+    }
+
+    @Test
+    void shouldGetNoGameToEditAsUser(){
+        //given
+        Game game = new Game("1", "Fifa22");
+        MyUser user = new MyUser();
+        user.setRoles(List.of("user"));
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        //when
+        Mockito.when(gameRepo.findById("1")).thenReturn(Optional.of(game));
+        //then
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(()-> gameService.getOneGameToEdit("1", user));
+    }
+
+    @Test
+    void shouldEditOneGameAsAdmin(){
+        //given
+        Game gameToEdit = new Game("123","FIFA 22");
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        GameData gameData = new GameData("1");
+        MyUser user = new MyUser("1", "hans", "123", List.of("admin"), List.of(gameData));
+        gameService.addGame(gameToEdit, user);
+        //when
+        Mockito.when(gameRepo.findById("123")).thenReturn(Optional.of(gameToEdit));
+        Mockito.when(gameRepo.save(gameToEdit)).thenReturn(gameToEdit);
+        gameToEdit.setGameName("FIFA 23");
+        gameService.editOneGame(gameToEdit, user);
+        //then
+        Assertions.assertThat(gameToEdit.getGameName()).isEqualTo("FIFA 23");
+        Assertions.assertThatNoException().isThrownBy(()-> gameService.switchStatus(gameToEdit.getId(), user));
+    }
+
+    @Test
+    void shouldNotEditOneGameAsUser(){
+        //given
+        Game gameToEdit = new Game("123","FIFA 22");
+        GameRepo gameRepo = Mockito.mock(GameRepo.class);
+        MyUserRepo myUserRepo = Mockito.mock(MyUserRepo.class);
+        GameService gameService = new GameService(gameRepo, myUserRepo);
+        GameData gameData = new GameData("1");
+        MyUser user = new MyUser("1", "hans", "123", List.of("amin"), List.of(gameData));
+        //then
+        Assertions.assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(()-> gameService.editOneGame(gameToEdit, user));
     }
 }
 
