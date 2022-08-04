@@ -143,7 +143,7 @@ public class GameController {
     }
 
     @PutMapping("/myGames/update")
-    public ResponseEntity updateGameStats(@RequestBody NewStatsDTO newStatsDTO, Principal principal){
+    public ResponseEntity<Void> updateGameStats(@RequestBody NewStatsDTO newStatsDTO, Principal principal){
         try{
             MyUser user = myUserRepo.findById(principal.getName()).orElseThrow();
             gameService.updateGameStats(user, newStatsDTO);
