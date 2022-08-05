@@ -15,7 +15,7 @@ export default function MyUserGames(){
         if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
             nav("/")
         }
-    })
+    },[])
 
     useEffect(()=>{
         fetchAll()

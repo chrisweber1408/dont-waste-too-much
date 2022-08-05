@@ -24,7 +24,7 @@ export default function MainPage(){
         if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
             nav("/")
         }
-    })
+    },[])
 
     const fetchAllCommunityGames = ()=>{
         fetchAllGames()

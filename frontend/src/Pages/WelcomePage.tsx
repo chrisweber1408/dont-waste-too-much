@@ -15,7 +15,7 @@ export default function RegisterPage() {
         if (localStorage.getItem("jwt") !== null && localStorage.getItem("jwt") !== ""){
             nav("/main")
         }
-    })
+    },[])
 
 
     function login(formEvent: FormEvent) {

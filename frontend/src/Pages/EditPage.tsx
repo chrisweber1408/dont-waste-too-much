@@ -19,7 +19,7 @@ export default function EditPage(){
         if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
             nav("/")
         }
-    })
+    },[])
 
     const fetchGame = useCallback(() => {
         if (id) {
