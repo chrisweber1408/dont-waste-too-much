@@ -6,4 +6,8 @@ Don't waste too much helps you to overview your spendings and playtime on video 
 
 https://dont-waste-too-much.herokuapp.com/
 
-![Bildschirmfoto 2022-08-01 um 10 52 44](https://user-images.githubusercontent.com/105639964/183077219-63853620-3e39-4e9c-9bde-74c8474093ca.png)
+
+![Bildschirmfoto 2022-08-01 um 10 48 43](https://user-images.githubusercontent.com/105639964/183077447-5e408d05-64a5-4c69-a537-a9d564a81bcd.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/105639964/183077447-5e408d05-64a5-4c69-a537-a9d564a81bcd.png" />
+</p>
