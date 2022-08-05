@@ -20,7 +20,7 @@ export default function CommunityGameInfoPage(){
         if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
             nav("/")
         }
-    },[])
+    },[nav])
 
     const fetchGame = useCallback(() => {
         if (id) {

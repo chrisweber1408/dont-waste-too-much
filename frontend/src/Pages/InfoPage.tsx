@@ -29,7 +29,7 @@ export default function InfoPage() {
         if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
             nav("/")
         }
-    },[])
+    },[nav])
 
 
     const fetchGame = useCallback(() => {
