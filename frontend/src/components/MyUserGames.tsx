@@ -18,11 +18,7 @@ export default function MyUserGames(){
     const fetchAll = ()=>{
         fetchAllMyGames()
             .then((gameDataFromDb) => setGames(gameDataFromDb))
-            .catch((error) => {
-                if (error.response){
-                    setErrorMessageLoadMyGames(error.response.data)
-                }
-            })
+            .catch(()=>setErrorMessageLoadMyGames("Add some games!"))
     }
 
 

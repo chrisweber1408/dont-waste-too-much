@@ -23,11 +23,7 @@ export default function CommunityGameInfoPage(){
                     setGame(data)
                 })
                 .then(() => setErrorMessage(""))
-                .catch((error) => {
-                    if (error.response){
-                        setErrorMessage(error.response.data)
-                    }
-                })
+                .catch(()=> setErrorMessage("No game stats!"))
         }
     }, [id])
 

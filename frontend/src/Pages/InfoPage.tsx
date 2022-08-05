@@ -34,11 +34,7 @@ export default function InfoPage() {
                     setGameName(data.gameName)
                 })
                 .then(() => setErrorMessage(""))
-                .catch((error) => {
-                    if (error.response){
-                        setErrorMessage(error.response.data)
-                    }
-                })
+                .catch(()=> setErrorMessage("No game found!"))
         }
     }, [id])
 
@@ -61,11 +57,6 @@ export default function InfoPage() {
             .then(() => setNewSpentMoneyCoins(0))
             .then(() => setNewSpentMoneyGamePass(0))
             .then(fetchGame)
-            .catch((error) => {
-                if (error.response){
-                    setErrorMessage(error.response.data)
-                }
-            })
     }
 
     const removeGame = () => {
