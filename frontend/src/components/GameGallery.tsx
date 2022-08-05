@@ -5,6 +5,8 @@ import {Grid} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import {useNavigate} from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
+import {toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 
 interface GamesGalleryProps {
     game: Game
@@ -12,7 +14,6 @@ interface GamesGalleryProps {
 
 export default function GameGallery(props: GamesGalleryProps) {
 
-    const [errorMessageFav, setErrorMessageFav] = useState("")
     const [roles, setRoles] = useState([""])
     const nav = useNavigate()
 
@@ -23,22 +24,21 @@ export default function GameGallery(props: GamesGalleryProps) {
     }, [])
 
 
+
     function addToMyGames(id: string | undefined) {
         if (id) {
             putToMyGames(id)
-                .catch(()=>setErrorMessageFav("Game already added!"))
+                .then(()=> toast.success("Game added to your list."))
+                .catch(()=> toast.warning("Game already added to your games!"))
         }
     }
 
     return (
         <div>
             <div>
-                <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageFav}</Grid>
-            </div>
-            <div>
                 <Grid margin={1} border={2} borderRadius={2}>
                     <Grid container>
-                        <Grid onClick={() => nav("/communityGameInfo/" + props.game.id)} item xs={9.3} margin={1}
+                        <Grid onClick={() => nav("/communityGameInfo/" + props.game.id)} item xs={9} margin={1}
                               sx={{fontSize: 20}}>{props.game.gameName}</Grid>
                         <Grid item xs={1} onClick={() => nav("/edit/" + props.game.id)}>
                             <Grid color={"red"} item xs={0.5}
@@ -48,7 +48,7 @@ export default function GameGallery(props: GamesGalleryProps) {
                                   margin={1}>{props.game.approved === true && roles.indexOf("admin") === 0 &&
                                 <EditIcon/>}</Grid>
                         </Grid>
-                        <Grid item xs={0.5} margin={1}><AddIcon
+                        <Grid item xs={0.8} margin={1}><AddIcon
                             onClick={() => addToMyGames(props.game.id)}>Add</AddIcon></Grid>
                     </Grid>
                 </Grid>

@@ -16,7 +16,7 @@ export default function EditPage(){
     const nav = useNavigate()
 
     useEffect(()=>{
-        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") == ""){
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
             nav("/")
         }
     })
@@ -102,7 +102,7 @@ export default function EditPage(){
                     <TextField type={"text"}  variant={"outlined"} color={"success"} value={gameName} onChange={event => setGameName(event.target.value)}/>
                 </Grid>
                 <Grid margin={3}>
-                    <Button onClick={()=> saveGame()} variant={"contained"} color={"success"}>Save name</Button>
+                    <Button onClick={()=> saveGame()} variant={"contained"} color={"success"}>Save</Button>
                 </Grid>
                 <Grid item xs={0.5} margin={3}>{roles.indexOf("admin") === 0 &&
                     <DeleteForeverIcon fontSize={"large"} onClick={() => deleteOneGame(game.id)}></DeleteForeverIcon>}</Grid>

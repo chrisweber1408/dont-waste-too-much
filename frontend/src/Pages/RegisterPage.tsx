@@ -3,6 +3,7 @@ import {FormEvent, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {registerUser} from "../service/apiService";
 import Header from "../components/header/Header";
+import {toast} from "react-toastify";
 
 
 export default function RegisterPage(){
@@ -17,6 +18,7 @@ export default function RegisterPage(){
         formEvent.preventDefault()
         registerUser({username, password, passwordRepeat})
             .then(()=> nav("/"))
+            .catch(()=> toast.warning("Passwords do not match!"))
     }
 
     return(

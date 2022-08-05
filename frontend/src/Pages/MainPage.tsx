@@ -5,6 +5,7 @@ import {Game} from "../service/model";
 import Header from "../components/header/Header";
 import {Button, Grid, TextField} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 export default function MainPage(){
 
@@ -20,7 +21,7 @@ export default function MainPage(){
     },[game])
 
     useEffect(()=>{
-        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") == ""){
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
             nav("/")
         }
     })
@@ -40,11 +41,7 @@ export default function MainPage(){
         createGame({gameName: game})
             .then(()=> setGame(""))
             .then(()=> setErrorMessageCreateGame(""))
-            .catch((error) => {
-                if (error.response){
-                    setErrorMessageCreateGame(error.response.data)
-                }
-            })
+            .catch(()=> toast.warning("Game already in the list!"))
     }
 
 

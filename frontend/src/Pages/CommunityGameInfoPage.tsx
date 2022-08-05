@@ -17,7 +17,7 @@ export default function CommunityGameInfoPage(){
     const nav = useNavigate()
 
     useEffect(()=>{
-        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") == ""){
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
             nav("/")
         }
     })

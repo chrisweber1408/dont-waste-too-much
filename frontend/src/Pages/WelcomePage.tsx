@@ -3,6 +3,7 @@ import {FormEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {sendLogin} from "../service/apiService";
 import Header from "../components/header/Header";
+import {toast} from "react-toastify";
 
 export default function RegisterPage() {
 
@@ -22,6 +23,7 @@ export default function RegisterPage() {
         sendLogin({username, password})
             .then(data => localStorage.setItem("jwt", data.jwt))
             .then(() => nav("/main"))
+            .catch(()=> toast.warning("Wrong username/password!"))
     }
 
 
@@ -38,11 +40,12 @@ export default function RegisterPage() {
                         <TextField type={"password"} label="Password" color={"success"} variant="outlined" value={password}
                                    onChange={event => setPassword(event.target.value)}/>
                     </Grid>
-                    <Grid item xs={6} textAlign={"center"}>
-                        <Button onClick={() => nav("/register")} variant="contained" color={"success"}>Register</Button>
-                    </Grid>
                     <Grid item xs={6} textAlign={"center"} margin={1}>
                         <Button variant="contained" type="submit" color={"success"}>Login</Button>
+                    </Grid>
+                    <Grid textAlign={"center"} fontSize={30}>Not registered?</Grid>
+                    <Grid item xs={6} textAlign={"center"} margin={1}>
+                        <Button onClick={() => nav("/register")} variant="contained" color={"success"}>Sign in now!</Button>
                     </Grid>
                 </form>
                 <div className="g-signin2" data-onsuccess="onSignIn"></div>
