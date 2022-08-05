@@ -12,6 +12,12 @@ export default function MyUserGames(){
     const nav = useNavigate()
 
     useEffect(()=>{
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") == ""){
+            nav("/")
+        }
+    })
+
+    useEffect(()=>{
         fetchAll()
     },[])
 

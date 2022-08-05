@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {Game} from "../service/model";
 import Header from "../components/header/Header";
 import {Button, Grid, TextField} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
 export default function MainPage(){
 
@@ -12,10 +13,17 @@ export default function MainPage(){
     const [games, setGames] = useState<Array<Game>>([])
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
     const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
+    const nav = useNavigate()
 
     useEffect(()=>{
         fetchAllCommunityGames()
     },[game])
+
+    useEffect(()=>{
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") == ""){
+            nav("/")
+        }
+    })
 
     const fetchAllCommunityGames = ()=>{
         fetchAllGames()

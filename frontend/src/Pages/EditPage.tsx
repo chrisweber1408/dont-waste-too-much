@@ -15,6 +15,12 @@ export default function EditPage(){
     const [roles, setRoles] = useState([""])
     const nav = useNavigate()
 
+    useEffect(()=>{
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") == ""){
+            nav("/")
+        }
+    })
+
     const fetchGame = useCallback(() => {
         if (id) {
             getOneGameToEdit(id)

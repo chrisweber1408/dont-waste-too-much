@@ -1,5 +1,5 @@
 import {Button, Grid, TextField} from "@mui/material";
-import {FormEvent, useState} from "react";
+import {FormEvent, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {sendLogin} from "../service/apiService";
 import Header from "../components/header/Header";
@@ -8,9 +8,14 @@ export default function RegisterPage() {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-
-
     const nav = useNavigate()
+
+    useEffect(()=>{
+        if (localStorage.getItem("jwt") !== null && localStorage.getItem("jwt") !== ""){
+            nav("/main")
+        }
+    })
+
 
     function login(formEvent: FormEvent) {
         formEvent.preventDefault()
@@ -18,6 +23,7 @@ export default function RegisterPage() {
             .then(data => localStorage.setItem("jwt", data.jwt))
             .then(() => nav("/main"))
     }
+
 
     return (
         <div>

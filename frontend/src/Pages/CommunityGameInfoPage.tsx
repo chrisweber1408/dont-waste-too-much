@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {getOneCommunityGame} from "../service/apiService";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {CommunityStatsDTO} from "../service/model";
 import Header from "../components/header/Header";
 import {Grid} from "@mui/material";
@@ -14,6 +14,13 @@ export default function CommunityGameInfoPage(){
     const {id} = useParams()
     const [game, setGame] = useState({} as CommunityStatsDTO)
     const [errorMessage, setErrorMessage] = useState("")
+    const nav = useNavigate()
+
+    useEffect(()=>{
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") == ""){
+            nav("/")
+        }
+    })
 
     const fetchGame = useCallback(() => {
         if (id) {

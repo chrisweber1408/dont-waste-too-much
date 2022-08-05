@@ -24,6 +24,12 @@ export default function InfoPage() {
     const [errorMessage, setErrorMessage] = useState("")
     const nav = useNavigate()
 
+    useEffect(()=>{
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") == ""){
+            nav("/")
+        }
+    })
+
 
     const fetchGame = useCallback(() => {
         if (id) {
