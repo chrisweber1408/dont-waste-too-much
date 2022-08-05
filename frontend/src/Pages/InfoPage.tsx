@@ -10,6 +10,7 @@ import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
 import {Add} from "@mui/icons-material";
 import {SpentMoneyDoughnut} from "../components/charts/SpentMoneyDoughnut";
 import {MoneyVsPlaytimeDoughnut} from "../components/charts/MoneyVsPlaytimeDoughnut";
+import {toast} from "react-toastify";
 
 
 export default function InfoPage() {
@@ -23,6 +24,12 @@ export default function InfoPage() {
     const [newSpentMoneyGame, setNewSpentMoneyGame] = useState(0)
     const [errorMessage, setErrorMessage] = useState("")
     const nav = useNavigate()
+
+    useEffect(()=>{
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
+            nav("/")
+        }
+    },[nav])
 
 
     const fetchGame = useCallback(() => {
@@ -57,6 +64,7 @@ export default function InfoPage() {
             .then(() => setNewSpentMoneyCoins(0))
             .then(() => setNewSpentMoneyGamePass(0))
             .then(fetchGame)
+            .then(()=> toast.success("Updated game stats."))
     }
 
     const removeGame = () => {
@@ -82,7 +90,7 @@ export default function InfoPage() {
                 <Grid container spacing={2}>
                     <Grid item xs={6} textAlign={"center"} marginTop={1}>
                         <TextField label={"Time to add"} color={"success"} variant={"outlined"} type={"number"} size={"small"}
-                                   value={newPlaytime} onChange={event => setNewPlaytime(parseFloat(event.target.value))}/>
+                                   inputMode={"numeric"} value={newPlaytime} onChange={event => setNewPlaytime(parseFloat(event.target.value))}/>
                     </Grid>
                     <Grid item xs={6} textAlign={"center"} marginTop={1}>
                         <TextField label={"Game price"} color={"success"} variant={"outlined"} type={"number"} size={"small"}

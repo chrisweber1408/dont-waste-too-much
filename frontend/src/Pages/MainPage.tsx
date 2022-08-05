@@ -4,6 +4,8 @@ import {useEffect, useState} from "react";
 import {Game} from "../service/model";
 import Header from "../components/header/Header";
 import {Button, Grid, TextField} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 export default function MainPage(){
 
@@ -12,10 +14,17 @@ export default function MainPage(){
     const [games, setGames] = useState<Array<Game>>([])
     const [errorMessageLoadGames, setErrorMessageLoadGames] = useState("")
     const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
+    const nav = useNavigate()
 
     useEffect(()=>{
         fetchAllCommunityGames()
     },[game])
+
+    useEffect(()=>{
+        if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
+            nav("/")
+        }
+    },[nav])
 
     const fetchAllCommunityGames = ()=>{
         fetchAllGames()
@@ -32,15 +41,11 @@ export default function MainPage(){
         createGame({gameName: game})
             .then(()=> setGame(""))
             .then(()=> setErrorMessageCreateGame(""))
-            .catch((error) => {
-                if (error.response){
-                    setErrorMessageCreateGame(error.response.data)
-                }
-            })
+            .catch(()=> toast.warning("Game already in the list!"))
     }
 
 
-    const searchGames = games
+    const searchGames = games.sort((a,b) => a.gameName.localeCompare(b.gameName))
         .filter(g => g.gameName.toLowerCase().includes(game.toLowerCase()))
         .map(search => <Grid key={search.id}><GameGallery game={search}/></Grid>)
 

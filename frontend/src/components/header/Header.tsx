@@ -4,6 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import {useNavigate} from "react-router-dom";
 import {Grid} from "@mui/material";
+import {ToastContainer} from "react-toastify";
 
 export default function Header(){
 
@@ -16,6 +17,7 @@ export default function Header(){
 
     return(
         <div>
+            <ToastContainer/>
             <div>
                 <h1 className={"header"}>Dont waste too much!</h1>
             </div>
