@@ -36,7 +36,8 @@ export default function MyUserGames(){
                 <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageLoadMyGames}</Grid>
             </div>
             <div>
-                {games.map(game =>
+                {games.sort((a,b) => a.gameName.localeCompare(b.gameName))
+                    .map(game =>
                     <Grid border={2} borderRadius={2} margin={2} onClick={()=> nav("/infos/" + game.gameId)}>
                         <Grid item xs={12} textAlign={"center"} margin={1}>{game.gameName}</Grid>
                         <Grid container margin={1}>

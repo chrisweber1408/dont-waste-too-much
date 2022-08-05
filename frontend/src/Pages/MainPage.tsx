@@ -48,7 +48,7 @@ export default function MainPage(){
     }
 
 
-    const searchGames = games
+    const searchGames = games.sort((a,b) => a.gameName.localeCompare(b.gameName))
         .filter(g => g.gameName.toLowerCase().includes(game.toLowerCase()))
         .map(search => <Grid key={search.id}><GameGallery game={search}/></Grid>)
 
