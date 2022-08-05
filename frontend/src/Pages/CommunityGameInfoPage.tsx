@@ -8,6 +8,7 @@ import {TotalCommunityMoneyVsPlaytimeDoughnut} from "../components/charts/TotalC
 import {TotalCommunitySpentMoneyDoughnut} from "../components/charts/TotalCommunitySpentMoneyDoughnut";
 import {AverageCommunitySpentMoneyDoughnut} from "../components/charts/AverageCommunitySpentMoneyDoughnut";
 import {AverageCommunityMoneyVsPlaytimeDoughnut} from "../components/charts/AverageCommunityMoneyVsPlaytimeDoughnut";
+import {toast} from "react-toastify";
 
 export default function CommunityGameInfoPage(){
 
@@ -29,8 +30,7 @@ export default function CommunityGameInfoPage(){
                 .then(data => {
                     setGame(data)
                 })
-                .then(() => setErrorMessage(""))
-                .catch(()=> setErrorMessage("No game stats!"))
+                .catch(()=> toast("No game stats!"))
         }
     }, [id])
 

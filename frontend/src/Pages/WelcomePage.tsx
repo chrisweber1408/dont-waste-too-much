@@ -43,7 +43,7 @@ export default function RegisterPage() {
                     <Grid item xs={6} textAlign={"center"} margin={1}>
                         <Button variant="contained" type="submit" color={"success"}>Login</Button>
                     </Grid>
-                    <Grid textAlign={"center"} fontSize={30}>Not registered?</Grid>
+                    <Grid textAlign={"center"} fontSize={30}>No account?</Grid>
                     <Grid item xs={6} textAlign={"center"} margin={1}>
                         <Button onClick={() => nav("/register")} variant="contained" color={"success"}>Sign in now!</Button>
                     </Grid>

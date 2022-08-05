@@ -4,6 +4,7 @@ import {UserGameDTO} from "../service/model";
 import {useNavigate} from "react-router-dom";
 import Header from "./header/Header";
 import {Grid} from "@mui/material";
+import {toast} from "react-toastify";
 
 export default function MyUserGames(){
 
@@ -22,9 +23,11 @@ export default function MyUserGames(){
     },[])
 
     const fetchAll = ()=>{
-        fetchAllMyGames()
-            .then((gameDataFromDb) => setGames(gameDataFromDb))
-            .catch(()=>setErrorMessageLoadMyGames("Add some games!"))
+        if (localStorage.getItem("jwt") !== null && localStorage.getItem("jwt") !== ""){
+            fetchAllMyGames()
+                .then((gameDataFromDb) => setGames(gameDataFromDb))
+                .catch(()=>toast.warning("Add some games!"))
+        }
     }
 
 

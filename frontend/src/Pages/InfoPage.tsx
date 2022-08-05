@@ -64,6 +64,7 @@ export default function InfoPage() {
             .then(() => setNewSpentMoneyCoins(0))
             .then(() => setNewSpentMoneyGamePass(0))
             .then(fetchGame)
+            .then(()=> toast.success("Updated game stats."))
     }
 
     const removeGame = () => {
