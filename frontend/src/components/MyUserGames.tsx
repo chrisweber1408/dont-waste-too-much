@@ -9,7 +9,6 @@ import {toast} from "react-toastify";
 export default function MyUserGames(){
 
     const [games, setGames] = useState<Array<UserGameDTO>>([])
-    const [errorMessageLoadMyGames, setErrorMessageLoadMyGames] = useState("")
     const nav = useNavigate()
 
     useEffect(()=>{
@@ -35,9 +34,6 @@ export default function MyUserGames(){
     return(
         <div>
             <Header/>
-            <div>
-                <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessageLoadMyGames}</Grid>
-            </div>
             <div>
                 {games.sort((a,b) => a.gameName.localeCompare(b.gameName))
                     .map(game =>

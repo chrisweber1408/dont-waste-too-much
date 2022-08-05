@@ -14,7 +14,6 @@ export default function CommunityGameInfoPage(){
 
     const {id} = useParams()
     const [game, setGame] = useState({} as CommunityStatsDTO)
-    const [errorMessage, setErrorMessage] = useState("")
     const nav = useNavigate()
 
     useEffect(()=>{
@@ -44,9 +43,7 @@ export default function CommunityGameInfoPage(){
             <Header/>
             <Grid textAlign={"center"}>
                 <h1>{game.gameName}</h1>
-                <Grid textAlign={"center"} fontSize={30} margin={2} color={"red"}>{errorMessage}</Grid>
             </Grid>
-            {!errorMessage && <div>
                 <Grid container>
                     <Grid item xs={6} textAlign={"center"}>
                         <TotalCommunitySpentMoneyDoughnut game={game}/>
@@ -63,7 +60,6 @@ export default function CommunityGameInfoPage(){
                         <AverageCommunityMoneyVsPlaytimeDoughnut game={game}/>
                     </Grid>
                 </Grid>
-            </div>}
         </div>
     )
 }
