@@ -1,6 +1,6 @@
-# spring-boot-react-bundle
+# DON'T WASTE TOO MUCH
 
-This is a demo project that shows how it is possible to deploy a react frontend and a Spring Boot backend into a heroku dyno. The following paragraphs describe the actions you need to perform.
+Don't waste too much helps you to overview your spendings and playtime on video games. Or maybe the spendings and playtime of your kids? If your spent or play to much the app helps you to control yourself! Or you just like to track it!
 
 ## Creating an heroku app
 When creating the heroku app I recommend to use the heroku cli. Use the following commands to create the app and add the required buildpack.
