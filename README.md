@@ -2,20 +2,8 @@
 
 Don't waste too much helps you to overview your spendings and playtime on video games. Or maybe the spendings and playtime of your kids? If your spent or play to much the app helps you to control yourself! Or you just like to track it!
 
-## Creating an heroku app
-When creating the heroku app I recommend to use the heroku cli. Use the following commands to create the app and add the required buildpack.
-* `heroku create <your-app-name>`
-* `heroku buildpacks:set heroku/java --app=<your-app-name>`
+# On heroku
 
-## Project structure
+https://dont-waste-too-much.herokuapp.com/
 
-The project consists of to sub projects. The react project is located in the frontend directory and the Spring Boot project in the backend directory. To let heroku know that the main project is the Spring Boot project, there is a parent pom.xml in the root directory. That way, when heroku builds checks out the code and starts the build the parent pom and the backend module are built.<br />
-To let heroku know that the jar file is now in the target directory of the backend, the `Procfile` is needed.
-
-## Bundling the frontend into the backend jar
-
-The frontend project is built using the `com.github.eirslett:frontend-maven-plugin`. The `maven-resources-plugin` is used to copy the content of the resulting `build` directory to the backend's `target/classes/static` directory.<br />
-
-## Deployment to heroku
-
-Just connect your heroku app and yout GitHub repository on the heroku app's "Deploy"-tab.
+![Bildschirmfoto 2022-08-01 um 10 52 44](https://user-images.githubusercontent.com/105639964/183077219-63853620-3e39-4e9c-9bde-74c8474093ca.png)
