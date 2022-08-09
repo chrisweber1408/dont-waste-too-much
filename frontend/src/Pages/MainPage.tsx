@@ -1,11 +1,12 @@
 import GameGallery from "../components/GameGallery";
 import {createGame, fetchAllGames} from "../service/apiService";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Game} from "../service/model";
 import Header from "../components/header/Header";
 import {Button, Grid, TextField} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import axios, { AxiosError } from "axios";
 
 export default function MainPage(){
 
@@ -16,9 +17,6 @@ export default function MainPage(){
     const [errorMessageCreateGame, setErrorMessageCreateGame] = useState("")
     const nav = useNavigate()
 
-    useEffect(()=>{
-        fetchAllCommunityGames()
-    },[game])
 
     useEffect(()=>{
         if (localStorage.getItem("jwt") === null || localStorage.getItem("jwt") === ""){
@@ -26,16 +24,25 @@ export default function MainPage(){
         }
     },[nav])
 
-    const fetchAllCommunityGames = ()=>{
+    const logout = useCallback(() => {
+        localStorage.clear();
+        nav("/");
+    }, [nav]);
+
+    const apiAuthCheck = useCallback((err: Error | AxiosError) => {
+        if (axios.isAxiosError(err) && err.response?.status === 403) {
+            logout();
+
+        }
+    }, [logout])
+
+
+    useEffect(()=>{
         fetchAllGames()
             .then((games: Array<Game>) => setGames(games))
             .then(()=> setErrorMessageLoadGames(""))
-            .catch((error) => {
-                if (error.response){
-                    setErrorMessageLoadGames(error.response.data)
-                }
-            })
-    }
+            .catch(err => apiAuthCheck(err))
+    },[apiAuthCheck])
 
     function saveGame(){
         createGame({gameName: game})

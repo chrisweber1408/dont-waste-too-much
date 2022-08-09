@@ -1,7 +1,7 @@
 import {Game} from "../service/model";
 import {putToMyGames} from "../service/apiService";
 import {useEffect, useState} from "react";
-import {Grid} from "@mui/material";
+import {Box, Grid} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import {useNavigate} from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
@@ -36,20 +36,30 @@ export default function GameGallery(props: GamesGalleryProps) {
     return (
         <div>
             <div>
-                <Grid margin={1} border={2} borderRadius={2}>
+                <Grid margin={1} border={2} borderRadius={2} sx={{textOverflow: "auto"}}>
+                    <Box component={"div"} onClick={() => nav("/communityGameInfo/" + props.game.id)} margin={0.5}
+                         sx={{fontSize: 20, textOverflow: 'auto'}}>{props.game.gameName}</Box>
                     <Grid container>
-                        <Grid onClick={() => nav("/communityGameInfo/" + props.game.id)} item xs={9} margin={1}
-                              sx={{fontSize: 20}}>{props.game.gameName}</Grid>
-                        <Grid item xs={1} onClick={() => nav("/edit/" + props.game.id)}>
-                            <Grid color={"red"} item xs={0.5}
-                                  margin={1}>{props.game.approved === false && roles.indexOf("admin") === 0 &&
-                                <EditIcon/>}</Grid>
-                            <Grid item xs={0.5}
-                                  margin={1}>{props.game.approved === true && roles.indexOf("admin") === 0 &&
-                                <EditIcon/>}</Grid>
+                        <Grid xs={1.62}>
                         </Grid>
-                        <Grid item xs={0.8} margin={1}><AddIcon
-                            onClick={() => addToMyGames(props.game.id)}>Add</AddIcon></Grid>
+                        {roles.indexOf("admin") === 0 &&
+                            <Grid margin={1} item xs={3} border={2} borderRadius={10} onClick={() => nav("/edit/" + props.game.id)}>
+                            <Grid textAlign={"center"} color={"red"}>{props.game.approved === false && roles.indexOf("admin") === 0 &&
+                            <EditIcon/>}</Grid>
+                            <Grid textAlign={"center"}>{props.game.approved === true && roles.indexOf("admin") === 0 &&
+                            <EditIcon/>}</Grid>
+                            </Grid>
+                        }
+                        {roles.indexOf("admin") !== 0 &&
+                            <Grid xs={4}>
+                            </Grid>
+                        }
+                        <Grid xs={1.62}>
+                        </Grid>
+                        <Grid onClick={() => addToMyGames(props.game.id)} textAlign={"center"} border={2} item xs={3} borderRadius={10} margin={1}>
+                            <AddIcon>Add</AddIcon></Grid>
+                        <Grid xs={1.62}>
+                        </Grid>
                     </Grid>
                 </Grid>
             </div>

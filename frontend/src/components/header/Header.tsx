@@ -9,7 +9,7 @@ import {ToastContainer} from "react-toastify";
 export default function Header(){
 
     function logout(){
-        localStorage.setItem("jwt", "")
+        localStorage.clear()
     }
 
 
