@@ -42,13 +42,20 @@ export default function MainPage(){
             .then((games: Array<Game>) => setGames(games))
             .then(()=> setErrorMessageLoadGames(""))
             .catch(err => apiAuthCheck(err))
-    },[apiAuthCheck])
+    },[apiAuthCheck, game])
 
     function saveGame(){
-        createGame({gameName: game})
-            .then(()=> setGame(""))
-            .then(()=> setErrorMessageCreateGame(""))
-            .catch(()=> toast.warning("Game already in the list!"))
+        if (game.length > 0){
+            createGame({gameName: game})
+                .then(()=> setGame(""))
+                .then(()=> apiAuthCheck)
+                .then(()=> setErrorMessageCreateGame(""))
+                .then(()=> fetchAllGames())
+                .catch(()=> toast.warning("Game already in the list!"))
+        } else {
+            toast.warning("Add a game name!")
+        }
+
     }
 
 
@@ -65,7 +72,7 @@ export default function MainPage(){
             <div>
                 <Grid>
                     <Grid textAlign={"center"} margin={1}>
-                        <TextField type={"text"}  variant={"outlined"} color={"success"} label={"Add a game"} value={game} onChange={event => setGame(event.target.value)}/>
+                        <TextField required={true} type={"text"}  variant={"outlined"} color={"success"} label={"Add a game"} value={game} onChange={event => setGame(event.target.value)}/>
                     </Grid>
                     <Grid textAlign={"center"} margin={1}>
                         <Button onClick={saveGame} variant={"contained"} color={"success"}>Add Game</Button>
