@@ -21,6 +21,7 @@ export default function MyUserGames(){
         fetchAll()
     },[])
 
+
     const fetchAll = ()=>{
         if (localStorage.getItem("jwt") !== null && localStorage.getItem("jwt") !== ""){
             fetchAllMyGames()

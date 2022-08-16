@@ -12,9 +12,7 @@ export default function RegisterPage() {
     const nav = useNavigate()
 
     useEffect(()=>{
-        if (localStorage.getItem("jwt") !== null && localStorage.getItem("jwt") !== ""){
-            nav("/main")
-        }
+        localStorage.setItem("jwt", "")
     },[nav])
 
 
