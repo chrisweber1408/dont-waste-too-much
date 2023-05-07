@@ -9,7 +9,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 export default function EditPage(){
 
     const {id} = useParams()
-    const [game, setGame] = useState({} as Game)
+    const [game, setGame] = useState({ approved: false } as Game);
     const [gameName, setGameName] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
     const [roles, setRoles] = useState([""])
