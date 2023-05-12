@@ -2,6 +2,10 @@
 
 Don't waste too much helps you to overview your spendings and playtime on video games. Or maybe the spendings and playtime of your kids? If your spent or play to much, the app helps you to control yourself! Or you just like to track it!
 
+# On HEROKU
+
+https://dont-waste-too-much.herokuapp.com/
+
 
 # A little view!
 
