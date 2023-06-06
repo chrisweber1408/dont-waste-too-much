@@ -4,6 +4,8 @@ Don't waste too much helps you to overview your spendings and playtime on video 
 
 # On HEROKU
 
+It´s a mobile first Version.
+
 https://dont-waste-too-much.herokuapp.com/
 
 
